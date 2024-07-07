@@ -1,0 +1,17 @@
+{
+  "Media query (tablet)": {
+    "prefix": "mqt",
+    "body": "@include tablet {\n\t${1}\n}",
+    "description": "Add media query for tablet screen size",
+  },
+  "Media query (laptop)": {
+    "prefix": "mql",
+    "body": "@include laptop {\n\t${1}\n}",
+    "description": "Add media query for desktop screen size",
+  },
+  "Media query (desktop)": {
+    "prefix": "mqd",
+    "body": "@include desktop {\n\t${1}\n}",
+    "description": "Add media query for extra large screen size",
+  },
+}

@@ -1,0 +1,47 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "next build",
+    "dev": "next",
+    "format": "npx prettier --write . --ignore-path .gitignore",
+    "lint": "next lint -- --ignore-path .gitignore",
+    "lint:fix": "npm run format && npm run lint -- --fix",
+    "start": "next start",
+    "type-check": "tsc --noEmit",
+    "generate-indexes": "node scripts/generate-indexes.ts"
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "@apollo/client": "^3.10.8",
+    "@supabase/ssr": "^0.4.0",
+    "@supabase/supabase-js": "^2.44.2",
+    "axios": "^1.7.2",
+    "dotenv": "^16.4.5",
+    "graphql": "^16.9.0",
+    "next": "^14.2.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "styled-components": "^6.1.8",
+    "web3": "^4.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "@types/react": "18.2.55",
+    "eslint": "8.56.0",
+    "eslint-config-next": "14.1.0",
+    "eslint-plugin-simple-import-sort": "10.0.0",
+    "postcss": "8.4.35",
+    "prettier": "3.2.5",
+    "prettier-plugin-packagejson": "2.4.10",
+    "prettier-plugin-tailwindcss": "0.5.11",
+    "react-icons": "^5.0.1",
+    "sass": "^1.71.0",
+    "typescript": "5.3.3"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

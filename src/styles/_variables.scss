@@ -1,0 +1,48 @@
+// For convenience, pre-calculated rem values are used for font sizes and spacing
+$px8: 0.5rem;
+$px10: 0.625rem;
+$px12: 0.75rem;
+$px14: 0.875rem;
+$px15: 0.938rem;
+$px16: 1rem;
+$px18: 1.125rem;
+$px20: 1.25rem;
+$px22: 1.375rem;
+$px24: 1.5rem;
+$px28: 1.75rem;
+$px32: 2rem;
+$px36: 2.25rem;
+$px40: 2.5rem;
+$px44: 2.75rem;
+$px48: 3rem;
+$px64: 4rem;
+$px768: 48rem;
+$px1024: 64rem;
+$px1280: 80rem;
+$px1920: 120rem;
+
+// For components with a maximum width
+$containerMaxWidth: $px1280;
+$containerMaxWidthSmall: $px768;
+
+// Use https://coolors.io to identify a color name
+// - Do not add a new color if another color shares the same name, since that means they're extremely similar
+// - Delete any colors not used in the project
+$cinnabar: #e8471b;
+$coral: #ff8564;
+$melon: #ffc4b4;
+$mistyRose: #ffe0d7;
+
+// Add aliases for common use cases
+$buttonColor: $cinnabar;
+$buttonGradientBottomColor: $coral;
+$buttonGradientTopColor: $mistyRose;
+$buttonTextColor: white;
+$iconGradientBottomColor: $cinnabar;
+$iconGradientTopColor: white;
+$siteBackgroundColor: black;
+$textDefaultColor: $mistyRose;
+$textGradientBottomColor: $coral;
+$textGradientLeftColor: $melon;
+$textGradientRightColor: $coral;
+$textGradientTopColor: white;
