@@ -8,7 +8,8 @@ export default function Home() {
   useEffect(() => {
     async function loadTransactions() {
       const response = await fetch(
-        '/api/process-transaction-batch?fromBlock=36100768&toBlock=36100768',
+        '/api/process-transaction-batch?fromBlock=17934173&toBlock=17934173',
+        // '/api/process-transaction-batch?fromBlock=36163174&toBlock=36163174',
       )
       const data = await response.json()
       setTransactions(data)
