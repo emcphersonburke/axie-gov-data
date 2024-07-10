@@ -17,6 +17,7 @@ import { decodeLogs, fetchLogsForContract, getNftType } from '~/utils'
 import { fetchBlockTimestamp } from '~/utils/fetchBlockTimestamp'
 
 export const dynamic = 'force-dynamic'
+export const maxDuration = 30 // Kick up the max execution time
 
 const web3 = new Web3(process.env.RONIN_API_ENDPOINT)
 
