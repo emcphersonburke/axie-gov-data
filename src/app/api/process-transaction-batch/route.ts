@@ -268,6 +268,12 @@ export async function GET(request: NextRequest) {
         transactionType = 'evolution'
       }
 
+      // In older transactions, the fee would originate from the user address instead of
+      // the marketplace contract. This is a workaround to label these transactions correctly.
+      if (transactionSource === 'unknown' && nftTransfers.length > 0) {
+        transactionType = 'sale'
+      }
+
       const newTransaction: Transaction = {
         transaction_id: transactionHash,
         timestamp: new Date(parseInt(blockTimestamp, 16) * 1000).toISOString(),
