@@ -15,7 +15,6 @@
 
 # production
 /build
-/studio/dist
 
 # misc
 .DS_Store
@@ -43,9 +42,3 @@ yarn-error.log*
 # Env files created by scripts for working locally
 .env
 studio/.env.development
-
-# Chromatic/Storybook
-build-storybook.log
-chromatic.log
-chromatic-build-*.xml
-chromatic-diagnostics.json
