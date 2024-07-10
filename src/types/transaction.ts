@@ -1,6 +1,6 @@
 export type NftTransfer = {
   transaction_id: string
-  id: string
+  id: number
   type: string
 }
 
@@ -8,11 +8,9 @@ export type Transaction = {
   transaction_id: string
   timestamp: string
   block: number
-  source: string
-  axs_fee: number
-  weth_fee: number
+  type: string
+  axs_fee: string
+  weth_fee: string
   gas_used: number
   gas_price: number
-  nft_id?: string
-  nft_type?: string
 }

@@ -1,18 +1,18 @@
 import axios from 'axios'
 import { NextRequest } from 'next/server'
 import Web3 from 'web3'
-import { AbiItem } from 'web3-utils'
 
 import {
   axieInfinityAbi,
   axsTokenAbi,
   charmTokenAbi,
   landTokenAbi,
+  partEvolutionAbi,
   runeTokenAbi,
   wethTokenAbi,
 } from '~/lib/abi'
 import { getMetaValue, setMetaValue, upsertTransaction } from '~/lib/supabase'
-import { Transaction } from '~/types'
+import { NftTransfer, Transaction } from '~/types'
 import { decodeLogs, fetchLogsForContract, getNftType } from '~/utils'
 import { fetchBlockTimestamp } from '~/utils/fetchBlockTimestamp'
 
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate toBlock based on fromBlock if toBlock is not provided
     if (!toBlockStr) {
-      const blockInterval = 50
+      const blockInterval = 20
       toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString()
     }
   }
@@ -93,47 +93,69 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch logs for other NFT contracts concurrently
-    const [axieLogs, landLogs, runeLogs, charmLogs] = await Promise.all([
-      fetchLogsForContract(
-        fromBlock,
-        toBlock,
-        process.env.AXIE_TOKEN_CONTRACT_ADDRESS,
-        [],
-      ),
-      fetchLogsForContract(
-        fromBlock,
-        toBlock,
-        process.env.LAND_TOKEN_CONTRACT_ADDRESS,
-        [],
-      ),
-      fetchLogsForContract(
-        fromBlock,
-        toBlock,
-        process.env.RUNE_TOKEN_CONTRACT_ADDRESS,
-        [],
-      ),
-      fetchLogsForContract(
-        fromBlock,
-        toBlock,
-        process.env.CHARM_TOKEN_CONTRACT_ADDRESS,
-        [],
-      ),
-    ])
+    const [ascendLogs, axieLogs, landLogs, runeLogs, charmLogs, evolutionLogs] =
+      await Promise.all([
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.AXIE_ASCEND_CONTRACT_ADDRESS,
+          [],
+        ),
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.AXIE_TOKEN_CONTRACT_ADDRESS,
+          [],
+        ),
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.LAND_TOKEN_CONTRACT_ADDRESS,
+          [],
+        ),
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.RUNE_TOKEN_CONTRACT_ADDRESS,
+          [],
+        ),
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.CHARM_TOKEN_CONTRACT_ADDRESS,
+          [],
+        ),
+        fetchLogsForContract(
+          fromBlock,
+          toBlock,
+          process.env.PART_EVOLUTION_CONTRACT_ADDRESS,
+          [],
+        ),
+      ])
 
+    // Decode logs for each contract
+    const decodedAscendLogs = decodeLogs(ascendLogs, axsTokenAbi, web3)
     const decodedAxsLogs = decodeLogs(axsLogs, axsTokenAbi, web3)
     const decodedWethLogs = decodeLogs(wethLogs, wethTokenAbi, web3)
     const decodedAxieLogs = decodeLogs(axieLogs, axieInfinityAbi, web3)
     const decodedLandLogs = decodeLogs(landLogs, landTokenAbi, web3)
     const decodedRuneLogs = decodeLogs(runeLogs, runeTokenAbi, web3)
     const decodedCharmLogs = decodeLogs(charmLogs, charmTokenAbi, web3)
+    const decodedEvolutionLogs = decodeLogs(
+      evolutionLogs,
+      partEvolutionAbi,
+      web3,
+    )
 
     const combinedLogs = [
+      ...decodedAscendLogs,
       ...decodedAxsLogs,
       ...decodedWethLogs,
       ...decodedAxieLogs,
       ...decodedLandLogs,
       ...decodedRuneLogs,
       ...decodedCharmLogs,
+      ...decodedEvolutionLogs,
     ]
 
     // Group logs by transactionHash
@@ -174,32 +196,39 @@ export async function GET(request: NextRequest) {
       const blockTimestamp = await fetchBlockTimestamp(transaction.blockNumber)
 
       // Aggregate information from logs
-      let axsFee = 0
-      let wethFee = 0
-      let nftId: string | null = null
-      let nftType: string | null = null
+      let axsFee = '0'
+      let wethFee = '0'
       let transactionSource = 'unknown'
       let hasTreasuryTransfer = false
+      const nftTransfers: NftTransfer[] = []
 
       logs.forEach((log) => {
         const { event, decodedLog, contractAddress } = log
         const fromAddress = (decodedLog._from || decodedLog.from)?.toLowerCase()
         const toAddress = (decodedLog._to || decodedLog.to)?.toLowerCase()
 
-        // Determine if this transaction originated from the marketplace contract
+        // Determine the transaction source
         if (fromAddress === process.env.MARKETPLACE_CONTRACT_ADDRESS) {
           transactionSource = 'marketplace'
+        } else if (fromAddress === process.env.PORTAL_CONTRACT_ADDRESS) {
+          transactionSource = 'portal'
+        } else if (fromAddress === process.env.AXIE_ASCEND_CONTRACT_ADDRESS) {
+          transactionSource = 'ascend'
+        } else if (event === 'PartEvolutionCreated') {
+          transactionSource = 'evolution'
+        } else if (event === 'AxieSpawn') {
+          transactionSource = 'breeding'
         }
 
         // Determine if this transaction contains AXS or WETH fees to the treasury
         if (contractAddress === process.env.AXS_TOKEN_CONTRACT_ADDRESS) {
-          axsFee = parseFloat(decodedLog._value as string)
+          axsFee = decodedLog._value as string
           hasTreasuryTransfer = true
         } else if (
           contractAddress === process.env.WETH_TOKEN_CONTRACT_ADDRESS &&
           toAddress === process.env.COMMUNITY_TREASURY_ADDRESS
         ) {
-          wethFee = parseFloat(decodedLog._value as string)
+          wethFee = decodedLog._value as string
           hasTreasuryTransfer = true
         }
 
@@ -211,14 +240,11 @@ export async function GET(request: NextRequest) {
         ) {
           const tokenId = decodedLog._tokenId || decodedLog.id
           if (tokenId) {
-            nftId = tokenId.toString()
-            nftType = getNftType(contractAddress)
-
-            // In older transactions, the fee would originate from the user address instead of
-            // the marketplace contract. This is a workaround to label these transactions correctly.
-            if (transactionSource === 'unknown') {
-              transactionSource = 'marketplace'
-            }
+            nftTransfers.push({
+              transaction_id: transactionHash,
+              id: Number(tokenId),
+              type: getNftType(contractAddress),
+            })
           }
         }
       })
@@ -228,20 +254,34 @@ export async function GET(request: NextRequest) {
         continue
       }
 
+      // Determine transaction type based on source
+      let transactionType = 'unknown'
+      if (transactionSource === 'marketplace') {
+        transactionType = 'sale'
+      } else if (transactionSource === 'portal') {
+        transactionType = 'rc-mint'
+      } else if (transactionSource === 'ascend') {
+        transactionType = 'ascension'
+      } else if (transactionSource === 'breeding') {
+        transactionType = 'breeding'
+      } else if (transactionSource === 'evolution') {
+        transactionType = 'evolution'
+      }
+
       const newTransaction: Transaction = {
         transaction_id: transactionHash,
         timestamp: new Date(parseInt(blockTimestamp, 16) * 1000).toISOString(),
         block: parseInt(transaction.blockNumber, 16),
-        source: transactionSource,
+        type: transactionType,
         axs_fee: axsFee,
         weth_fee: wethFee,
         gas_used: parseInt(transaction.gasUsed, 16),
-        gas_price: parseInt(transaction.effectiveGasPrice, 16) / 1e9, // Convert Wei to Gwei
-        nft_id: nftId,
-        nft_type: nftType,
+        gas_price: parseFloat(
+          web3.utils.fromWei(transaction.effectiveGasPrice, 'gwei'),
+        ),
       }
 
-      await upsertTransaction(newTransaction)
+      await upsertTransaction(newTransaction, nftTransfers)
     }
 
     // Update the last processed block in the meta table
