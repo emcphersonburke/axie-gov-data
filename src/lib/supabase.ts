@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 
-import { NftTransfer, Transaction } from '~/types'
+import { GatewayTransaction, NftTransfer, Transaction } from '~/types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseKey = process.env.SUPABASE_SERVICE_KEY
@@ -29,6 +29,21 @@ export const setMetaValue = async (key: string, value: string) => {
   }
 }
 
+export const upsertGatewayTransaction = async (
+  transaction: GatewayTransaction,
+) => {
+  const { data, error } = await supabase
+    .from('gateway_transactions')
+    .upsert(transaction, { onConflict: 'transaction_id' })
+
+  if (error) {
+    console.error('Error upserting gateway transaction:', error)
+    return
+  }
+
+  console.log('Gateway transaction upserted:', data)
+}
+
 export const upsertTransaction = async (
   transaction: Transaction,
   nftTransfers: NftTransfer[],
@@ -54,7 +69,6 @@ export const upsertTransaction = async (
   }
 
   // Filter out NFT transfers that already exist
-  console.log('Existing NFT transfers:', existingNftTransfers, nftTransfers)
   const newNftTransfers = nftTransfers.filter(
     (nftTransfer) =>
       !existingNftTransfers.some(
