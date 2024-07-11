@@ -41,6 +41,7 @@ function generateIndexes(
   })
 }
 
+generateIndexes('lib/abis', '.ts', 'index.ts')
 generateIndexes('media/vectors', '.tsx', 'index.ts')
 generateIndexes('types', '.ts', 'index.ts')
 generateIndexes('utils', '.ts', 'index.ts')

@@ -1,6 +1,6 @@
 import Web3, { AbiEventFragment } from 'web3'
 
-import { axieInfinityAbi } from './abi'
+import { axieInfinityAbi } from './abis/abi'
 
 const web3 = new Web3()
 

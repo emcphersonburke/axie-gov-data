@@ -8,8 +8,8 @@ export default function Home() {
   useEffect(() => {
     async function loadTransactions() {
       const response = await fetch(
-        '/api/process-bridge-transaction-batch?fromBlock=36277624&toBlock=36277624',
-        // '/api/process-transaction-batch?fromBlock=36163174&toBlock=36163174',
+        // '/api/process-bridge-transaction-batch?fromBlock=36277624&toBlock=36277624',
+        '/api/process-transaction-batch?fromBlock=17950097&toBlock=17950097',
       )
       const data = await response.json()
       setTransactions(data)

@@ -77,6 +77,7 @@ export const upsertTransaction = async (
   )
 
   if (newNftTransfers.length > 0) {
+    console.log('Inserting new NFT transfers:', newNftTransfers)
     const { error: nftError } = await supabase
       .from('nft_transfers')
       .insert(newNftTransfers)

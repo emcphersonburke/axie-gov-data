@@ -6,11 +6,12 @@ import {
   axieInfinityAbi,
   axsTokenAbi,
   charmTokenAbi,
+  landItemTokenAbi,
   landTokenAbi,
   partEvolutionAbi,
   runeTokenAbi,
   wethTokenAbi,
-} from '~/lib/abi'
+} from '~/lib/abis/'
 import { getMetaValue, setMetaValue, upsertTransaction } from '~/lib/supabase'
 import { NftTransfer, Transaction } from '~/types'
 import { decodeLogs, fetchLogsForContract, getNftType } from '~/utils'
@@ -94,45 +95,58 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch logs for other NFT contracts concurrently
-    const [ascendLogs, axieLogs, landLogs, runeLogs, charmLogs, evolutionLogs] =
-      await Promise.all([
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.AXIE_ASCEND_CONTRACT_ADDRESS,
-          [],
-        ),
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.AXIE_TOKEN_CONTRACT_ADDRESS,
-          [],
-        ),
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.LAND_TOKEN_CONTRACT_ADDRESS,
-          [],
-        ),
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.RUNE_TOKEN_CONTRACT_ADDRESS,
-          [],
-        ),
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.CHARM_TOKEN_CONTRACT_ADDRESS,
-          [],
-        ),
-        fetchLogsForContract(
-          fromBlock,
-          toBlock,
-          process.env.PART_EVOLUTION_CONTRACT_ADDRESS,
-          [],
-        ),
-      ])
+    const [
+      ascendLogs,
+      axieLogs,
+      landLogs,
+      landItemLogs,
+      runeLogs,
+      charmLogs,
+      evolutionLogs,
+    ] = await Promise.all([
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.AXIE_ASCEND_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.AXIE_TOKEN_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.LAND_TOKEN_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.LAND_ITEM_TOKEN_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.RUNE_TOKEN_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.CHARM_TOKEN_CONTRACT_ADDRESS,
+        [],
+      ),
+      fetchLogsForContract(
+        fromBlock,
+        toBlock,
+        process.env.PART_EVOLUTION_CONTRACT_ADDRESS,
+        [],
+      ),
+    ])
 
     // Decode logs for each contract
     const decodedAscendLogs = decodeLogs(ascendLogs, axsTokenAbi, web3)
@@ -140,6 +154,7 @@ export async function GET(request: NextRequest) {
     const decodedWethLogs = decodeLogs(wethLogs, wethTokenAbi, web3)
     const decodedAxieLogs = decodeLogs(axieLogs, axieInfinityAbi, web3)
     const decodedLandLogs = decodeLogs(landLogs, landTokenAbi, web3)
+    const decodedLandItemLogs = decodeLogs(landItemLogs, landItemTokenAbi, web3)
     const decodedRuneLogs = decodeLogs(runeLogs, runeTokenAbi, web3)
     const decodedCharmLogs = decodeLogs(charmLogs, charmTokenAbi, web3)
     const decodedEvolutionLogs = decodeLogs(
@@ -154,6 +169,7 @@ export async function GET(request: NextRequest) {
       ...decodedWethLogs,
       ...decodedAxieLogs,
       ...decodedLandLogs,
+      ...decodedLandItemLogs,
       ...decodedRuneLogs,
       ...decodedCharmLogs,
       ...decodedEvolutionLogs,
@@ -243,7 +259,7 @@ export async function GET(request: NextRequest) {
           if (tokenId) {
             nftTransfers.push({
               transaction_id: transactionHash,
-              id: Number(tokenId),
+              id: tokenId.toString(),
               type: getNftType(contractAddress),
             })
           }
@@ -287,6 +303,8 @@ export async function GET(request: NextRequest) {
           web3.utils.fromWei(transaction.effectiveGasPrice, 'gwei'),
         ),
       }
+
+      console.log('newTransaction', newTransaction)
 
       await upsertTransaction(newTransaction, nftTransfers)
     }

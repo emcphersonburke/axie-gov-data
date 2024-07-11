@@ -2,7 +2,7 @@ import axios from 'axios'
 import { NextRequest } from 'next/server'
 import Web3 from 'web3'
 
-import { roninGatewayAbi, wethTokenAbi } from '~/lib/abi'
+import { roninGatewayAbi, wethTokenAbi } from '~/lib/abis/'
 import {
   getMetaValue,
   setMetaValue,
