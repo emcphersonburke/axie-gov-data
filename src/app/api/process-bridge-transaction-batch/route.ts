@@ -14,7 +14,11 @@ import {
   withdrawalRequestedTopic,
 } from '~/lib/topics'
 import { GatewayTransaction } from '~/types'
-import { decodeLogs, fetchBlockTimestamp, fetchLogsForContract } from '~/utils'
+import {
+  decodeLogs,
+  fetchBlockTimestamp,
+  fetchLogsForBlockRange,
+} from '~/utils'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30 // Kick up the max execution time
@@ -47,32 +51,42 @@ export async function GET(request: NextRequest) {
   const toBlock = parseInt(toBlockStr, 10)
 
   try {
-    // Fetch logs for WETH transfers to/from the gateway
-    const wethLogs = await fetchLogsForContract(
-      fromBlock,
-      toBlock,
-      process.env.WETH_TOKEN_CONTRACT_ADDRESS,
-      [transferTopic],
+    const logs = await fetchLogsForBlockRange(fromBlock, toBlock)
+
+    if (logs.length === 0) {
+      await setMetaValue('last_processed_bridge_block', toBlock.toString())
+      return new Response(
+        JSON.stringify({ success: true, message: 'No logs found' }),
+        {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
+    }
+
+    const filteredLogs = logs.filter(
+      (log) =>
+        log.address === process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase() ||
+        log.address === gatewayAddress,
     )
 
-    // Fetch logs for Deposited and WithdrawalRequested events
-    const [depositedLogs, withdrawalRequestedLogs] = await Promise.all([
-      fetchLogsForContract(fromBlock, toBlock, gatewayAddress, [
-        depositedTopic,
-      ]),
-      fetchLogsForContract(fromBlock, toBlock, gatewayAddress, [
-        withdrawalRequestedTopic,
-      ]),
-    ])
-
-    const decodedWethLogs = decodeLogs(wethLogs, wethTokenAbi, web3)
+    const decodedWethLogs = decodeLogs(
+      filteredLogs.filter(
+        (log) =>
+          log.address === process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
+      ),
+      wethTokenAbi,
+      web3,
+    )
     const decodedDepositedLogs = decodeLogs(
-      depositedLogs,
+      filteredLogs.filter((log) => log.topics.includes(depositedTopic)),
       roninGatewayAbi,
       web3,
     )
     const decodedWithdrawalRequestedLogs = decodeLogs(
-      withdrawalRequestedLogs,
+      filteredLogs.filter((log) =>
+        log.topics.includes(withdrawalRequestedTopic),
+      ),
       roninGatewayAbi,
       web3,
     )
@@ -83,7 +97,6 @@ export async function GET(request: NextRequest) {
       ...decodedWithdrawalRequestedLogs,
     ]
 
-    // Group logs by transactionHash
     const logsByTransaction: { [key: string]: any[] } = {}
     combinedLogs.forEach((log) => {
       if (!logsByTransaction[log.transactionHash]) {
@@ -92,7 +105,6 @@ export async function GET(request: NextRequest) {
       logsByTransaction[log.transactionHash].push(log)
     })
 
-    // Filter transactions to only include those with both a transfer and a deposit or withdrawal
     const filteredTransactions = Object.entries(logsByTransaction).filter(
       ([, logs]) =>
         logs.some((log) => log.event === 'Transfer') &&
@@ -102,7 +114,6 @@ export async function GET(request: NextRequest) {
         ),
     )
 
-    // Process each filtered transaction
     for (const [transactionHash, logs] of filteredTransactions) {
       const transactionPayload = {
         jsonrpc: '2.0',
@@ -141,7 +152,6 @@ export async function GET(request: NextRequest) {
           event === 'Transfer' &&
           contractAddress === process.env.WETH_TOKEN_CONTRACT_ADDRESS
         ) {
-          console.log('GOT A TXER')
           const fromAddress = decodedLog._from.toLowerCase()
           const toAddress = decodedLog._to.toLowerCase()
 
@@ -151,10 +161,6 @@ export async function GET(request: NextRequest) {
             address = fromAddress
           }
 
-          console.log(
-            'decodedLog._value.toString()',
-            decodedLog._value.toString(),
-          )
           amount = decodedLog._value.toString()
         } else if (event === 'Deposited') {
           type = 'deposit'
@@ -171,6 +177,7 @@ export async function GET(request: NextRequest) {
         address,
       }
 
+      console.log('aklalalaak', newTransaction)
       await upsertGatewayTransaction(newTransaction)
     }
 
