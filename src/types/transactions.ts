@@ -19,6 +19,4 @@ export type Transaction = {
   type: string
   axs_fee: string
   weth_fee: string
-  gas_used: number
-  gas_price: number
 }

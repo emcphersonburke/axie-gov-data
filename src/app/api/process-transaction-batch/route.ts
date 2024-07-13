@@ -14,13 +14,28 @@ import {
 } from '~/lib/abis/'
 import { getMetaValue, setMetaValue, upsertTransaction } from '~/lib/supabase'
 import { NftTransfer, Transaction } from '~/types'
-import { decodeLogs, fetchLogsForBlockRange, getNftType } from '~/utils'
-import { fetchBlockTimestamp } from '~/utils/fetchBlockTimestamp'
+import {
+  decodeLogs,
+  fetchBlockTimestamp,
+  fetchLogsForBlockRange,
+  getNftType,
+} from '~/utils'
 
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30 // Kick up the max execution time
 
 const web3 = new Web3(process.env.RONIN_API_ENDPOINT)
+const blockTimestampCache: Record<string, string> = {}
+
+const fetchCachedBlockTimestamp = async (blockNumber: string) => {
+  if (blockTimestampCache[blockNumber]) {
+    return blockTimestampCache[blockNumber]
+  }
+
+  const timestamp = await fetchBlockTimestamp(blockNumber)
+  blockTimestampCache[blockNumber] = timestamp
+  return timestamp
+}
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -28,14 +43,17 @@ export async function GET(request: NextRequest) {
   let toBlockStr = searchParams.get('toBlock')
 
   if (!fromBlockStr || !toBlockStr) {
+    // Fetch the last processed block from the meta table if fromBlock is not provided
     if (!fromBlockStr) {
       const lastProcessedBlock = await getMetaValue('last_processed_block')
       fromBlockStr = lastProcessedBlock
         ? lastProcessedBlock
         : process.env.TREASURY_FIRST_TX_WITH_CONTENT_BLOCK || '0'
     }
+
+    // Calculate toBlock based on fromBlock if toBlock is not provided
     if (!toBlockStr) {
-      const blockInterval = 20
+      const blockInterval = 50
       toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString()
     }
   }
@@ -44,9 +62,12 @@ export async function GET(request: NextRequest) {
   const toBlock = parseInt(toBlockStr, 10)
 
   try {
+    // Fetch logs for the specified block range
     const logs = await fetchLogsForBlockRange(fromBlock, toBlock)
 
+    // Return early if no logs are found in the block range
     if (logs.length === 0) {
+      // Update the last processed block in the meta table
       await setMetaValue('last_processed_block', toBlock.toString())
       return new Response(
         JSON.stringify({ success: true, message: 'No logs found' }),
@@ -57,6 +78,7 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Define contract addresses for easy reference
     const contractAddresses = {
       axs: process.env.AXS_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       weth: process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
@@ -69,78 +91,56 @@ export async function GET(request: NextRequest) {
       evolution: process.env.PART_EVOLUTION_CONTRACT_ADDRESS.toLowerCase(),
     }
 
-    const filteredLogs = logs.filter((log) =>
-      log.topics.includes(
-        web3.eth.abi.encodeParameter(
-          'address',
-          process.env.COMMUNITY_TREASURY_ADDRESS.toLowerCase(),
-        ),
-      ),
-    )
-
-    if (filteredLogs.length === 0) {
-      await setMetaValue('last_processed_block', toBlock.toString())
-      return new Response(
-        JSON.stringify({ success: true, message: 'No logs found' }),
-        {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        },
-      )
-    }
-
+    // Decode logs for each contract
     const decodedLogs = {
       axs: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.axs),
+        logs.filter((log) => log.address === contractAddresses.axs),
         axsTokenAbi,
         web3,
       ),
       weth: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.weth),
+        logs.filter((log) => log.address === contractAddresses.weth),
         wethTokenAbi,
         web3,
       ),
       ascend: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.ascend),
+        logs.filter((log) => log.address === contractAddresses.ascend),
         axsTokenAbi,
         web3,
       ),
       axie: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.axie),
+        logs.filter((log) => log.address === contractAddresses.axie),
         axieInfinityAbi,
         web3,
       ),
       land: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.land),
+        logs.filter((log) => log.address === contractAddresses.land),
         landTokenAbi,
         web3,
       ),
       landItem: decodeLogs(
-        filteredLogs.filter(
-          (log) => log.address === contractAddresses.landItem,
-        ),
+        logs.filter((log) => log.address === contractAddresses.landItem),
         landItemTokenAbi,
         web3,
       ),
       rune: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.rune),
+        logs.filter((log) => log.address === contractAddresses.rune),
         runeTokenAbi,
         web3,
       ),
       charm: decodeLogs(
-        filteredLogs.filter((log) => log.address === contractAddresses.charm),
+        logs.filter((log) => log.address === contractAddresses.charm),
         charmTokenAbi,
         web3,
       ),
       evolution: decodeLogs(
-        filteredLogs.filter(
-          (log) => log.address === contractAddresses.evolution,
-        ),
+        logs.filter((log) => log.address === contractAddresses.evolution),
         partEvolutionAbi,
         web3,
       ),
     }
 
+    // Combine all decoded logs into a single array
     const combinedLogs = [
       ...decodedLogs.ascend,
       ...decodedLogs.axs,
@@ -153,6 +153,7 @@ export async function GET(request: NextRequest) {
       ...decodedLogs.evolution,
     ]
 
+    // Group logs by transaction hash
     const logsByTransaction: { [key: string]: any[] } = {}
     combinedLogs.forEach((log) => {
       if (!logsByTransaction[log.transactionHash]) {
@@ -161,37 +162,53 @@ export async function GET(request: NextRequest) {
       logsByTransaction[log.transactionHash].push(log)
     })
 
-    for (const [transactionHash, logs] of Object.entries(logsByTransaction)) {
-      const transactionPayload = {
-        jsonrpc: '2.0',
-        method: 'eth_getTransactionReceipt',
-        params: [transactionHash],
-        id: 1,
-      }
+    // Filter transactions that include at least one treasury transfer
+    const filteredTransactions = Object.entries(logsByTransaction).filter(
+      ([, logs]) =>
+        logs.some(
+          (log) =>
+            (log.contractAddress === process.env.AXS_TOKEN_CONTRACT_ADDRESS ||
+              log.contractAddress ===
+                process.env.WETH_TOKEN_CONTRACT_ADDRESS) &&
+            log.decodedLog._to?.toLowerCase() ===
+              process.env.COMMUNITY_TREASURY_ADDRESS.toLowerCase(),
+        ),
+    )
 
-      const transactionResponse = await axios.post(
-        process.env.RONIN_API_ENDPOINT,
-        transactionPayload,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': process.env.RONIN_API_KEY,
-          },
-        },
-      )
+    // Extract unique block numbers
+    const uniqueBlockNumbers = [
+      ...new Set(
+        filteredTransactions.flatMap(([, logs]) =>
+          logs.map((log) => log.blockNumber),
+        ),
+      ),
+    ]
 
-      const transaction = transactionResponse.data.result
-      if (!transaction) {
-        console.error(`Transaction not found for hash: ${transactionHash}`)
-        continue
-      }
+    // Fetch all block timestamps concurrently
+    const blockTimestamps = await Promise.all(
+      uniqueBlockNumbers.map((blockNumber) =>
+        fetchCachedBlockTimestamp(blockNumber),
+      ),
+    )
 
-      const blockTimestamp = await fetchBlockTimestamp(transaction.blockNumber)
+    // Create a map of block numbers to timestamps
+    const blockTimestampMap = uniqueBlockNumbers.reduce(
+      (acc, blockNumber, index) => {
+        acc[blockNumber] = blockTimestamps[index]
+        return acc
+      },
+      {} as Record<string, string>,
+    )
 
+    // Process each filtered transaction
+    for (const [transactionHash, logs] of filteredTransactions) {
+      const blockNumber = logs[0].blockNumber
+      const blockTimestamp = blockTimestampMap[blockNumber]
+
+      // Aggregate information from logs
       let axsFee = '0'
       let wethFee = '0'
       let transactionSource = 'unknown'
-      let hasTreasuryTransfer = false
       const nftTransfers: NftTransfer[] = []
 
       logs.forEach((log) => {
@@ -199,6 +216,7 @@ export async function GET(request: NextRequest) {
         const fromAddress = (decodedLog._from || decodedLog.from)?.toLowerCase()
         const toAddress = (decodedLog._to || decodedLog.to)?.toLowerCase()
 
+        // Determine the transaction source
         if (fromAddress === process.env.MARKETPLACE_CONTRACT_ADDRESS) {
           transactionSource = 'marketplace'
         } else if (fromAddress === process.env.PORTAL_CONTRACT_ADDRESS) {
@@ -211,17 +229,18 @@ export async function GET(request: NextRequest) {
           transactionSource = 'breeding'
         }
 
-        if (contractAddress === process.env.AXS_TOKEN_CONTRACT_ADDRESS) {
-          axsFee = decodedLog._value as string
-          hasTreasuryTransfer = true
-        } else if (
-          contractAddress === process.env.WETH_TOKEN_CONTRACT_ADDRESS &&
-          toAddress === process.env.COMMUNITY_TREASURY_ADDRESS
-        ) {
-          wethFee = decodedLog._value as string
-          hasTreasuryTransfer = true
+        // Determine if this transaction contains AXS or WETH fees to the treasury
+        if (toAddress === process.env.COMMUNITY_TREASURY_ADDRESS) {
+          if (contractAddress === process.env.AXS_TOKEN_CONTRACT_ADDRESS) {
+            axsFee = decodedLog._value.toString()
+          } else if (
+            contractAddress === process.env.WETH_TOKEN_CONTRACT_ADDRESS
+          ) {
+            wethFee = decodedLog._value.toString()
+          }
         }
 
+        // Determine if this transaction involves an NFT transfer
         if (
           (event === 'Transfer' || event === 'TransferSingle') &&
           toAddress &&
@@ -238,10 +257,7 @@ export async function GET(request: NextRequest) {
         }
       })
 
-      if (!hasTreasuryTransfer) {
-        continue
-      }
-
+      // Determine transaction type based on source
       let transactionType = 'unknown'
       if (transactionSource === 'marketplace') {
         transactionType = 'sale'
@@ -255,6 +271,8 @@ export async function GET(request: NextRequest) {
         transactionType = 'evolution'
       }
 
+      // In older transactions, the fee would originate from the user address instead of
+      // the marketplace contract. This is a workaround to label these transactions correctly.
       if (transactionSource === 'unknown' && nftTransfers.length > 0) {
         transactionType = 'sale'
       }
@@ -262,21 +280,18 @@ export async function GET(request: NextRequest) {
       const newTransaction: Transaction = {
         transaction_id: transactionHash,
         timestamp: new Date(parseInt(blockTimestamp, 16) * 1000).toISOString(),
-        block: parseInt(transaction.blockNumber, 16),
+        block: parseInt(blockNumber, 16),
         type: transactionType,
         axs_fee: axsFee,
         weth_fee: wethFee,
-        gas_used: parseInt(transaction.gasUsed, 16),
-        gas_price: parseFloat(
-          web3.utils.fromWei(transaction.effectiveGasPrice, 'gwei'),
-        ),
       }
 
-      console.log('newTransaction', newTransaction)
+      // console.log('newTransaction', newTransaction)
 
       await upsertTransaction(newTransaction, nftTransfers)
     }
 
+    // Update the last processed block in the meta table
     await setMetaValue('last_processed_block', toBlock.toString())
 
     return new Response(JSON.stringify({ success: true }), {

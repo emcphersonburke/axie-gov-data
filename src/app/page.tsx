@@ -1,26 +1,81 @@
-'use client'
+// app/page.tsx
+import { createClient } from '@supabase/supabase-js'
 
-import { useEffect, useState } from 'react'
+import Chart from '~/components/Chart/Chart'
+import { ChartTransaction } from '~/types'
 
-export default function Home() {
-  const [transactions, setTransactions] = useState([])
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseKey = process.env.SUPABASE_SERVICE_KEY
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-  useEffect(() => {
-    async function loadTransactions() {
-      const response = await fetch(
-        '/api/process-bridge-transaction-batch?fromBlock=36277624&toBlock=36277624',
-        // '/api/process-transaction-batch?fromBlock=17950097&toBlock=17950097',
-      )
-      const data = await response.json()
-      setTransactions(data)
-    }
-    loadTransactions()
-  }, [])
+async function fetchTransactions(
+  groupBy = 'daily',
+): Promise<ChartTransaction[]> {
+  let view
+  if (groupBy === 'daily') {
+    view = 'daily_aggregated_transactions'
+  } else if (groupBy === 'weekly') {
+    view = 'weekly_aggregated_transactions'
+  } else if (groupBy === 'monthly') {
+    view = 'monthly_aggregated_transactions'
+  }
+
+  const { data, error } = await supabase.from(view).select('*')
+
+  if (error) {
+    throw new Error(error.message)
+  }
+
+  return data as ChartTransaction[]
+}
+
+async function fetchExchangeRates() {
+  const response = await fetch(
+    'https://api-gateway.skymavis.com/graphql/marketplace',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-Key': process.env.RONIN_API_KEY,
+      },
+      body: JSON.stringify({
+        query: `
+        query GetExchangeRates {
+          exchangeRate {
+            axs {
+              usd
+            }
+            eth {
+              usd
+            }
+          }
+        }
+      `,
+      }),
+    },
+  )
+
+  const json = await response.json()
+  const { axs, eth } = json.data.exchangeRate
+
+  return {
+    axs: axs.usd,
+    eth: eth.usd,
+  }
+}
+
+export default async function Page() {
+  const initialTransactions = await fetchTransactions('daily') // default to daily for now
+  const exchangeRates = await fetchExchangeRates()
 
   return (
     <div>
-      <h1>TX</h1>
-      <pre>{JSON.stringify(transactions, null, 2)}</pre>
+      <h1>Treasury Inflows and Outflows</h1>
+      <div>
+        <p>AXS to USD: ${exchangeRates.axs}</p>
+        <p>ETH to USD: ${exchangeRates.eth}</p>
+      </div>
+      <Chart initialTransactions={initialTransactions} />
     </div>
   )
 }

@@ -23,5 +23,5 @@ export const fetchBlockTimestamp = async (blockNumber: string) => {
     throw new Error(response.data.error.message)
   }
 
-  return response.data.result.timestamp
+  return response.data.result.timestamp as string
 }
