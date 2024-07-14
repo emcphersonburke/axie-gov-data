@@ -65,7 +65,7 @@ export default function PageContent({
           </>
         )}
       </ChartGroup>
-      <ChartGroup title="Inflows by NFT Type (WETH)">
+      <ChartGroup title="Marketplace Inflows by NFT Type (WETH)">
         {(data) => <BarChart data={data} type="nftType" currency="weth" />}
       </ChartGroup>
       <ChartGroup title="Inflows by Transaction Type (AXS)">
