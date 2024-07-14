@@ -3,11 +3,14 @@ import { NextRequest } from 'next/server'
 import Web3 from 'web3'
 
 import {
+  atiasBlessingAbi,
+  axieAscendAbi,
   axieInfinityAbi,
   axsTokenAbi,
   charmTokenAbi,
   landItemTokenAbi,
   landTokenAbi,
+  materialAbi,
   partEvolutionAbi,
   runeTokenAbi,
   wethTokenAbi,
@@ -80,12 +83,14 @@ export async function GET(request: NextRequest) {
 
     // Define contract addresses for easy reference
     const contractAddresses = {
+      atia: process.env.ATIAS_BLESSING_CONTRACT_ADDRESS.toLowerCase(),
       axs: process.env.AXS_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       weth: process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       ascend: process.env.AXIE_ASCEND_CONTRACT_ADDRESS.toLowerCase(),
       axie: process.env.AXIE_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       land: process.env.LAND_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       landItem: process.env.LAND_ITEM_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
+      material: process.env.MATERIAL_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       rune: process.env.RUNE_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       charm: process.env.CHARM_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       evolution: process.env.PART_EVOLUTION_CONTRACT_ADDRESS.toLowerCase(),
@@ -93,6 +98,11 @@ export async function GET(request: NextRequest) {
 
     // Decode logs for each contract
     const decodedLogs = {
+      atia: decodeLogs(
+        logs.filter((log) => log.address === contractAddresses.atia),
+        atiasBlessingAbi,
+        web3,
+      ),
       axs: decodeLogs(
         logs.filter((log) => log.address === contractAddresses.axs),
         axsTokenAbi,
@@ -105,7 +115,7 @@ export async function GET(request: NextRequest) {
       ),
       ascend: decodeLogs(
         logs.filter((log) => log.address === contractAddresses.ascend),
-        axsTokenAbi,
+        axieAscendAbi,
         web3,
       ),
       axie: decodeLogs(
@@ -121,6 +131,11 @@ export async function GET(request: NextRequest) {
       landItem: decodeLogs(
         logs.filter((log) => log.address === contractAddresses.landItem),
         landItemTokenAbi,
+        web3,
+      ),
+      material: decodeLogs(
+        logs.filter((log) => log.address === contractAddresses.material),
+        materialAbi,
         web3,
       ),
       rune: decodeLogs(
@@ -142,12 +157,14 @@ export async function GET(request: NextRequest) {
 
     // Combine all decoded logs into a single array
     const combinedLogs = [
+      ...decodedLogs.atia,
       ...decodedLogs.ascend,
       ...decodedLogs.axs,
       ...decodedLogs.weth,
       ...decodedLogs.axie,
       ...decodedLogs.land,
       ...decodedLogs.landItem,
+      ...decodedLogs.material,
       ...decodedLogs.rune,
       ...decodedLogs.charm,
       ...decodedLogs.evolution,
@@ -221,7 +238,9 @@ export async function GET(request: NextRequest) {
           transactionSource = 'marketplace'
         } else if (fromAddress === process.env.PORTAL_CONTRACT_ADDRESS) {
           transactionSource = 'portal'
-        } else if (fromAddress === process.env.AXIE_ASCEND_CONTRACT_ADDRESS) {
+        } else if (event === 'PrayerCountSynced') {
+          transactionSource = 'atiablessing'
+        } else if (event === 'AxieLevelAscended') {
           transactionSource = 'ascend'
         } else if (event === 'PartEvolutionCreated') {
           transactionSource = 'evolution'

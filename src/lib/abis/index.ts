@@ -1,3 +1,4 @@
+export * from './atiasBlessingAbi'
 export * from './axieAscendAbi'
 export * from './axieInfinityAbi'
 export * from './axsTokenAbi'
