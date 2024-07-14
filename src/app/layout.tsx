@@ -1,6 +1,13 @@
 import '~/styles/global.scss'
 
 import type { Metadata } from 'next'
+import { Work_Sans } from 'next/font/google'
+
+const workSans = Work_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-work-sans',
+})
 
 export const metadata: Metadata = {
   icons: [
@@ -30,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={workSans.className}>
       <link rel="manifest" href="/site.webmanifest" />
       <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
       <meta name="msapplication-TileColor" content="#da532c" />

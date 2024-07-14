@@ -1,0 +1,60 @@
+.axsColor {
+  color: $mediumStateBlue;
+}
+
+.ethColor {
+  color: $dodgerBlue;
+}
+
+.headingWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $px24;
+}
+
+.page {
+  background-color: black;
+  color: white;
+  padding: 24px;
+
+  .chartGroup {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    > div {
+      flex: 1 1 calc(50% - 16px);
+      min-width: calc(50% - 16px);
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      > div {
+        min-width: 100%;
+      }
+    }
+  }
+}
+
+.tokenPriceBox {
+  background-color: $containerBackgroundColor;
+  border-radius: 8px;
+  font-family: $fontWorkSans;
+  padding: 12px 16px 8px;
+}
+
+.tokenPriceBoxHeading {
+  font-size: $px14;
+  font-weight: 600;
+}
+
+.tokenPriceBoxPrice {
+  font-size: $px24;
+  font-weight: 600;
+}
+
+.tokenPriceBoxWrapper {
+  display: flex;
+  gap: 16px;
+}

@@ -1,0 +1,45 @@
+.chartGroup {
+  background-color: $containerBackgroundColor;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  padding: 24px;
+  position: relative;
+
+  .controls {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+
+    button {
+      background: none;
+      border: none;
+      border-radius: 8px;
+      color: $coolGray;
+      cursor: pointer;
+      font-size: $px14;
+      font-weight: 600;
+      margin-left: 8px;
+      padding: 12px 20px;
+
+      &.active {
+        background-color: $innerContainerBackgroundColor;
+        color: $fulvous;
+      }
+
+      &:hover {
+        background-color: $innerContainerBackgroundColor;
+      }
+    }
+  }
+}
+
+.chartWrapper {
+  display: flex;
+  > * {
+    flex: 1;
+  }
+}
+
+.heading {
+  margin-left: 12px;
+}

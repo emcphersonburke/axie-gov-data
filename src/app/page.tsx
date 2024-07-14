@@ -1,7 +1,7 @@
 // app/page.tsx
 import { createClient } from '@supabase/supabase-js'
 
-import Chart from '~/components/Chart/Chart'
+import PageContent from '~/components/PageContent/PageContent'
 import { ChartTransaction } from '~/types'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -69,13 +69,9 @@ export default async function Page() {
   const exchangeRates = await fetchExchangeRates()
 
   return (
-    <div>
-      <h1>Treasury Inflows and Outflows</h1>
-      <div>
-        <p>AXS to USD: ${exchangeRates.axs}</p>
-        <p>ETH to USD: ${exchangeRates.eth}</p>
-      </div>
-      <Chart initialTransactions={initialTransactions} />
-    </div>
+    <PageContent
+      initialTransactions={initialTransactions}
+      exchangeRates={exchangeRates}
+    />
   )
 }

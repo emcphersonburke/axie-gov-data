@@ -6,7 +6,7 @@ export interface ChartData {
 export interface ChartTransaction {
   date: string
   type: string
-  axs_fee: number
-  weth_fee: number
+  axs_fee: string
+  weth_fee: string
   nft_type: string
 }

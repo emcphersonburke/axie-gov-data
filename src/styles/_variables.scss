@@ -25,24 +25,22 @@ $px1920: 120rem;
 $containerMaxWidth: $px1280;
 $containerMaxWidthSmall: $px768;
 
-// Use https://coolors.io to identify a color name
-// - Do not add a new color if another color shares the same name, since that means they're extremely similar
-// - Delete any colors not used in the project
-$cinnabar: #e8471b;
-$coral: #ff8564;
-$melon: #ffc4b4;
-$mistyRose: #ffe0d7;
+// Colors
+$aqua: #00f5f8;
+$brilliantRose: #fa59a0;
+$coolGray: #8e97a8;
+$dodgerBlue: #0094ff;
+$fulvous: #dd8a0e;
+$kellyGreen: #6db80f;
+$mediumStateBlue: #9967fb;
+$raisinBlack: #1c1f25;
+$richBlack: #13161b;
 
 // Add aliases for common use cases
-$buttonColor: $cinnabar;
-$buttonGradientBottomColor: $coral;
-$buttonGradientTopColor: $mistyRose;
-$buttonTextColor: white;
-$iconGradientBottomColor: $cinnabar;
-$iconGradientTopColor: white;
+$containerBackgroundColor: $richBlack;
+$innerContainerBackgroundColor: $raisinBlack;
 $siteBackgroundColor: black;
-$textDefaultColor: $mistyRose;
-$textGradientBottomColor: $coral;
-$textGradientLeftColor: $melon;
-$textGradientRightColor: $coral;
-$textGradientTopColor: white;
+$textDefaultColor: white;
+
+// Fonts
+$fontWorkSans: --var(--font-work-sans);
