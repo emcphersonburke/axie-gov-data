@@ -103,6 +103,7 @@ export default function LineChart({
             stacked: true,
             reverse: false,
           }}
+          animate={false}
           curve="monotoneX"
           axisTop={null}
           axisRight={null}

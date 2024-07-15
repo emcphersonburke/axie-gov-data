@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   let view, interval
 
   // Use a hard-coded date for testing
-  const hardcodedDate = '2024-05-28'
+  const hardcodedDate = '2024-06-07'
 
   switch (groupBy) {
     case '30m':
