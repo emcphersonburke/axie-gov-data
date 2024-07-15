@@ -79,9 +79,25 @@ export default function LineChart({
     return <div>No data available</div>
   }
 
+  const initialTotal = Number(cumulativeTotals[filter])
+  const finalTotal =
+    filter === 'axs'
+      ? Number(filteredData[filteredData.length - 1].cumulative_axs)
+      : Number(filteredData[filteredData.length - 1].cumulative_weth)
+
+  const totalIncrease = finalTotal - initialTotal
+
   return (
     <div className={styles.wrapper}>
       <h3 className={styles.heading}>{filter.toUpperCase()}</h3>
+      <p className={styles.subheading}>
+        +
+        {totalIncrease.toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })}{' '}
+        {filter.toUpperCase()}
+      </p>
       <div style={{ height: '300px' }}>
         <ResponsiveLine
           data={[
@@ -94,7 +110,7 @@ export default function LineChart({
               })),
             },
           ]}
-          margin={{ top: 12, right: 48, bottom: 48, left: 8 }}
+          margin={{ top: 12, right: 8, bottom: 48, left: 8 }}
           xScale={{ type: 'point' }}
           yScale={{
             type: 'linear',
