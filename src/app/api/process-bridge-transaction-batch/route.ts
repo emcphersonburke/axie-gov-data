@@ -177,7 +177,6 @@ export async function GET(request: NextRequest) {
         address,
       }
 
-      console.log('aklalalaak', newTransaction)
       await upsertGatewayTransaction(newTransaction)
     }
 

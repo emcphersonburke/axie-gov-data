@@ -40,8 +40,6 @@ export const upsertGatewayTransaction = async (
     console.error('Error upserting gateway transaction:', error)
     return
   }
-
-  console.log('Gateway transaction upserted:', data)
 }
 
 export const upsertTransaction = async (

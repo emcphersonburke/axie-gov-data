@@ -61,7 +61,6 @@ export default function ChartGroup({ title, children }: ChartGroupProps) {
         `/api/fetch-transactions?groupBy=${groupBy}&startDate=${calculatedStartDate.toISOString()}`,
       )
       const { transactions, cumulativeTotals } = await response.json()
-      console.log('Data:', transactions, cumulativeTotals)
       setData(transactions)
       setCumulativeTotals(cumulativeTotals)
     } catch (error) {
@@ -77,8 +76,6 @@ export default function ChartGroup({ title, children }: ChartGroupProps) {
     setTimeRange(range)
     fetchData(range)
   }
-
-  console.log('Got data:', data.length)
 
   return (
     <div className={styles.chartGroup}>
