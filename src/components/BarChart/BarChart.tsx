@@ -98,8 +98,6 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
   })
   const filteredKeys = Array.from(allKeys)
 
-  console.log('Filtered keys:', filteredKeys)
-
   // Map keys to friendly names for the legend
   const legendTitleMap: { [key: string]: string } = {
     ascension_axs_fee: 'Ascension',

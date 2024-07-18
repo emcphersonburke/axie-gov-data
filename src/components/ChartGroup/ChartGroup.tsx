@@ -6,6 +6,8 @@ import styles from './ChartGroup.module.scss'
 
 type ChartGroupProps = {
   title: string
+  initialData: ChartTransaction[]
+  initialTotals: { axs: number; weth: number }
   children: (
     data: ChartTransaction[],
     startDate: string,
@@ -13,15 +15,22 @@ type ChartGroupProps = {
   ) => ReactNode
 }
 
-export default function ChartGroup({ title, children }: ChartGroupProps) {
+export default function ChartGroup({
+  title,
+  initialData = [],
+  initialTotals = { axs: 0, weth: 0 },
+  children,
+}: ChartGroupProps) {
   const [timeRange, setTimeRange] = useState('24H')
-  const [data, setData] = useState<ChartTransaction[]>([])
+  const [data, setData] = useState<ChartTransaction[]>(initialData)
   const [startDate, setStartDate] = useState('')
-  const [cumulativeTotals, setCumulativeTotals] = useState({ axs: 0, weth: 0 })
+  const [cumulativeTotals, setCumulativeTotals] = useState(initialTotals)
+
+  console.log('totals', cumulativeTotals, initialData.length)
 
   const fetchData = async (range: string) => {
     let groupBy
-    let calculatedStartDate = new Date()
+    let calculatedStartDate = new Date('2024-06-17')
 
     switch (range) {
       case '24H':
@@ -67,10 +76,6 @@ export default function ChartGroup({ title, children }: ChartGroupProps) {
       console.error('Error fetching transactions:', error)
     }
   }
-
-  useEffect(() => {
-    fetchData(timeRange)
-  }, [timeRange])
 
   const handleRangeChange = (range: string) => {
     setTimeRange(range)

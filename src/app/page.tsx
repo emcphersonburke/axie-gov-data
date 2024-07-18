@@ -2,32 +2,7 @@
 import { createClient } from '@supabase/supabase-js'
 
 import PageContent from '~/components/PageContent/PageContent'
-import { ChartTransaction } from '~/types'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseKey = process.env.SUPABASE_SERVICE_KEY
-const supabase = createClient(supabaseUrl, supabaseKey)
-
-async function fetchTransactions(
-  groupBy = 'daily',
-): Promise<ChartTransaction[]> {
-  let view
-  if (groupBy === 'daily') {
-    view = 'daily_aggregated_transactions'
-  } else if (groupBy === 'weekly') {
-    view = 'weekly_aggregated_transactions'
-  } else if (groupBy === 'monthly') {
-    view = 'monthly_aggregated_transactions'
-  }
-
-  const { data, error } = await supabase.from(view).select('*')
-
-  if (error) {
-    throw new Error(error.message)
-  }
-
-  return data as ChartTransaction[]
-}
+import { fetchTransactions } from '~/utils/fetchTransactions'
 
 async function fetchExchangeRates() {
   const response = await fetch(
@@ -65,12 +40,16 @@ async function fetchExchangeRates() {
 }
 
 export default async function Page() {
-  const initialTransactions = await fetchTransactions('daily') // default to daily for now
+  const { transactions, cumulativeTotals } = await fetchTransactions(
+    '30m',
+    '2024-06-16',
+  )
   const exchangeRates = await fetchExchangeRates()
 
   return (
     <PageContent
-      initialTransactions={initialTransactions}
+      initialTransactions={transactions}
+      initialTotals={cumulativeTotals}
       exchangeRates={exchangeRates}
     />
   )

@@ -1,4 +1,6 @@
+// components/PageContent/PageContent.tsx
 'use client'
+
 import BarChart from '~/components/BarChart/BarChart'
 import ChartGroup from '~/components/ChartGroup/ChartGroup'
 import LineChart from '~/components/LineChart/LineChart'
@@ -13,11 +15,13 @@ type ExchangeRates = {
 
 type PageContentProps = {
   initialTransactions: ChartTransaction[]
+  initialTotals: { axs: number; weth: number }
   exchangeRates: ExchangeRates
 }
 
 export default function PageContent({
   initialTransactions,
+  initialTotals,
   exchangeRates,
 }: PageContentProps) {
   return (
@@ -43,7 +47,11 @@ export default function PageContent({
           </div>
         </div>
       </div>
-      <ChartGroup title="Growth">
+      <ChartGroup
+        title="Growth"
+        initialData={initialTransactions}
+        initialTotals={initialTotals}
+      >
         {(data, startDate, cumulativeTotals) => (
           <>
             <LineChart
@@ -65,10 +73,18 @@ export default function PageContent({
           </>
         )}
       </ChartGroup>
-      <ChartGroup title="Marketplace Fee Inflows by NFT Type (WETH)">
+      <ChartGroup
+        title="Marketplace Fee Inflows by NFT Type (WETH)"
+        initialData={initialTransactions}
+        initialTotals={initialTotals}
+      >
         {(data) => <BarChart data={data} type="nftType" currency="weth" />}
       </ChartGroup>
-      <ChartGroup title="Inflows by Transaction Type (AXS)">
+      <ChartGroup
+        title="Inflows by Transaction Type (AXS)"
+        initialData={initialTransactions}
+        initialTotals={initialTotals}
+      >
         {(data) => (
           <BarChart data={data} type="transactionType" currency="axs" />
         )}
