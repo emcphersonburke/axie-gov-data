@@ -49,9 +49,24 @@ export async function GET(request: NextRequest) {
     // Fetch the last processed block from the meta table if fromBlock is not provided
     if (!fromBlockStr) {
       const lastProcessedBlock = await getMetaValue('last_processed_block')
+
+      // Return early if we don't have a last processed block
+      if (!lastProcessedBlock) {
+        return new Response(
+          JSON.stringify({ error: 'No last processed block found' }),
+          {
+            status: 400,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
+      }
+
       fromBlockStr = lastProcessedBlock
-        ? lastProcessedBlock
-        : process.env.TREASURY_FIRST_TX_WITH_CONTENT_BLOCK || '0'
+
+      // Uncomment the below if starting with an empty database
+      // fromBlockStr = lastProcessedBlock
+      //   ? lastProcessedBlock
+      //   : process.env.TREASURY_FIRST_TX_WITH_CONTENT_BLOCK || '0'
     }
 
     // Calculate toBlock based on fromBlock if toBlock is not provided
