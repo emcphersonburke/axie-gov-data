@@ -6,6 +6,7 @@ export const getNftType = (contractAddress: string): string => {
     [process.env.CHARM_TOKEN_CONTRACT_ADDRESS]: 'Charm',
     [process.env.LAND_ITEM_TOKEN_CONTRACT_ADDRESS]: 'Land Item',
     [process.env.MATERIAL_TOKEN_CONTRACT_ADDRESS]: 'Material',
+    [process.env.AXIE_ACCESSORY_TOKEN_CONTRACT_ADDRESS]: 'Accessory',
   }
   return nftTypeMapping[contractAddress] || 'Unknown'
 }

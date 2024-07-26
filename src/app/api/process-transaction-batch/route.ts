@@ -4,6 +4,7 @@ import Web3 from 'web3'
 
 import {
   atiasBlessingAbi,
+  axieAccessoryAbi,
   axieAscendAbi,
   axieInfinityAbi,
   axsTokenAbi,
@@ -99,6 +100,8 @@ export async function GET(request: NextRequest) {
     // Define contract addresses for easy reference
     const contractAddresses = {
       atia: process.env.ATIAS_BLESSING_CONTRACT_ADDRESS.toLowerCase(),
+      accessory:
+        process.env.AXIE_ACCESSORY_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       axs: process.env.AXS_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       weth: process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       ascend: process.env.AXIE_ASCEND_CONTRACT_ADDRESS.toLowerCase(),
@@ -113,6 +116,11 @@ export async function GET(request: NextRequest) {
 
     // Decode logs for each contract
     const decodedLogs = {
+      accessory: decodeLogs(
+        logs.filter((log) => log.address === contractAddresses.atia),
+        axieAccessoryAbi,
+        web3,
+      ),
       atia: decodeLogs(
         logs.filter((log) => log.address === contractAddresses.atia),
         atiasBlessingAbi,
@@ -172,6 +180,7 @@ export async function GET(request: NextRequest) {
 
     // Combine all decoded logs into a single array
     const combinedLogs = [
+      ...decodedLogs.accessory,
       ...decodedLogs.atia,
       ...decodedLogs.ascend,
       ...decodedLogs.axs,
