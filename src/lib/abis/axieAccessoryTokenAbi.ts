@@ -1,6 +1,6 @@
 import { AbiItem } from 'web3'
 
-export const axieAccessoryAbi: AbiItem[] = [
+export const axieAccessoryTokenAbi: AbiItem[] = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,

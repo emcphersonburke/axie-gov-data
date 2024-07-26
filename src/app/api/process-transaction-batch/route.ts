@@ -4,7 +4,7 @@ import Web3 from 'web3'
 
 import {
   atiasBlessingAbi,
-  axieAccessoryAbi,
+  axieAccessoryTokenAbi,
   axieAscendAbi,
   axieInfinityAbi,
   axsTokenAbi,
@@ -117,8 +117,8 @@ export async function GET(request: NextRequest) {
     // Decode logs for each contract
     const decodedLogs = {
       accessory: decodeLogs(
-        logs.filter((log) => log.address === contractAddresses.atia),
-        axieAccessoryAbi,
+        logs.filter((log) => log.address === contractAddresses.accessory),
+        axieAccessoryTokenAbi,
         web3,
       ),
       atia: decodeLogs(
@@ -289,7 +289,8 @@ export async function GET(request: NextRequest) {
           toAddress &&
           fromAddress
         ) {
-          const tokenId = decodedLog._tokenId || decodedLog.id
+          const tokenId =
+            decodedLog._tokenId || decodedLog.tokenId || decodedLog.id
           if (tokenId) {
             nftTransfers.push({
               transaction_id: transactionHash,

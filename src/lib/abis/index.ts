@@ -1,5 +1,5 @@
 export * from './atiasBlessingAbi'
-export * from './axieAccessoryAbi'
+export * from './axieAccessoryTokenAbi'
 export * from './axieAscendAbi'
 export * from './axieInfinityAbi'
 export * from './axsTokenAbi'
