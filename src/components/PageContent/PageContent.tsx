@@ -74,7 +74,8 @@ export default function PageContent({
         )}
       </ChartGroup>
       <ChartGroup
-        title="Marketplace Fee Inflows by NFT Type (WETH)"
+        title="Fees from Marketplace Sales"
+        subtitle="By NFT Type (WETH)"
         initialData={initialTransactions}
         initialTotals={initialTotals}
       >

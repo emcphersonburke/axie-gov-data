@@ -6,6 +6,7 @@ import styles from './ChartGroup.module.scss'
 
 type ChartGroupProps = {
   title: string
+  subtitle?: string
   initialData: ChartTransaction[]
   initialTotals: { axs: number; weth: number }
   children: (
@@ -17,6 +18,7 @@ type ChartGroupProps = {
 
 export default function ChartGroup({
   title,
+  subtitle,
   initialData = [],
   initialTotals = { axs: 0, weth: 0 },
   children,
@@ -25,8 +27,6 @@ export default function ChartGroup({
   const [data, setData] = useState<ChartTransaction[]>(initialData)
   const [startDate, setStartDate] = useState('')
   const [cumulativeTotals, setCumulativeTotals] = useState(initialTotals)
-
-  console.log('totals', cumulativeTotals, initialData.length)
 
   const fetchData = async (range: string) => {
     let groupBy
@@ -85,6 +85,7 @@ export default function ChartGroup({
   return (
     <div className={styles.chartGroup}>
       <h2 className={styles.heading}>{title}</h2>
+      {subtitle && <h3 className={styles.subheading}>{subtitle}</h3>}
       <div className={styles.controls}>
         {['24H', '7D', '30D', '6M', '1Y', 'ALL'].map((range) => (
           <button
