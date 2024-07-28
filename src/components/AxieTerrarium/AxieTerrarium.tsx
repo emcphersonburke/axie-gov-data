@@ -1,6 +1,6 @@
 'use client'
 
-import * as PIXI from 'pixi.js'
+import { Application } from 'pixi.js'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Axie from '../Axie/Axie'
@@ -33,7 +33,7 @@ const axieVariations = [
 
 export default function AxieTerrarium() {
   const containerRef = useRef<HTMLDivElement>(null)
-  const appRef = useRef<PIXI.Application>(null)
+  const appRef = useRef<Application>(null)
   const [axies, setAxies] = useState<AxieData[]>([])
   const axieIdRef = useRef(0)
 
@@ -41,28 +41,20 @@ export default function AxieTerrarium() {
     if (!containerRef.current || !window) return
 
     const container = containerRef.current
-    appRef.current = new PIXI.Application({
-      width: window.innerWidth,
-      height: document.body.scrollHeight,
-      transparent: true,
+    const app = new Application({
+      resizeTo: container,
+      backgroundAlpha: 0,
     })
-    container.appendChild(appRef.current.view)
+    appRef.current = app
+    container.appendChild(app.view as HTMLCanvasElement)
 
     const handleResize = () => {
-      appRef.current.renderer.resize(
-        window.innerWidth,
-        document.body.scrollHeight,
-      )
+      app.renderer.resize(container.clientWidth, container.clientHeight)
     }
 
     window.addEventListener('resize', handleResize)
 
     const spawnAxie = () => {
-      console.log(
-        'spawnAxie scrollY and innerHeight',
-        window.scrollY,
-        window.innerHeight,
-      )
       axieIdRef.current += 1
       const variation =
         axieVariations[Math.floor(Math.random() * axieVariations.length)]
@@ -90,7 +82,7 @@ export default function AxieTerrarium() {
     return () => {
       window.removeEventListener('resize', handleResize)
       if (appRef.current) {
-        appRef.current.destroy(true, true)
+        appRef.current.destroy(true)
       }
     }
   }, [])

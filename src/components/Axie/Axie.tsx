@@ -6,6 +6,12 @@ import {
   getVariantAttachmentPath,
   MixedSkeletonData,
 } from '@axieinfinity/mixer'
+import { TextureAtlas } from '@pixi-spine/base'
+import {
+  AtlasAttachmentLoader,
+  SkeletonJson,
+  Spine,
+} from '@pixi-spine/runtime-3.8'
 import * as PIXI from 'pixi.js'
 import React, { useEffect, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
@@ -41,17 +47,24 @@ const generateRandomCombo = () => {
 }
 
 const loadSpineResources = async (
-  loader: PIXI.loaders.Loader,
   mixer: MixedSkeletonData,
   variant: string,
 ) => {
   const resources = getResources(mixer, variant)
+  const textureUrls = resources.map((item) => item.imagePath)
+  const loadedTextures = await PIXI.Assets.load(textureUrls)
+
+  const allTextures: { [key: string]: PIXI.Texture } = {}
   resources.forEach((item) => {
-    if (loader.resources[item.key] === undefined) {
-      loader.add(item.key, item.imagePath)
+    const texture = loadedTextures[item.imagePath]
+    if (texture) {
+      allTextures[item.key] = texture
+    } else {
+      console.error(`Texture for ${item.key} is undefined`)
     }
   })
-  await new Promise((resolve) => loader.load(resolve))
+
+  return allTextures
 }
 
 const getResources = (mixer: MixedSkeletonData, variant: string) => {
@@ -76,8 +89,6 @@ const getResources = (mixer: MixedSkeletonData, variant: string) => {
   return imagesToLoad
 }
 
-const Figure = PIXI.spine.Spine
-
 interface AxieProps {
   direction: 'left' | 'right'
   app: PIXI.Application
@@ -87,54 +98,6 @@ interface AxieProps {
   onRemove: () => void
 }
 
-const summerColors: AxieColor[] = [
-  {
-    key: 'aquatic-summer',
-    primary1: 'Aquatic',
-    primary2: '',
-  },
-  {
-    key: 'bird-summer',
-    primary1: 'Bird',
-    primary2: '',
-  },
-  {
-    key: 'dawn-summer',
-    primary1: 'Dawn',
-    primary2: '',
-  },
-  {
-    key: 'mech-summer',
-    primary1: 'Mech',
-    primary2: '',
-  },
-  {
-    key: 'reptile-summer',
-    primary1: 'Reptile',
-    primary2: '',
-  },
-  {
-    key: 'beast-summer',
-    primary1: 'Beast',
-    primary2: '',
-  },
-  {
-    key: 'bug-summer',
-    primary1: 'Bug',
-    primary2: '',
-  },
-  {
-    key: 'dusk-summer',
-    primary1: 'Dusk',
-    primary2: '',
-  },
-  {
-    key: 'plant-summer',
-    primary1: 'Plant',
-    primary2: '',
-  },
-]
-
 export default function Axie({
   direction,
   app,
@@ -143,23 +106,23 @@ export default function Axie({
   y,
   onRemove,
 }: AxieProps) {
-  const createdRef = useRef(false) // Add a ref to track if the Axie is created
-  const [isLoading, setIsLoading] = useState(false) // Add state to track loading
-  const [hasHydrated, setHasHydrated] = useState(false) // Add state to track loading
+  const createdRef = useRef(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [isReadyForCreation, setIsReadyForCreation] = useState(false)
 
   useEffect(() => {
-    let spineInstance: PIXI.spine.Spine | null = null
+    let spineInstance: Spine | null = null
 
     const createAxie = async () => {
-      if (createdRef.current || isLoading) return // Check if the Axie is already created or loading
+      if (createdRef.current || isLoading) return
 
-      setIsLoading(true) // Set loading to true
+      setIsLoading(true)
 
       console.log('createAxie')
       const container = new PIXI.Container()
-      app.stage.addChild(container)
+      // app.stage.addChild(container)
 
-      const combinedColors: AxieColor[] = [...key.items.colors, ...summerColors]
+      const combinedColors: AxieColor[] = key.items.colors
       const axieCombo = generateRandomCombo()
       const randomVariant =
         combinedColors[Math.floor(Math.random() * combinedColors.length)].key
@@ -172,24 +135,14 @@ export default function Axie({
         return
       }
 
-      const loader = new PIXI.loaders.Loader()
-      await loadSpineResources(loader, spineData, randomVariant)
-
       try {
-        const allTextures: { [key: string]: PIXI.Texture } = {}
-        Object.values(loader.resources).forEach((resource) => {
-          allTextures[resource.name] = resource.texture
-        })
+        const allTextures = await loadSpineResources(spineData, randomVariant)
 
-        const spineAtlas = new PIXI.spine.core.TextureAtlas()
+        const spineAtlas = new TextureAtlas()
         spineAtlas.addTextureHash(allTextures, false)
 
-        const spineAtlasLoader = new PIXI.spine.core.AtlasAttachmentLoader(
-          spineAtlas,
-        )
-        const spineJsonParser = new PIXI.spine.core.SkeletonJson(
-          spineAtlasLoader,
-        )
+        const spineAtlasLoader = new AtlasAttachmentLoader(spineAtlas)
+        const spineJsonParser = new SkeletonJson(spineAtlasLoader)
 
         const skeletonData = spineJsonParser.readSkeletonData(spineData)
 
@@ -200,20 +153,21 @@ export default function Axie({
           throw new Error('skeletonData is missing critical properties')
         }
 
-        const spine = new Figure(skeletonData)
+        const spine = new Spine(skeletonData)
         spine.scale.set(direction === 'right' ? -0.18 : 0.18, 0.18)
 
         console.log('setting Y position', y)
-        // Adjusting the position to move the Axie down
         spine.position.set(
           direction === 'left' ? app.screen.width + spine.width : spine.width,
           y,
         )
 
+        spine.zIndex = Math.floor(spine.y)
         spine.state.setAnimation(0, animation, true)
-        container.addChild(spine)
+        app.stage.addChild(spine)
+        app.stage.sortableChildren = true
         spineInstance = spine
-        createdRef.current = true // Set the ref to true after creation
+        createdRef.current = true
 
         app.ticker.add(() => {
           if (spineInstance) {
@@ -231,12 +185,14 @@ export default function Axie({
       } catch (error) {
         console.error('Error creating spine:', error)
       } finally {
-        setIsLoading(false) // Set loading to false after process
+        setIsLoading(false)
+        createdRef.current = false
       }
     }
 
-    if (hasHydrated) {
+    if (isReadyForCreation) {
       createAxie()
+      setIsReadyForCreation(false)
     }
 
     return () => {
@@ -244,10 +200,19 @@ export default function Axie({
         app.stage.removeChild(spineInstance)
       }
     }
-  }, [direction, app, animation, speed, y, onRemove, isLoading, hasHydrated])
+  }, [
+    direction,
+    app,
+    animation,
+    speed,
+    y,
+    onRemove,
+    isLoading,
+    isReadyForCreation,
+  ])
 
   useEffect(() => {
-    setHasHydrated(true)
+    setIsReadyForCreation(true)
   }, [])
 
   return null
