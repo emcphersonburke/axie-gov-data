@@ -1,2 +1,3 @@
-export * from './chartData'
-export * from './transactions'
+export * from './axie';
+export * from './chartData';
+export * from './transactions';

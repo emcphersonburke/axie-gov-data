@@ -1,0 +1,41 @@
+.terrarium {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.axie {
+  position: absolute;
+  bottom: 0;
+  height: 100px;
+  animation-duration: 10s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  &.direction0 {
+    animation-name: walkRight;
+  }
+
+  &.direction1 {
+    animation-name: walkLeft;
+  }
+}
+
+@keyframes walkRight {
+  from {
+    left: -10%;
+  }
+  to {
+    left: 110%;
+  }
+}
+
+@keyframes walkLeft {
+  from {
+    left: 110%;
+  }
+  to {
+    left: -10%;
+  }
+}

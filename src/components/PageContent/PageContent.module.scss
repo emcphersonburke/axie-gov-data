@@ -17,6 +17,10 @@
   color: white;
   padding: 24px;
 
+  h1 {
+    z-index: 1;
+  }
+
   .chartGroup {
     display: flex;
     flex-wrap: wrap;
@@ -42,6 +46,7 @@
   border-radius: 8px;
   font-family: $fontWorkSans;
   padding: 12px 16px 8px;
+  z-index: 1;
 }
 
 .tokenPriceBoxHeading {
