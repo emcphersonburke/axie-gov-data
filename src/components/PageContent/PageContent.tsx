@@ -1,3 +1,4 @@
+// app/PageContent.tsx
 'use client'
 
 import dynamic from 'next/dynamic'
@@ -6,6 +7,7 @@ import React from 'react'
 import BarChart from '~/components/BarChart/BarChart'
 import ChartGroup from '~/components/ChartGroup/ChartGroup'
 import LineChart from '~/components/LineChart/LineChart'
+import TreasuryTotals from '~/components/TreasuryTotals/TreasuryTotals'
 import { ChartTransaction } from '~/types'
 
 import styles from './PageContent.module.scss'
@@ -55,6 +57,10 @@ export default function PageContent({
           </div>
         </div>
       </div>
+      <TreasuryTotals
+        axsExchangeRate={exchangeRates.axs}
+        wethExchangeRate={exchangeRates.eth}
+      />
       <ChartGroup
         title="Growth"
         initialData={initialTransactions}

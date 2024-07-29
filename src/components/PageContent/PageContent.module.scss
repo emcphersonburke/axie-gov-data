@@ -8,8 +8,16 @@
 
 .headingWrapper {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  gap: $px16;
+  justify-content: stretch;
   margin-bottom: $px24;
+
+  @include tablet {
+    flex-direction: row;
+    gap: 0;
+    justify-content: space-between;
+  }
 }
 
 .page {
@@ -19,6 +27,7 @@
   position: relative;
 
   h1 {
+    line-height: 1.2;
     z-index: 1;
   }
 
@@ -63,4 +72,5 @@
 .tokenPriceBoxWrapper {
   display: flex;
   gap: 16px;
+  justify-content: flex-end;
 }

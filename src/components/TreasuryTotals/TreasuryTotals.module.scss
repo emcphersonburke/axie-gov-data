@@ -1,0 +1,30 @@
+.treasuryTotals {
+  background-color: $containerBackgroundColor;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: $px24;
+  justify-content: space-between;
+  margin-bottom: $px24;
+  padding: 16px;
+  z-index: 1;
+
+  @include tablet {
+    flex-direction: row;
+  }
+
+  .totalBox {
+    text-align: center;
+  }
+
+  .totalLabel {
+    font-size: $px14;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  .totalAmount {
+    font-size: $px24;
+    font-weight: 600;
+  }
+}
