@@ -198,6 +198,8 @@ export default function Axie({
     return () => {
       if (spineInstance) {
         app.stage.removeChild(spineInstance)
+        spineInstance.destroy()
+        spineInstance = null
       }
     }
   }, [

@@ -38,7 +38,7 @@ export default function ChartGroup({
         calculatedStartDate.setDate(calculatedStartDate.getDate() - 1)
         break
       case '7D':
-        groupBy = '3h'
+        groupBy = '8h'
         calculatedStartDate.setDate(calculatedStartDate.getDate() - 7)
         break
       case '30D':

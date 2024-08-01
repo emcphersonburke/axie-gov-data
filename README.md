@@ -53,7 +53,7 @@ Fetch transactions grouped by different intervals.
 
 **Parameters:**
 
-- `groupBy` - Interval to group transactions by (`30m`, `3h`, `daily`, `weekly`, `monthly`).
+- `groupBy` - Interval to group transactions by (`30m`, `8h`, `daily`, `weekly`, `monthly`).
 
 **Example:**
 

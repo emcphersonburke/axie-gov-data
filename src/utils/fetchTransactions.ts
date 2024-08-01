@@ -19,8 +19,8 @@ export const fetchTransactions = async (
       view = 'thirty_min_aggregated_transactions'
       interval = '1 day'
       break
-    case '3h':
-      view = 'three_hour_aggregated_transactions'
+    case '8h':
+      view = 'eight_hour_aggregated_transactions'
       interval = '7 days'
       break
     case 'daily':
@@ -47,7 +47,7 @@ export const fetchTransactions = async (
   if (interval) {
     if (groupBy === '30m') {
       startDateObj.setDate(endDateObj.getDate() - 1)
-    } else if (groupBy === '3h') {
+    } else if (groupBy === '8h') {
       startDateObj.setDate(endDateObj.getDate() - 7)
     } else if (groupBy === 'daily') {
       startDateObj.setDate(endDateObj.getDate() - 30)
@@ -85,7 +85,10 @@ export const fetchTransactions = async (
       : { axs: 0, weth: 0 }
 
   return {
-    transactions: data as ChartTransaction[],
+    transactions: data.map((transaction, index) => ({
+      ...transaction,
+      index,
+    })) as ChartTransaction[],
     cumulativeTotals,
   }
 }

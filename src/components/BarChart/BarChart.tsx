@@ -5,6 +5,12 @@ import { ResponsiveBar } from '@nivo/bar'
 import { nivoColors, nivoTheme } from '~/lib/nivo'
 import { ChartData, ChartTransaction } from '~/types'
 
+type BarChartProps = {
+  data: ChartTransaction[]
+  type: 'nftType' | 'transactionType'
+  currency: 'axs' | 'weth'
+}
+
 function formatSaleData(transactions: ChartTransaction[]): {
   nftTypeData: ChartData[]
   transactionTypeData: ChartData[]
@@ -13,13 +19,13 @@ function formatSaleData(transactions: ChartTransaction[]): {
     return { nftTypeData: [], transactionTypeData: [] }
 
   const nftTypeData = transactions.reduce(
-    (acc, tx) => {
+    (acc, tx, index) => {
       if (tx.type !== 'sale' || tx.nft_type === 'No NFT Transfer') return acc
 
       const key = tx.date
 
       if (!acc[key]) {
-        acc[key] = { date: key }
+        acc[key] = { date: key, index }
       }
 
       if (!acc[key][`${tx.nft_type}_axs_fee`]) {
@@ -42,11 +48,11 @@ function formatSaleData(transactions: ChartTransaction[]): {
   )
 
   const transactionTypeData = transactions.reduce(
-    (acc, tx) => {
+    (acc, tx, index) => {
       const key = tx.date
 
       if (!acc[key]) {
-        acc[key] = { date: key }
+        acc[key] = { date: key, index }
       }
 
       if (!acc[key][`${tx.type}_axs_fee`]) {
@@ -68,15 +74,11 @@ function formatSaleData(transactions: ChartTransaction[]): {
   )
 
   return {
-    nftTypeData: Object.values(nftTypeData),
-    transactionTypeData: Object.values(transactionTypeData),
+    nftTypeData: Object.values(nftTypeData).sort((a, b) => a.index - b.index),
+    transactionTypeData: Object.values(transactionTypeData).sort(
+      (a, b) => a.index - b.index,
+    ),
   }
-}
-
-type BarChartProps = {
-  data: ChartTransaction[]
-  type: 'nftType' | 'transactionType'
-  currency: 'axs' | 'weth'
 }
 
 export default function BarChart({ data, type, currency }: BarChartProps) {
@@ -91,12 +93,16 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
   const allKeys = new Set<string>()
   chartData.forEach((item) => {
     Object.keys(item).forEach((key) => {
-      if (key !== 'date' && key.includes(`${currency}_fee`)) {
+      if (
+        key !== 'date' &&
+        key !== 'index' &&
+        key.includes(`${currency}_fee`)
+      ) {
         allKeys.add(key)
       }
     })
   })
-  const filteredKeys = Array.from(allKeys)
+  const filteredKeys = Array.from(allKeys).sort() // Ensure keys are sorted
 
   // Map keys to friendly names for the legend
   const legendTitleMap: { [key: string]: string } = {
@@ -112,6 +118,7 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
     Charm_weth_fee: 'Charm',
     sale_axs_fee: 'Marketplace',
     'rc-mint_axs_fee': 'R&C Mint',
+    Accessory_weth_fee: 'Accessory',
   }
 
   return (
@@ -119,7 +126,7 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
       <ResponsiveBar
         data={chartData}
         keys={filteredKeys}
-        indexBy="date"
+        indexBy="index"
         margin={{ top: 50, right: 130, bottom: 20, left: 48 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
@@ -138,6 +145,7 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
           tickRotation: 0,
           format: (value) => value.toLocaleString(),
         }}
+        layout={'vertical'}
         enableLabel={false} // Disable labels on the bars
         legends={[
           {
@@ -194,7 +202,7 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
               })}
             </div>
             <strong>
-              {legendTitleMap[id as string] || id}: {Number(value).toFixed(2)}{' '}
+              {legendTitleMap[id as string] || id}: {Number(value).toFixed(4)}{' '}
               {currency.toUpperCase()}
             </strong>
           </div>

@@ -72,6 +72,7 @@ export const nivoColors = {
   growthAxs: ['#9967fb'],
   growthWeth: ['#0094ff'],
   barChartColors: {
+    accessory: '#dd8a0e',
     ascension: '#fa59a0',
     charm: '#fa59a0',
     axie: '#00f5f8',
