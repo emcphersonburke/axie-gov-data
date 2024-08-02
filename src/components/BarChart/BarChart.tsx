@@ -126,7 +126,7 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
       <ResponsiveBar
         data={chartData}
         keys={filteredKeys}
-        indexBy="index"
+        indexBy="date"
         margin={{ top: 50, right: 130, bottom: 20, left: 48 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
