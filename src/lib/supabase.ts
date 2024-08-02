@@ -29,12 +29,26 @@ export const setMetaValue = async (key: string, value: string) => {
   }
 }
 
+export const upsertBlock = async (blockNumber: number) => {
+  const { error } = await supabase
+    .from('blocks')
+    .upsert({ number: blockNumber }, { onConflict: 'number' })
+
+  if (error) {
+    console.error('Error upserting block:', error)
+    return
+  }
+}
+
 export const upsertGatewayTransaction = async (
   transaction: GatewayTransaction,
 ) => {
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from('gateway_transactions')
-    .upsert(transaction, { onConflict: 'transaction_id' })
+    .upsert(
+      { ...transaction, block: transaction.block },
+      { onConflict: 'transaction_id' },
+    )
 
   if (error) {
     console.error('Error upserting gateway transaction:', error)

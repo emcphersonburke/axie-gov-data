@@ -6,6 +6,7 @@ import { roninGatewayAbi, wethTokenAbi } from '~/lib/abis/'
 import {
   getMetaValue,
   setMetaValue,
+  upsertBlock,
   upsertGatewayTransaction,
 } from '~/lib/supabase'
 import {
@@ -20,17 +21,21 @@ import {
   fetchLogsForBlockRange,
 } from '~/utils'
 
+// Configure dynamic execution and set max duration for the function
 export const dynamic = 'force-dynamic'
 export const maxDuration = 30 // Kick up the max execution time
 
+// Initialize Web3 instance and set gateway address
 const web3 = new Web3(process.env.RONIN_API_ENDPOINT)
 const gatewayAddress = process.env.RONIN_GATEWAY_ADDRESS.toLowerCase()
 
+// Main handler for GET request to fetch and process blockchain logs
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
   let fromBlockStr = searchParams.get('fromBlock')
   let toBlockStr = searchParams.get('toBlock')
 
+  // Determine block range if not provided
   if (!fromBlockStr || !toBlockStr) {
     if (!fromBlockStr) {
       const lastProcessedBlock = await getMetaValue(
@@ -38,12 +43,12 @@ export async function GET(request: NextRequest) {
       )
       fromBlockStr = lastProcessedBlock
         ? lastProcessedBlock
-        : process.env.RONIN_GATEWAY_FIRST_REAL_TX_BLOCK || '0'
+        : process.env.RONIN_GATEWAY_FIRST_REAL_TX_BLOCK || '0' // Use default if no last block found
     }
 
     if (!toBlockStr) {
-      const blockInterval = 20
-      toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString()
+      const blockInterval = 200
+      toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString() // Set range to 20 blocks
     }
   }
 
@@ -51,9 +56,21 @@ export async function GET(request: NextRequest) {
   const toBlock = parseInt(toBlockStr, 10)
 
   try {
+    // Fetch logs for the specified block range
     const logs = await fetchLogsForBlockRange(fromBlock, toBlock)
 
+    // console.log(`Fetched logs for blocks ${fromBlock} to ${toBlock}`)
+    // console.log(logs)
+    // return new Response(
+    //   JSON.stringify({ success: true, message: 'No logs found' }),
+    //   {
+    //     status: 200,
+    //     headers: { 'Content-Type': 'application/json' },
+    //   },
+    // )
+
     if (logs.length === 0) {
+      // Update last processed block if no relevant logs found
       await setMetaValue('last_processed_bridge_block', toBlock.toString())
       return new Response(
         JSON.stringify({ success: true, message: 'No logs found' }),
@@ -64,12 +81,14 @@ export async function GET(request: NextRequest) {
       )
     }
 
+    // Filter logs for relevant contract addresses
     const filteredLogs = logs.filter(
       (log) =>
         log.address === process.env.WETH_TOKEN_CONTRACT_ADDRESS.toLowerCase() ||
         log.address === gatewayAddress,
     )
 
+    // Decode logs based on their topics and respective ABI
     const decodedWethLogs = decodeLogs(
       filteredLogs.filter(
         (log) =>
@@ -91,6 +110,7 @@ export async function GET(request: NextRequest) {
       web3,
     )
 
+    // Combine and organize logs by transaction hash
     const combinedLogs = [
       ...decodedWethLogs,
       ...decodedDepositedLogs,
@@ -105,6 +125,7 @@ export async function GET(request: NextRequest) {
       logsByTransaction[log.transactionHash].push(log)
     })
 
+    // Filter transactions to include only those with specific event combinations
     const filteredTransactions = Object.entries(logsByTransaction).filter(
       ([, logs]) =>
         logs.some((log) => log.event === 'Transfer') &&
@@ -115,6 +136,8 @@ export async function GET(request: NextRequest) {
     )
 
     for (const [transactionHash, logs] of filteredTransactions) {
+      /* Temporarily disabled 
+      // Prepare payload to fetch transaction receipt
       const transactionPayload = {
         jsonrpc: '2.0',
         method: 'eth_getTransactionReceipt',
@@ -122,6 +145,7 @@ export async function GET(request: NextRequest) {
         id: 1,
       }
 
+      // Fetch transaction receipt from the API
       const transactionResponse = await axios.post(
         process.env.RONIN_API_ENDPOINT,
         transactionPayload,
@@ -137,14 +161,22 @@ export async function GET(request: NextRequest) {
       if (!transaction) {
         console.error(`Transaction not found for hash: ${transactionHash}`)
         continue
-      }
+      } 
 
       const blockTimestamp = await fetchBlockTimestamp(transaction.blockNumber)
+      */
+
+      const blockNumberHex = logs[0].blockNumber
+      const blockNumber = parseInt(blockNumberHex, 16)
+
+      // Add the block to the database if it doesn't exist
+      await upsertBlock(blockNumber)
 
       let type = 'unknown'
       let address = ''
       let amount = '0'
 
+      // Determine transaction type and details based on logs
       logs.forEach((log) => {
         const { event, decodedLog, contractAddress } = log
 
@@ -169,9 +201,10 @@ export async function GET(request: NextRequest) {
         }
       })
 
+      // Create a new transaction object to upsert into the database
       const newTransaction: GatewayTransaction = {
         transaction_id: transactionHash,
-        block: parseInt(transaction.blockNumber, 16),
+        block: blockNumber,
         amount,
         type,
         address,

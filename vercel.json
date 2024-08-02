@@ -1,7 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/process-transaction-batch",
+      "path": "/api/process-bridge-transaction-batch",
       "schedule": "* * * * *"
     }
   ]

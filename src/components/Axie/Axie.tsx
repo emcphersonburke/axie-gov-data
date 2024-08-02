@@ -118,9 +118,7 @@ export default function Axie({
 
       setIsLoading(true)
 
-      console.log('createAxie')
       const container = new PIXI.Container()
-      // app.stage.addChild(container)
 
       const combinedColors: AxieColor[] = key.items.colors
       const axieCombo = generateRandomCombo()
@@ -156,7 +154,6 @@ export default function Axie({
         const spine = new Spine(skeletonData)
         spine.scale.set(direction === 'right' ? -0.18 : 0.18, 0.18)
 
-        console.log('setting Y position', y)
         spine.position.set(
           direction === 'left' ? app.screen.width + spine.width : spine.width,
           y,

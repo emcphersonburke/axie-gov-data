@@ -71,7 +71,6 @@ export default function AxieTerrarium() {
 
     const scheduleNextSpawn = () => {
       const randomInterval = Math.random() * 5000 + 5000 // Random interval between 5 to 10 seconds
-      console.log('scheduleNextSpawn', randomInterval)
       spawnIntervalRef.current = setTimeout(() => {
         spawnAxie()
         scheduleNextSpawn()
