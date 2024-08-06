@@ -42,8 +42,10 @@ export async function GET(request: NextRequest) {
         'last_processed_bridge_block',
       )
       fromBlockStr = lastProcessedBlock
-        ? lastProcessedBlock
-        : process.env.RONIN_GATEWAY_FIRST_REAL_TX_BLOCK || '0' // Use default if no last block found
+      // Uncomment the below if starting with an empty database
+      // fromBlockStr = lastProcessedBlock
+      //   ? lastProcessedBlock
+      //   : process.env.RONIN_GATEWAY_FIRST_REAL_TX_BLOCK || '0' // Use default if no last block found
     }
 
     if (!toBlockStr) {
