@@ -93,7 +93,14 @@ export default function PageContent({
         initialData={initialTransactions}
         initialTotals={initialTotals}
       >
-        {(data) => <BarChart data={data} type="nftType" currency="weth" />}
+        {(data, startDate, cumulativeTotals, displayTime) => (
+          <BarChart
+            data={data}
+            type="nftType"
+            currency="weth"
+            displayTime={displayTime}
+          />
+        )}
       </ChartGroup>
       <ChartGroup
         title="Fee Breakdown in Ecosystem"
@@ -101,8 +108,13 @@ export default function PageContent({
         initialData={initialTransactions}
         initialTotals={initialTotals}
       >
-        {(data) => (
-          <BarChart data={data} type="transactionType" currency="axs" />
+        {(data, startDate, cumulativeTotals, displayTime) => (
+          <BarChart
+            data={data}
+            type="transactionType"
+            currency="axs"
+            displayTime={displayTime}
+          />
         )}
       </ChartGroup>
     </div>

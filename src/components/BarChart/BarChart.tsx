@@ -5,8 +5,11 @@ import { ResponsiveBar } from '@nivo/bar'
 import { nivoColors, nivoTheme } from '~/lib/nivo'
 import { ChartData, ChartTransaction } from '~/types'
 
+import ChartTick from '../ChartTick/ChartTick'
+
 type BarChartProps = {
   data: ChartTransaction[]
+  displayTime: boolean
   type: 'nftType' | 'transactionType'
   currency: 'axs' | 'weth'
 }
@@ -81,7 +84,12 @@ function formatSaleData(transactions: ChartTransaction[]): {
   }
 }
 
-export default function BarChart({ data, type, currency }: BarChartProps) {
+export default function BarChart({
+  data,
+  type,
+  currency,
+  displayTime,
+}: BarChartProps) {
   const { nftTypeData, transactionTypeData } = formatSaleData(data)
   const chartData = type === 'nftType' ? nftTypeData : transactionTypeData
 
@@ -127,18 +135,38 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
         data={chartData}
         keys={filteredKeys}
         indexBy="date"
-        margin={{ top: 50, right: 130, bottom: 20, left: 48 }}
+        margin={{ top: 50, right: 130, bottom: 40, left: 48 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}
         colors={({ id }) => {
           const key = id.toString().split('_')[0].toLowerCase()
-          return nivoColors.barChartColors[key] || '#fff'
+          return nivoColors.barChartColors[key] + 'dd' || '#fff'
         }}
         borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
         axisTop={null}
         axisRight={null}
-        axisBottom={null}
+        axisBottom={{
+          renderTick: ChartTick,
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          format: (value) => {
+            const date = new Date(value)
+            const dateStr = date.toLocaleDateString(undefined, {
+              month: 'numeric',
+              day: 'numeric',
+              year: '2-digit',
+            })
+            const timeStr = date.toLocaleTimeString(undefined, {
+              hour: 'numeric',
+              minute: 'numeric',
+              hour12: false,
+            })
+
+            return displayTime ? `${dateStr}\n${timeStr}` : dateStr
+          },
+        }}
         axisLeft={{
           tickSize: 5,
           tickPadding: 5,
@@ -177,36 +205,46 @@ export default function BarChart({ data, type, currency }: BarChartProps) {
           },
         ]}
         role="application"
-        ariaLabel={`Inflows by ${type === 'nftType' ? 'NFT Type' : 'Transaction Type'} (${currency.toUpperCase()})`}
+        ariaLabel={`Inflows by ${
+          type === 'nftType' ? 'NFT Type' : 'Transaction Type'
+        } (${currency.toUpperCase()})`}
         barAriaLabel={(e) => `${e.id}: ${e.formattedValue} in ${e.indexValue}`}
         theme={nivoTheme}
-        tooltip={({ id, value, indexValue }) => (
-          <div
-            style={{
-              color:
-                nivoColors.barChartColors[
-                  id.toString().split('_')[0].toLowerCase()
-                ],
-              background: '#1c1f25',
-              padding: '5px',
-              borderRadius: '3px',
-            }}
-          >
-            <div style={{ fontSize: '0.8rem' }}>
-              {new Date(indexValue).toLocaleDateString(undefined, {
-                year: 'numeric',
-                month: 'short',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-              })}
+        tooltip={({ id, value, indexValue }) => {
+          const date = new Date(indexValue)
+          const dateStr = date.toLocaleDateString(undefined, {
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+          })
+          const timeStr = date.toLocaleTimeString(undefined, {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: false,
+          })
+
+          return (
+            <div
+              style={{
+                color:
+                  nivoColors.barChartColors[
+                    id.toString().split('_')[0].toLowerCase()
+                  ],
+                background: '#1c1f25',
+                padding: '5px',
+                borderRadius: '3px',
+              }}
+            >
+              <div style={{ fontSize: '0.8rem' }}>
+                {timeStr === '0:00' ? dateStr : `${dateStr} ${timeStr}`}
+              </div>
+              <strong>
+                {legendTitleMap[id as string] || id}: {Number(value).toFixed(4)}{' '}
+                {currency.toUpperCase()}
+              </strong>
             </div>
-            <strong>
-              {legendTitleMap[id as string] || id}: {Number(value).toFixed(4)}{' '}
-              {currency.toUpperCase()}
-            </strong>
-          </div>
-        )}
+          )
+        }}
       />
     </div>
   )

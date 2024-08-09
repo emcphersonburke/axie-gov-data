@@ -41,7 +41,7 @@ async function fetchExchangeRates() {
 
 export default async function Page() {
   const { transactions, cumulativeTotals } = await fetchTransactions(
-    '30m',
+    '1h',
     '2024-06-16',
   )
   const exchangeRates = await fetchExchangeRates()

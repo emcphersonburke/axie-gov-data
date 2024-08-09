@@ -15,8 +15,8 @@ export const fetchTransactions = async (
   let interval: string
 
   switch (groupBy) {
-    case '30m':
-      view = 'thirty_min_aggregated_transactions'
+    case '1h':
+      view = 'hourly_aggregated_transactions'
       interval = '1 day'
       break
     case '8h':
@@ -45,7 +45,7 @@ export const fetchTransactions = async (
   const startDateObj = new Date(startDate)
 
   if (interval) {
-    if (groupBy === '30m') {
+    if (groupBy === '1h') {
       startDateObj.setDate(endDateObj.getDate() - 1)
     } else if (groupBy === '8h') {
       startDateObj.setDate(endDateObj.getDate() - 7)

@@ -13,6 +13,7 @@ type ChartGroupProps = {
     data: ChartTransaction[],
     startDate: string,
     cumulativeTotals: { axs: number; weth: number },
+    displayTime: boolean,
   ) => ReactNode
 }
 
@@ -34,7 +35,7 @@ export default function ChartGroup({
 
     switch (range) {
       case '24H':
-        groupBy = '30m'
+        groupBy = '1h'
         calculatedStartDate.setDate(calculatedStartDate.getDate() - 1)
         break
       case '7D':
@@ -98,7 +99,12 @@ export default function ChartGroup({
         ))}
       </div>
       <div className={styles.chartWrapper}>
-        {children(data, startDate, cumulativeTotals)}
+        {children(
+          data,
+          startDate,
+          cumulativeTotals,
+          timeRange === '24H' || timeRange === '7D',
+        )}
       </div>
     </div>
   )

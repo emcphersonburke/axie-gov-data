@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { NextRequest } from 'next/server'
 import Web3 from 'web3'
 
