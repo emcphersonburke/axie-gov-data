@@ -1,6 +1,6 @@
 export interface ChartData {
   index?: number
-  date: string
+  date?: string
   [key: string]: number | string
 }
 

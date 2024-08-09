@@ -64,7 +64,6 @@
     "bodies": [
       "body-sumo",
       "body-curly",
-      "body-summer",
       "body-mystic-normal",
       "body-frosty",
       "body-spiky",
@@ -87,12 +86,6 @@
         "name": "Curly",
         "type": "body",
         "sample": "body-curly"
-      },
-      {
-        "key": "body-summer",
-        "name": "Summer",
-        "type": "body",
-        "sample": "body-summer"
       },
       {
         "key": "body-mystic-normal",

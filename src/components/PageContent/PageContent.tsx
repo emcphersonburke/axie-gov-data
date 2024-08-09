@@ -1,18 +1,16 @@
-// app/PageContent.tsx
 'use client'
 
 import dynamic from 'next/dynamic'
 import React from 'react'
 
-import BarChart from '~/components/BarChart/BarChart'
 import ChartGroup from '~/components/ChartGroup/ChartGroup'
 import LineChart from '~/components/LineChart/LineChart'
+import PieChart from '~/components/PieChart/PieChart'
 import TreasuryTotals from '~/components/TreasuryTotals/TreasuryTotals'
 import { ChartTransaction } from '~/types'
 
 import styles from './PageContent.module.scss'
 
-// Dynamically import AxieTerrarium with no SSR
 const AxieTerrarium = dynamic(() => import('../AxieTerrarium/AxieTerrarium'), {
   ssr: false,
 })
@@ -23,13 +21,15 @@ type ExchangeRates = {
 }
 
 type PageContentProps = {
-  initialTransactions: ChartTransaction[]
+  lineTransactions: ChartTransaction[]
+  pieTransactions: ChartTransaction[]
   initialTotals: { axs: number; weth: number }
   exchangeRates: ExchangeRates
 }
 
 export default function PageContent({
-  initialTransactions,
+  lineTransactions,
+  pieTransactions,
   initialTotals,
   exchangeRates,
 }: PageContentProps) {
@@ -38,6 +38,10 @@ export default function PageContent({
       <AxieTerrarium />
       <div className={styles.headingWrapper}>
         <h1>Axie Community Treasury</h1>
+        <p className={styles.disclaimer}>
+          Note: We are currently syncing transaction data, so the totals may be
+          inaccurate until the process is complete.
+        </p>
         <div className={styles.tokenPriceBoxWrapper}>
           <div className={styles.tokenPriceBox}>
             <p className={`${styles.tokenPriceBoxHeading} ${styles.ethColor}`}>
@@ -63,8 +67,9 @@ export default function PageContent({
       />
       <ChartGroup
         title="Growth"
-        initialData={initialTransactions}
+        initialData={lineTransactions}
         initialTotals={initialTotals}
+        dataType="line"
       >
         {(data, startDate, cumulativeTotals) => (
           <>
@@ -90,31 +95,21 @@ export default function PageContent({
       <ChartGroup
         title="Fees from Marketplace Sales"
         subtitle="By NFT Type (WETH)"
-        initialData={initialTransactions}
+        initialData={pieTransactions}
         initialTotals={initialTotals}
+        dataType="pie"
       >
-        {(data, startDate, cumulativeTotals, displayTime) => (
-          <BarChart
-            data={data}
-            type="nftType"
-            currency="weth"
-            displayTime={displayTime}
-          />
-        )}
+        {(data) => <PieChart data={data} type="nftType" currency="weth" />}
       </ChartGroup>
       <ChartGroup
         title="Fee Breakdown in Ecosystem"
-        subtitle="By Transaction Type (AXS)" // Make AXS its own line along with the logo. Same for wETh
-        initialData={initialTransactions}
+        subtitle="By Transaction Type (AXS)"
+        initialData={pieTransactions}
         initialTotals={initialTotals}
+        dataType="pie"
       >
-        {(data, startDate, cumulativeTotals, displayTime) => (
-          <BarChart
-            data={data}
-            type="transactionType"
-            currency="axs"
-            displayTime={displayTime}
-          />
+        {(data) => (
+          <PieChart data={data} type="transactionType" currency="axs" />
         )}
       </ChartGroup>
     </div>

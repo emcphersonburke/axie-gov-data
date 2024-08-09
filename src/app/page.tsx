@@ -1,6 +1,3 @@
-// app/page.tsx
-import { createClient } from '@supabase/supabase-js'
-
 import PageContent from '~/components/PageContent/PageContent'
 import { fetchTransactions } from '~/utils/fetchTransactions'
 
@@ -40,15 +37,23 @@ async function fetchExchangeRates() {
 }
 
 export default async function Page() {
-  const { transactions, cumulativeTotals } = await fetchTransactions(
+  // Fetch line chart data
+  const { transactions: lineTransactions, cumulativeTotals } =
+    await fetchTransactions('1h', '2024-06-17', 'line')
+
+  // Fetch pie chart data
+  const { transactions: pieTransactions } = await fetchTransactions(
     '1h',
     '2024-06-16',
+    'pie',
   )
+
   const exchangeRates = await fetchExchangeRates()
 
   return (
     <PageContent
-      initialTransactions={transactions}
+      lineTransactions={lineTransactions}
+      pieTransactions={pieTransactions}
       initialTotals={cumulativeTotals}
       exchangeRates={exchangeRates}
     />

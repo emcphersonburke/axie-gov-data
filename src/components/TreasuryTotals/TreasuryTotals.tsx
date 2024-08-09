@@ -35,25 +35,39 @@ export default function TreasuryTotals({
     return <div>Loading...</div>
   }
 
-  const totalUSD = (
-    totals.axsTotal * axsExchangeRate +
-    totals.wethTotal * wethExchangeRate
-  ).toFixed(2)
+  const totalUSD =
+    totals.axsTotal * axsExchangeRate + totals.wethTotal * wethExchangeRate
 
   return (
     <div className={styles.treasuryTotals}>
       <div className={styles.totalBox}>
         <p className={styles.totalLabel}>Total AXS</p>
-        <p className={styles.totalAmount}>{totals.axsTotal} AXS</p>
+        <p className={styles.totalAmount}>
+          {new Intl.NumberFormat(undefined, {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4,
+          }).format(totals.axsTotal)}{' '}
+          AXS
+        </p>
       </div>
       <div className={styles.totalBox}>
         <p className={styles.totalLabel}>Total WETH</p>
-        <p className={styles.totalAmount}>{totals.wethTotal} WETH</p>
+        <p className={styles.totalAmount}>
+          {new Intl.NumberFormat(undefined, {
+            minimumFractionDigits: 4,
+            maximumFractionDigits: 4,
+          }).format(totals.wethTotal)}{' '}
+          WETH
+        </p>
       </div>
       <div className={styles.totalBox}>
         <p className={styles.totalLabel}>Total AXS + WETH as USD</p>
         <p className={styles.totalAmount}>
-          ${new Intl.NumberFormat().format(Number(totalUSD))}
+          $
+          {new Intl.NumberFormat(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          }).format(totalUSD)}
         </p>
       </div>
     </div>

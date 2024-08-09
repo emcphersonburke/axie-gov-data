@@ -9,56 +9,55 @@ import { ChartTransaction } from '~/types'
 export const fetchTransactions = async (
   groupBy: string,
   startDate: string,
-  endDate: string = '2024-06-17',
+  dataType: 'line' | 'pie', // Specify the type of data needed
 ) => {
   let view: string
-  let interval: string
 
-  switch (groupBy) {
-    case '1h':
-      view = 'hourly_aggregated_transactions'
-      interval = '1 day'
-      break
-    case '8h':
-      view = 'eight_hour_aggregated_transactions'
-      interval = '7 days'
-      break
-    case 'daily':
-      view = 'daily_aggregated_transactions'
-      interval = '30 days'
-      break
-    case 'weekly':
-      view = 'weekly_aggregated_transactions'
-      interval = '1 year'
-      break
-    case 'monthly':
-      view = 'monthly_aggregated_transactions'
-      interval = '' // No constraint for 'ALL'
-      break
-    default:
-      throw new Error('Invalid groupBy parameter')
-  }
-
-  let query = supabase.from(view).select('*')
-
-  const endDateObj = new Date(endDate)
-  const startDateObj = new Date(startDate)
-
-  if (interval) {
-    if (groupBy === '1h') {
-      startDateObj.setDate(endDateObj.getDate() - 1)
-    } else if (groupBy === '8h') {
-      startDateObj.setDate(endDateObj.getDate() - 7)
-    } else if (groupBy === 'daily') {
-      startDateObj.setDate(endDateObj.getDate() - 30)
-    } else if (groupBy === 'weekly') {
-      startDateObj.setFullYear(endDateObj.getFullYear() - 1)
+  if (dataType === 'pie') {
+    // Use pie chart views
+    switch (groupBy) {
+      case '1h':
+        view = 'aggregated_transactions_24h'
+        break
+      case '8h':
+        view = 'aggregated_transactions_7d'
+        break
+      case 'daily':
+        view = 'aggregated_transactions_30d'
+        break
+      case 'weekly':
+        view = 'aggregated_transactions_6m'
+        break
+      case 'monthly':
+        view = 'aggregated_transactions_1y'
+        break
+      default:
+        view = 'aggregated_transactions_all'
     }
-
-    query = query
-      .gte('date', startDateObj.toISOString().split('T')[0])
-      .lte('date', endDateObj.toISOString().split('T')[0])
+  } else {
+    // Use line chart views
+    switch (groupBy) {
+      case '1h':
+        view = 'aggregated_fees_24h_v2'
+        break
+      case '8h':
+        view = 'aggregated_fees_7d'
+        break
+      case 'daily':
+        view = 'aggregated_fees_30d'
+        break
+      case 'weekly':
+        view = 'aggregated_fees_6m'
+        break
+      case 'monthly':
+        view = 'aggregated_fees_1y'
+        break
+      default:
+        view = 'aggregated_fees_all'
+    }
   }
+
+  const query = supabase.from(view).select('*')
 
   const { data, error } = await query
 
@@ -66,22 +65,10 @@ export const fetchTransactions = async (
     throw new Error(error.message)
   }
 
-  // Fetch cumulative totals before the start date using the created function
-  const { data: preWindowData, error: preWindowError } = await supabase.rpc(
-    'get_cumulative_totals',
-    { end_date: startDateObj.toISOString().split('T')[0] },
-  )
-
-  if (preWindowError) {
-    throw new Error(preWindowError.message)
-  }
-
+  // Fetch cumulative totals before the start date for line charts
   const cumulativeTotals =
-    preWindowData && preWindowData.length > 0
-      ? {
-          axs: parseFloat(preWindowData[0].total_axs),
-          weth: parseFloat(preWindowData[0].total_weth),
-        }
+    dataType === 'line'
+      ? await getCumulativeTotals(startDate)
       : { axs: 0, weth: 0 }
 
   return {
@@ -91,4 +78,22 @@ export const fetchTransactions = async (
     })) as ChartTransaction[],
     cumulativeTotals,
   }
+}
+
+const getCumulativeTotals = async (startDate: string) => {
+  const { data: preWindowData, error: preWindowError } = await supabase.rpc(
+    'get_cumulative_totals',
+    { end_date: new Date(startDate).toISOString().split('T')[0] },
+  )
+
+  if (preWindowError) {
+    throw new Error(preWindowError.message)
+  }
+
+  return preWindowData && preWindowData.length > 0
+    ? {
+        axs: parseFloat(preWindowData[0].total_axs),
+        weth: parseFloat(preWindowData[0].total_weth),
+      }
+    : { axs: 0, weth: 0 }
 }

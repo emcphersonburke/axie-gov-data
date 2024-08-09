@@ -8,6 +8,7 @@ import {
   axieInfinityAbi,
   axsTokenAbi,
   charmTokenAbi,
+  consumableTokenAbi,
   landItemTokenAbi,
   landTokenAbi,
   materialAbi,
@@ -111,6 +112,7 @@ export async function GET(request: NextRequest) {
       rune: process.env.RUNE_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       charm: process.env.CHARM_TOKEN_CONTRACT_ADDRESS.toLowerCase(),
       evolution: process.env.PART_EVOLUTION_CONTRACT_ADDRESS.toLowerCase(),
+      consumable: process.env.CONSUMABLE_ITEM_TOKEN_ADDRESS.toLowerCase(),
     }
 
     // Decode logs for each contract
@@ -175,6 +177,11 @@ export async function GET(request: NextRequest) {
         partEvolutionAbi,
         web3,
       ),
+      consumable: decodeLogs(
+        logs.filter((log) => log.address === contractAddresses.consumable),
+        consumableTokenAbi,
+        web3,
+      ),
     }
 
     // Combine all decoded logs into a single array
@@ -191,6 +198,7 @@ export async function GET(request: NextRequest) {
       ...decodedLogs.rune,
       ...decodedLogs.charm,
       ...decodedLogs.evolution,
+      ...decodedLogs.consumable,
     ]
 
     // Group logs by transaction hash

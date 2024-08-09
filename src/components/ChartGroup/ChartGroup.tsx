@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { ChartTransaction } from '~/types'
 
@@ -15,6 +15,7 @@ type ChartGroupProps = {
     cumulativeTotals: { axs: number; weth: number },
     displayTime: boolean,
   ) => ReactNode
+  dataType: 'line' | 'pie' // Add dataType prop to distinguish chart type
 }
 
 export default function ChartGroup({
@@ -23,6 +24,7 @@ export default function ChartGroup({
   initialData = [],
   initialTotals = { axs: 0, weth: 0 },
   children,
+  dataType,
 }: ChartGroupProps) {
   const [timeRange, setTimeRange] = useState('24H')
   const [data, setData] = useState<ChartTransaction[]>(initialData)
@@ -31,7 +33,7 @@ export default function ChartGroup({
 
   const fetchData = async (range: string) => {
     let groupBy
-    let calculatedStartDate = new Date('2024-06-17')
+    let calculatedStartDate = new Date('2024-07-23')
 
     switch (range) {
       case '24H':
@@ -68,7 +70,7 @@ export default function ChartGroup({
 
     try {
       const response = await fetch(
-        `/api/fetch-transactions?groupBy=${groupBy}&startDate=${calculatedStartDate.toISOString()}`,
+        `/api/fetch-transactions?groupBy=${groupBy}&startDate=${calculatedStartDate.toISOString()}&dataType=${dataType}`,
       )
       const { transactions, cumulativeTotals } = await response.json()
       setData(transactions)

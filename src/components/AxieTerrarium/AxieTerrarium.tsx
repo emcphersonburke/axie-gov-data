@@ -70,6 +70,7 @@ export default function AxieTerrarium() {
     }
 
     const scheduleNextSpawn = () => {
+      console.log('scheduleNextSpawn')
       const randomInterval = Math.random() * 5000 + 5000 // Random interval between 5 to 10 seconds
       spawnIntervalRef.current = setTimeout(() => {
         spawnAxie()
@@ -80,6 +81,7 @@ export default function AxieTerrarium() {
     scheduleNextSpawn()
 
     const handleVisibilityChange = () => {
+      console.log('visibility change', document.hidden)
       if (document.hidden) {
         if (spawnIntervalRef.current) {
           clearTimeout(spawnIntervalRef.current)
