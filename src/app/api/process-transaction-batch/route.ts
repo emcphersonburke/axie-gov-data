@@ -320,6 +320,8 @@ export async function GET(request: NextRequest) {
         transactionType = 'breeding'
       } else if (transactionSource === 'evolution') {
         transactionType = 'evolution'
+      } else if (transactionSource === 'atiablessing') {
+        transactionType = 'atiablessing'
       }
 
       // In older transactions, the fee would originate from the user address instead of
