@@ -16,6 +16,7 @@
 
   .totalBox {
     text-align: center;
+    position: relative;
   }
 
   .totalLabel {
@@ -27,5 +28,42 @@
   .totalAmount {
     font-size: $px24;
     font-weight: 600;
+  }
+
+  .tooltip {
+    visibility: hidden;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 4px;
+    padding: 8px;
+    position: absolute;
+    z-index: 2;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    font-size: $px12;
+
+    ::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
+    }
+  }
+
+  .totalLabel:hover .tooltip {
+    visibility: visible;
+  }
+
+  .infoIcon {
+    margin-left: 4px;
+    cursor: pointer;
+    position: relative;
   }
 }

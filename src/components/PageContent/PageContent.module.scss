@@ -5,9 +5,12 @@
 .disclaimer {
   font-size: 14px;
   color: #ffcc00;
-  margin-top: 8px;
-  margin-bottom: 16px;
+  margin: 8px 0 16px;
   line-height: 1.4;
+
+  @include tablet {
+    margin: 8px 24px 16px;
+  }
 }
 
 .ethColor {
