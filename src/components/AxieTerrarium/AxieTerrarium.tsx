@@ -36,7 +36,8 @@ export default function AxieTerrarium() {
   const appRef = useRef<Application>(null)
   const [axies, setAxies] = useState<AxieData[]>([])
   const axieIdRef = useRef(0)
-  const spawnIntervalRef = useRef<NodeJS.Timeout | null>(null)
+  const spawnIntervalRef = useRef<number>(0)
+  const lastSpawnTimeRef = useRef<number>(0)
 
   useEffect(() => {
     if (!containerRef.current || !window) return
@@ -70,27 +71,30 @@ export default function AxieTerrarium() {
     }
 
     const scheduleNextSpawn = () => {
-      console.log('scheduleNextSpawn')
       const randomInterval = Math.random() * 5000 + 5000 // Random interval between 5 to 10 seconds
-      spawnIntervalRef.current = setTimeout(() => {
+      lastSpawnTimeRef.current = performance.now()
+      spawnIntervalRef.current = window.setTimeout(() => {
         spawnAxie()
         scheduleNextSpawn()
       }, randomInterval)
     }
 
-    scheduleNextSpawn()
-
     const handleVisibilityChange = () => {
-      console.log('visibility change', document.hidden)
       if (document.hidden) {
         if (spawnIntervalRef.current) {
           clearTimeout(spawnIntervalRef.current)
         }
       } else {
+        const timeAway = performance.now() - lastSpawnTimeRef.current
+        if (timeAway >= 5000) {
+          // Check if the time away exceeds the min spawn interval
+          spawnAxie()
+        }
         scheduleNextSpawn()
       }
     }
 
+    scheduleNextSpawn()
     document.addEventListener('visibilitychange', handleVisibilityChange)
 
     return () => {

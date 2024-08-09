@@ -68,8 +68,6 @@ function formatPieData(
 export default function PieChart({ data, type, currency }: PieChartProps) {
   const [showArcLabels, setShowArcLabels] = useState(true)
 
-  console.log('data', data)
-
   useEffect(() => {
     // Function to determine if arc labels should be shown
     const handleResize = () => {
