@@ -38,13 +38,14 @@ async function fetchExchangeRates() {
 
 export default async function Page() {
   // Fetch line chart data
+  const today = new Date().toISOString().split('T')[0]
   const { transactions: lineTransactions, cumulativeTotals } =
-    await fetchTransactions('1h', '2024-06-17', 'line')
+    await fetchTransactions('1h', today, 'line')
 
   // Fetch pie chart data
   const { transactions: pieTransactions } = await fetchTransactions(
     '1h',
-    '2024-06-16',
+    today,
     'pie',
   )
 

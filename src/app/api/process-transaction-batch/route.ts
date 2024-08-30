@@ -63,16 +63,11 @@ export async function GET(request: NextRequest) {
       }
 
       fromBlockStr = lastProcessedBlock
-
-      // Uncomment the below if starting with an empty database
-      // fromBlockStr = lastProcessedBlock
-      //   ? lastProcessedBlock
-      //   : process.env.TREASURY_FIRST_TX_WITH_CONTENT_BLOCK || '0'
     }
 
     // Calculate toBlock based on fromBlock if toBlock is not provided
     if (!toBlockStr) {
-      const blockInterval = 50
+      const blockInterval = 20
       toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString()
     }
   }
@@ -86,12 +81,25 @@ export async function GET(request: NextRequest) {
 
     // Return early if no logs are found in the block range
     if (logs.length === 0) {
-      // Update the last processed block in the meta table
-      await setMetaValue('last_processed_block', toBlock.toString())
+      // Check to see if we've gotten ahead of the chain
+      const latestBlockNumber = await web3.eth.getBlockNumber()
+
+      // Update the last processed block in the meta table if we're still behind
+      if (toBlock < latestBlockNumber) {
+        await setMetaValue('last_processed_block', toBlock.toString())
+        return new Response(
+          JSON.stringify({ success: true, message: 'No logs found' }),
+          {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          },
+        )
+      }
+
       return new Response(
-        JSON.stringify({ success: true, message: 'No logs found' }),
+        JSON.stringify({ error: 'No logs found. Waiting for new blocks.' }),
         {
-          status: 200,
+          status: 400,
           headers: { 'Content-Type': 'application/json' },
         },
       )
@@ -338,8 +346,6 @@ export async function GET(request: NextRequest) {
         axs_fee: axsFee,
         weth_fee: wethFee,
       }
-
-      // console.log('newTransaction', newTransaction)
 
       await upsertTransaction(newTransaction, nftTransfers)
     }

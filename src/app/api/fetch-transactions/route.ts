@@ -4,8 +4,9 @@ import { fetchTransactions } from '~/utils/fetchTransactions'
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
+  const today = new Date().toISOString().split('T')[0]
   const groupBy = searchParams.get('groupBy')
-  const startDate = searchParams.get('startDate') || '2024-06-16'
+  const startDate = searchParams.get('startDate') || today
   const dataType = searchParams.get('dataType') || 'line'
 
   if (!groupBy) {

@@ -33,7 +33,7 @@ export default function ChartGroup({
 
   const fetchData = async (range: string) => {
     let groupBy
-    let calculatedStartDate = new Date('2024-07-23')
+    let calculatedStartDate = new Date()
 
     switch (range) {
       case '24H':
