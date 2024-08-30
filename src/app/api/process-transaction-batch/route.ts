@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate toBlock based on fromBlock if toBlock is not provided
     if (!toBlockStr) {
-      const blockInterval = 50
+      const blockInterval = 20
       toBlockStr = (parseInt(fromBlockStr, 10) + blockInterval).toString()
     }
   }
@@ -320,6 +320,8 @@ export async function GET(request: NextRequest) {
         transactionType = 'breeding'
       } else if (transactionSource === 'evolution') {
         transactionType = 'evolution'
+      } else if (transactionSource === 'atiablessing') {
+        transactionType = 'atiablessing'
       }
 
       // In older transactions, the fee would originate from the user address instead of
@@ -336,8 +338,6 @@ export async function GET(request: NextRequest) {
         axs_fee: axsFee,
         weth_fee: wethFee,
       }
-
-      // console.log('newTransaction', newTransaction)
 
       await upsertTransaction(newTransaction, nftTransfers)
     }
