@@ -152,4 +152,4 @@ SELECT * FROM get_cumulative_totals_before('2024-05-28');
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License. 
