@@ -26,7 +26,7 @@ export default function TreasuryTotals({
     const fetchTotals = async () => {
       const response = await fetch('/api/fetch-treasury-totals')
       const data: Totals = await response.json()
-      setTotals({ ...data, backedWethTotal: 2492.02 })
+      setTotals({ ...data, backedWethTotal: 2507.1211 })
     }
 
     fetchTotals()
