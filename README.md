@@ -1,4 +1,4 @@
-# Axie Community Treasury Dashboard
+# Axie Community Treasury Dashboard 
 
 This project is a dashboard for visualizing the Axie Community Treasury data. It displays various charts to show the growth and sales of the treasury over different time periods.
 
