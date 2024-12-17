@@ -38,7 +38,7 @@ export const fetchTransactions = async (
     // Use line chart views
     switch (groupBy) {
       case '1h':
-        view = 'aggregated_fees_24h_v2'
+        view = 'aggregated_fees_24h'
         break
       case '8h':
         view = 'aggregated_fees_7d'

@@ -104,5 +104,6 @@ export const nivoColors = {
     'rune mint': '#8e97a8',
     'charm mint': '#fa59a0',
     'blessing streak restore': '#9967fb',
+    'marketplace sale': '#007fa8',
   },
 }

@@ -38,10 +38,6 @@ export default function PageContent({
       <AxieTerrarium />
       <div className={styles.headingWrapper}>
         <h1>Axie Community Treasury</h1>
-        <p className={styles.disclaimer}>
-          Note: We are currently syncing transaction data, so the totals may be
-          inaccurate until the process is complete.
-        </p>
         <div className={styles.tokenPriceBoxWrapper}>
           <div className={styles.tokenPriceBox}>
             <p className={`${styles.tokenPriceBoxHeading} ${styles.ethColor}`}>

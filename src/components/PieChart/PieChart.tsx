@@ -58,6 +58,7 @@ function formatPieData(
 
   return Object.keys(dataMap)
     .filter((key) => dataMap[key] > 0)
+    .filter((key) => key.split('_')[0] !== 'direct')
     .map((key) => ({
       id: key.split('_')[0],
       label: key.split('_')[0],

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 
 import { ChartTransaction } from '~/types'
 
@@ -53,11 +53,11 @@ export default function ChartGroup({
         calculatedStartDate.setMonth(calculatedStartDate.getMonth() - 6)
         break
       case '1Y':
-        groupBy = 'weekly'
+        groupBy = 'monthly'
         calculatedStartDate.setFullYear(calculatedStartDate.getFullYear() - 1)
         break
       case 'ALL':
-        groupBy = 'monthly'
+        groupBy = 'all'
         calculatedStartDate = new Date('1970-01-01')
         break
       default:

@@ -1,6 +1,8 @@
 import PageContent from '~/components/PageContent/PageContent'
 import { fetchTransactions } from '~/utils/fetchTransactions'
 
+export const revalidate = 60
+
 async function fetchExchangeRates() {
   const response = await fetch(
     'https://api-gateway.skymavis.com/graphql/marketplace',
