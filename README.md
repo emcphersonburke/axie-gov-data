@@ -16,7 +16,7 @@ This project is a dashboard for visualizing the Axie Community Treasury data. It
 
 ## Installation
 
-1. Clone the repository:
+1. Clone the repository: 
 
 ```sh
 git clone https://github.com/emcphersonburke/axie-gov-data.git
