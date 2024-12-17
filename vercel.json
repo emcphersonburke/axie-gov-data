@@ -4,8 +4,5 @@
       "path": "/api/process-bridge-transaction-batch",
       "schedule": "* * * * *"
     }
-  ],
-  "build": {
-    "ignoreFiles": ["supabase/**/*"]
-  }
+  ]
 }
