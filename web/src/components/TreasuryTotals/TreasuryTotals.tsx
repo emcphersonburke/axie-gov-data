@@ -44,8 +44,9 @@ export default function TreasuryTotals({
               role="tooltip"
               id="backed-weth-tooltip"
             >
-              WETH bridged onto Ronin minus WETH withdrawn, chain-wide (from{' '}
-              {bridge.eventCount.toLocaleString()} Ronin Bridge events).
+              WETH bridged onto Ronin minus WETH withdrawn, chain-wide, through
+              the Ronin Gateway (from {bridge.eventCount.toLocaleString()}{' '}
+              bridge events). Frozen at the 2025 migration to Chainlink CCIP.
             </span>
           </span>
         </p>

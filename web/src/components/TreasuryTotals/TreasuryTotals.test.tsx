@@ -58,7 +58,7 @@ describe('<TreasuryTotals>', () => {
       />,
     )
     expect(screen.getByRole('tooltip').textContent).toMatch(
-      /bridged onto Ronin minus WETH withdrawn, chain-wide/,
+      /bridged onto Ronin minus WETH withdrawn, chain-wide, through the Ronin Gateway/,
     )
   })
 
