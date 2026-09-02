@@ -1,5 +1,5 @@
 import type { DashboardSnapshot } from '@axie-gov/shared'
-import { STALE_LAG_BLOCKS } from '@axie-gov/shared'
+import { STALE_LAG_BLOCKS } from '@axie-gov/shared/snapshot'
 import { createContext } from 'react'
 
 /** Poll interval while the tab is visible. */

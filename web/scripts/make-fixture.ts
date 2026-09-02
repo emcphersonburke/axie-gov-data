@@ -20,19 +20,20 @@ import type {
   RangeStats,
   TxType,
 } from '@axie-gov/shared'
+import { ADDRESSES, DEFAULT_CONFIRMATIONS } from '@axie-gov/shared/contracts'
 import {
-  ADDRESSES,
-  bucketStarts,
   dashboardSnapshotSchema,
-  DEFAULT_CONFIRMATIONS,
+  STALE_LAG_BLOCKS,
+} from '@axie-gov/shared/snapshot'
+import {
+  bucketStarts,
   floorHour,
   HOUR,
   nextBucket,
   RANGE_KEYS,
   rangeWindow,
-  STALE_LAG_BLOCKS,
   toIso,
-} from '@axie-gov/shared'
+} from '@axie-gov/shared/time'
 
 // ---- fixed reference points -------------------------------------------------
 const NOW_ISO = '2026-09-02T12:34:56Z'

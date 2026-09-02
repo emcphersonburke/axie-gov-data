@@ -1,9 +1,6 @@
 import type { RangeKey } from '@axie-gov/shared'
-import {
-  bucketStarts,
-  dashboardSnapshotSchema,
-  RANGE_KEYS,
-} from '@axie-gov/shared'
+import { dashboardSnapshotSchema } from '@axie-gov/shared/snapshot'
+import { bucketStarts, RANGE_KEYS } from '@axie-gov/shared/time'
 import { describe, expect, it } from 'vitest'
 
 import fixture from '../../fixtures/dashboard.json'

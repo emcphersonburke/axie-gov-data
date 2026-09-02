@@ -1,5 +1,6 @@
 import type { DashboardSnapshot } from '@axie-gov/shared'
-import { dashboardSnapshotSchema, RANGE_KEYS } from '@axie-gov/shared'
+import { dashboardSnapshotSchema } from '@axie-gov/shared/snapshot'
+import { RANGE_KEYS } from '@axie-gov/shared/time'
 
 export const DATA_URL: string =
   import.meta.env.VITE_DATA_URL ?? '/data/dashboard.json'

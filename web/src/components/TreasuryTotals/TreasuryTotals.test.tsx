@@ -1,4 +1,4 @@
-import { dashboardSnapshotSchema } from '@axie-gov/shared'
+import { dashboardSnapshotSchema } from '@axie-gov/shared/snapshot'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 

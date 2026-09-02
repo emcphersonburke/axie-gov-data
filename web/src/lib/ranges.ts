@@ -1,5 +1,5 @@
 import type { RangeKey } from '@axie-gov/shared'
-import { RANGE_KEYS } from '@axie-gov/shared'
+import { RANGE_KEYS } from '@axie-gov/shared/time'
 
 /** Button captions, in display order (mirrors RANGE_KEYS). */
 export const RANGE_LABELS: Record<RangeKey, string> = {
