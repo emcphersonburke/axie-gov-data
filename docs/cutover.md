@@ -25,6 +25,17 @@ owner's go-ahead.
 
 ## C. Provision, deploy, backfill, reconcile
 
+> **RPC provider is the gating item (measured 2026-09-02).** The Sky Mavis gateway
+> (`api-gateway.skymavis.com/rpc` and `/rpc/archive`) accepts the key but answered every call with
+> HTTP 503 `failure to get a peer from the ring-balancer` — check the app's enabled services in the
+> Sky Mavis developer portal (Ronin RPC / archive), or open a ticket. The public
+> `api.roninchain.com/rpc` works for tailing (200-block `eth_getLogs` cap, JSON-RPC batches ≤ 3,
+> ~5 req/s) but returns `null` receipts older than roughly 2.5M blocks, so it **cannot backfill
+> 2022–2025**. If the gateway stays down, an archive-capable provider with Ronin support (Alchemy,
+> Chainstack, dRPC paid tier) goes in `RONIN_RPC_URL`; the indexer's endpoint pool (`RPC_URLS`)
+> can split receipts across providers.
+
+
 1. ◻ Confirm the production domain (Vercel → Domains). Add it to Cloudflare (free plan) and switch
    Namecheap nameservers to Cloudflare's. Wait for propagation before issuing the Origin CA cert.
 2. ◻ Hetzner CX23, Falkenstein or Helsinki, Ubuntu 24.04, your SSH key, Backups on.
@@ -41,6 +52,18 @@ owner's go-ahead.
    `reference-figures/aggregated_fees_all.csv` within ±2 % for complete months. Spot-check 25
    legacy hashes with `verify --tx` and 10 new-only ones on the Ronin explorer.
 6. ◻ `https://beta.<domain>` renders live; banner clears at `status: live`; healthchecks green 24 h.
+7. ◻ Contract drift since the legacy sync stopped (Feb 2025), seen while smoke-testing near head:
+   marketplace fee transfers now come from `0x3b3adf1422f84254b7fbb0e7ca62bd0865133fe3` (not the
+   old `MARKETPLACE` address) and AXS fees route via `0xb4c12d442fb0f90eba1fe5c63498aa91c02bc183`;
+   no `rc-mint` or `breeding` transactions appeared in ~40k recent blocks. Sales still classify via
+   the NFT fallback. During reconciliation compare per-type monthly counts against
+   `reference-figures/aggregated_transactions_all.csv`; if a type vanished after Feb 2025, add the
+   new contract to `shared/src/contracts.ts` and re-run `rebuild-rollups`.
+8. ◻ **Bridge / Backed WETH:** the Ronin Gateway (`0x0cf8ff40…`) has emitted nothing recently —
+   bridging moved to Chainlink CCIP (WETH now minted from
+   `0x320a10449556388503fd71d74a16ab52e0bd1deb`). Historical gateway events decode correctly, so
+   `bridge.all.net` is accurate up to the migration and frozen after it. A CCIP leg is a follow-up;
+   until then the Backed WETH tile shows the pre-migration figure (tooltip should say so).
 
 ## D. DNS switch
 

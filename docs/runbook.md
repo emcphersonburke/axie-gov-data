@@ -90,6 +90,19 @@ journalctl -u axie-reindex -f
 # when it exits 0: stop the service, swap the DB files, start the service
 ```
 
+## RPC providers
+
+`RONIN_RPC_URL` is the primary endpoint; the API key is only sent to `*.skymavis.com` hosts.
+`RPC_URLS=url|rps|batch,…` adds pool members for receipt/header load. Known behaviour:
+
+| Endpoint | Notes |
+|---|---|
+| `api-gateway.skymavis.com/rpc` (+`/rpc/archive`) | Needs the key. Was 503 "ring-balancer" all of 2026-09-02 — check the app's RPC entitlement in the developer portal. |
+| `api.roninchain.com/rpc` (public) | 200-block `eth_getLogs` cap (auto-learned), batches ≤ 3, ~5 req/s, receipts only for ~the last 2.5M blocks. Fine for `tail`, not for backfill. |
+
+`backfill --probe` reports HTTP vs sub-call accounting and the first 429 so `RPC_MAX_RPS` /
+`RPC_BATCH_SIZE` can be set per provider.
+
 ## Rotate the Sky Mavis key
 
 Edit `/etc/axie-indexer.env`, then `sudo systemctl restart axie-indexer`. Check the journal for
