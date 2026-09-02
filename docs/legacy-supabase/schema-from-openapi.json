@@ -1,0 +1,464 @@
+{
+  "definitions": {
+    "sale_transactions_without_nfts": {
+      "properties": {
+        "transaction_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "text",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "block": {
+          "format": "bigint",
+          "type": "integer"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_30d": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_24h": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_1y": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_1y": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "blocks": {
+      "required": [
+        "number"
+      ],
+      "properties": {
+        "number": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "bigint",
+          "type": "integer"
+        },
+        "timestamp": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_6m": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_6m": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "treasury_totals": {
+      "properties": {
+        "axs_total": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_total": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_24h_v2": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "transactions": {
+      "required": [
+        "transaction_id",
+        "timestamp",
+        "block",
+        "type",
+        "axs_fee",
+        "weth_fee"
+      ],
+      "properties": {
+        "transaction_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "text",
+          "type": "string"
+        },
+        "timestamp": {
+          "format": "timestamp without time zone",
+          "type": "string"
+        },
+        "block": {
+          "format": "bigint",
+          "type": "integer"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "gateway_transactions": {
+      "required": [
+        "transaction_id"
+      ],
+      "properties": {
+        "transaction_id": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "text",
+          "type": "string"
+        },
+        "amount": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "address": {
+          "format": "text",
+          "type": "string"
+        },
+        "block": {
+          "format": "bigint",
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_all": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "gateway_transactions_totals": {
+      "properties": {
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "total_amount": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_7d": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_7d": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "nft_transfers": {
+      "required": [
+        "uid",
+        "transaction_id",
+        "id"
+      ],
+      "properties": {
+        "uid": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "bigint",
+          "type": "integer"
+        },
+        "transaction_id": {
+          "description": "Note:\nThis is a Foreign Key to `transactions.transaction_id`.<fk table='transactions' column='transaction_id'/>",
+          "format": "text",
+          "type": "string"
+        },
+        "id": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_all": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_fees_30d": {
+      "properties": {
+        "date": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "aggregated_transactions_24h": {
+      "properties": {
+        "date": {
+          "format": "date",
+          "type": "string"
+        },
+        "type": {
+          "format": "text",
+          "type": "string"
+        },
+        "axs_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "weth_fee": {
+          "format": "numeric",
+          "type": "number"
+        },
+        "nft_type": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "meta": {
+      "required": [
+        "key",
+        "value"
+      ],
+      "properties": {
+        "key": {
+          "description": "Note:\nThis is a Primary Key.<pk/>",
+          "format": "text",
+          "type": "string"
+        },
+        "value": {
+          "format": "text",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "rpc": [
+    "/rpc/execute_sql",
+    "/rpc/get_sale_transactions_without_nfts",
+    "/rpc/get_cumulative_totals"
+  ]
+}

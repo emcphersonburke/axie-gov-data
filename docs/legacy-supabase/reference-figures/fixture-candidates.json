@@ -1,0 +1,184 @@
+{
+  "sale": [
+    {
+      "transaction_id": "0x011a8614f0cebf49c0f29d8f7604590f1aac53ca49279e2412d9cd15399d50ce",
+      "block": 42206669,
+      "timestamp": "2025-02-02T04:49:06",
+      "type": "sale",
+      "axs_fee": 0,
+      "weth_fee": 4.7115846951621e-05
+    },
+    {
+      "transaction_id": "0x0fae0b7c1f6f3bfde2b855e2861b30f6df08d4412b754d6e9f82133d6acbf135",
+      "block": 42206671,
+      "timestamp": "2025-02-02T04:49:12",
+      "type": "sale",
+      "axs_fee": 0,
+      "weth_fee": 0.000205399675
+    },
+    {
+      "transaction_id": "0xd1723266d36a04171e924e3da3ee8eaeca64db31a067cb1a51ecb931c66a3d52",
+      "block": 42206676,
+      "timestamp": "2025-02-02T04:49:27",
+      "type": "sale",
+      "axs_fee": 0,
+      "weth_fee": 1.39145e-05
+    }
+  ],
+  "rc-mint": [
+    {
+      "transaction_id": "0x3e6c6b488725559fc68e6a2ae55d078c81989b0537732c1b94e9e903beea0e78",
+      "block": 42220133,
+      "timestamp": "2025-02-02T16:02:25",
+      "type": "rc-mint",
+      "axs_fee": 0.6864466815656107,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xe691bb2859bc323052b47fd0b837923304787c80c8d7e4b99fdb6325457b6164",
+      "block": 42220157,
+      "timestamp": "2025-02-02T16:03:37",
+      "type": "rc-mint",
+      "axs_fee": 0.4224945702995952,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xfa33e045acddb00eee1774f9e6abda335e715cda4aeb732891c139f794fe18b4",
+      "block": 42220440,
+      "timestamp": "2025-02-02T16:17:46",
+      "type": "rc-mint",
+      "axs_fee": 0.2120758454879552,
+      "weth_fee": 0
+    }
+  ],
+  "ascension": [
+    {
+      "transaction_id": "0x73e56fee8ffa7a7d3bc6333af76ee15392eaffff36de1cefeaf7b30e4b1400f3",
+      "block": 42197662,
+      "timestamp": "2025-02-01T21:18:44",
+      "type": "ascension",
+      "axs_fee": 0.09878373636770199,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xcc2f9abb3daf7ae2f27ccbede06eee2a7e287a67c5eeac9040111f23305e0004",
+      "block": 42197664,
+      "timestamp": "2025-02-01T21:18:50",
+      "type": "ascension",
+      "axs_fee": 0.09878373636770199,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xc13feb3e6e7d90cacaf24996e040255a465f43c27630c911b3e277e886055021",
+      "block": 42197675,
+      "timestamp": "2025-02-01T21:19:23",
+      "type": "ascension",
+      "axs_fee": 0.09878373636770199,
+      "weth_fee": 0
+    }
+  ],
+  "breeding": [
+    {
+      "transaction_id": "0x01b3f19ade0c316d0c138b67a3469d118d417db79877cc8b41a82491b4e9adcb",
+      "block": 36257762,
+      "timestamp": "2024-07-10T10:24:19",
+      "type": "breeding",
+      "axs_fee": 0.5,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x73e80676ebec5f7e934ef2809afde8e9bd72f9ac4a4828bfee5c32b1f8bead69",
+      "block": 36257780,
+      "timestamp": "2024-07-10T10:25:13",
+      "type": "breeding",
+      "axs_fee": 0.5,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x6997df88c5735baad4690fe8eb0309572d53dc6d3cf82b4bc3e4da081e13fd07",
+      "block": 35779152,
+      "timestamp": "2024-06-23T19:13:53",
+      "type": "breeding",
+      "axs_fee": 0.5,
+      "weth_fee": 0
+    }
+  ],
+  "evolution": [
+    {
+      "transaction_id": "0x0a8322daa526a8415fc9477676e80fe017ab75e24a2ea323f6bc50e109395c2e",
+      "block": 35778774,
+      "timestamp": "2024-06-23T18:54:59",
+      "type": "evolution",
+      "axs_fee": 0.3402067523907267,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xe4643b517a9f98fefe05044e8a367548612bb8f7de71ef942377485993e4f0aa",
+      "block": 35779010,
+      "timestamp": "2024-06-23T19:06:47",
+      "type": "evolution",
+      "axs_fee": 0.6802414898355622,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x1c13122dd5995168dc18ce6bee5a25d9926be1d23bd21afafc6019020de1d439",
+      "block": 36257729,
+      "timestamp": "2024-07-10T10:22:40",
+      "type": "evolution",
+      "axs_fee": 0.37703921690401876,
+      "weth_fee": 0
+    }
+  ],
+  "atiablessing": [
+    {
+      "transaction_id": "0x5c8561c3bc6fad0e6ba29d1f46c2b66c8579fbc8f4a9af53b292815e8e94e52d",
+      "block": 42200427,
+      "timestamp": "2025-02-01T23:36:59",
+      "type": "atiablessing",
+      "axs_fee": 0.9969751355657378,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x1d137e5193360a804461c00b522824e426c6f74eceb0daf44c1363a584a88415",
+      "block": 42201320,
+      "timestamp": "2025-02-02T00:21:38",
+      "type": "atiablessing",
+      "axs_fee": 0.9901970492127934,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x2df8c8b60f668e9f239b2ed71a78a8f54f3332b1489f815aad9b330a73ebc363",
+      "block": 42201827,
+      "timestamp": "2025-02-02T00:46:59",
+      "type": "atiablessing",
+      "axs_fee": 0.9798226819987464,
+      "weth_fee": 0
+    }
+  ],
+  "unknown": [
+    {
+      "transaction_id": "0x6bf57968219495c0d9f2a3d600ca32dc7c0eb28fab0e684ec8c4ee28f39d33f2",
+      "block": 26224552,
+      "timestamp": "2023-07-27T23:33:06",
+      "type": "unknown",
+      "axs_fee": 54,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0x84819ec1e27cc0a40df90e4a98b612d4161dc438a02b9ff92014bf4a33f5b11c",
+      "block": 26923102,
+      "timestamp": "2023-08-21T05:41:06",
+      "type": "unknown",
+      "axs_fee": 56.8,
+      "weth_fee": 0
+    },
+    {
+      "transaction_id": "0xb0c11a7294dee7bee2a9f1868f1fbae1e4c4e24476bafaf87317a6dc42e24b5b",
+      "block": 28436881,
+      "timestamp": "2023-10-12T19:14:31",
+      "type": "unknown",
+      "axs_fee": 79,
+      "weth_fee": 0
+    }
+  ]
+}
