@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const roninGatewayAbi: AbiItem[] = [
+export const roninGatewayAbi = [
   {
     inputs: [{ internalType: 'address', name: 'voter', type: 'address' }],
     name: 'ErrAlreadyVoted',
@@ -1233,4 +1233,4 @@ export const roninGatewayAbi: AbiItem[] = [
     type: 'function',
   },
   { stateMutability: 'payable', type: 'receive' },
-]
+] as const satisfies Abi

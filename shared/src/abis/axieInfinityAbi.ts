@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const axieInfinityAbi: AbiItem[] = [
+export const axieInfinityAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   { inputs: [], name: 'AccessControlBadConfirmation', type: 'error' },
   {
@@ -1648,4 +1648,4 @@ export const axieInfinityAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

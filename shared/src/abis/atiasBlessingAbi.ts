@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const atiasBlessingAbi: AbiItem[] = [
+export const atiasBlessingAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   { inputs: [], name: 'ErrActivateBeforeStartingBlock', type: 'error' },
   { inputs: [], name: 'ErrAlreadyActivatedStreak', type: 'error' },
@@ -693,4 +693,4 @@ export const atiasBlessingAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

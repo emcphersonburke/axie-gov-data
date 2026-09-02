@@ -1,0 +1,27 @@
+{
+  "name": "@axie-gov/shared",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false || tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "viem": "^2.31.0",
+    "zod": "^3.25.0"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.0"
+  }
+}

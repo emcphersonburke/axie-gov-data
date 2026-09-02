@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const charmTokenAbi: AbiItem[] = [
+export const charmTokenAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -439,4 +439,4 @@ export const charmTokenAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

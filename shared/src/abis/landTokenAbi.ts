@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const landTokenAbi: AbiItem[] = [
+export const landTokenAbi = [
   {
     anonymous: false,
     inputs: [
@@ -646,4 +646,4 @@ export const landTokenAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

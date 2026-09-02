@@ -1,58 +1,37 @@
 {
+  "name": "axie-gov-data",
   "private": true,
+  "license": "MIT",
+  "workspaces": [
+    "shared",
+    "indexer",
+    "web"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
   "scripts": {
-    "build": "next build",
-    "dev": "next",
-    "format": "npx prettier --write . --ignore-path .gitignore",
-    "lint": "next lint -- --ignore-path .gitignore",
-    "lint:fix": "npm run format && npm run lint -- --fix",
-    "start": "next start",
-    "type-check": "tsc --noEmit",
-    "generate-indexes": "node scripts/generate-indexes.ts"
-  },
-  "prettier": {
-    "semi": false,
-    "singleQuote": true
-  },
-  "dependencies": {
-    "@apollo/client": "^3.10.8",
-    "@axieinfinity/mixer": "1.2.0",
-    "@nivo/bar": "^0.87.0",
-    "@nivo/core": "^0.87.0",
-    "@nivo/line": "^0.87.0",
-    "@nivo/pie": "^0.87.0",
-    "@pixi/layers": "^2.1.0",
-    "@supabase/ssr": "^0.4.0",
-    "@supabase/supabase-js": "^2.44.2",
-    "axios": "^1.7.2",
-    "dotenv": "^16.4.5",
-    "graphql": "^16.9.0",
-    "JSONStream": "^1.3.5",
-    "next": "^14.2.4",
-    "pixi-spine": "^4.0.0",
-    "pixi.js": "^7.0.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "styled-components": "^6.1.8",
-    "uuid": "^10.0.0",
-    "web3": "^4.10.0",
-    "webpack": "^5.93.0"
+    "build": "npm run build -w shared && npm run build -w indexer && npm run build -w web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "npm test --workspaces --if-present",
+    "dev:web": "npm run build -w shared && npm run dev -w web",
+    "dev:indexer": "npm run build -w shared && npm run dev -w indexer",
+    "clean": "rm -rf shared/dist indexer/dist web/dist"
   },
   "devDependencies": {
-    "@types/node": "^20.14.9",
-    "@types/react": "18.2.55",
-    "eslint": "8.56.0",
-    "eslint-config-next": "14.1.0",
-    "eslint-plugin-simple-import-sort": "10.0.0",
-    "postcss": "8.4.35",
-    "prettier": "3.2.5",
-    "prettier-plugin-packagejson": "2.4.10",
-    "prettier-plugin-tailwindcss": "0.5.11",
-    "react-icons": "^5.0.1",
-    "sass": "^1.71.0",
-    "typescript": "5.3.3"
-  },
-  "engines": {
-    "node": ">=16"
+    "@eslint/js": "^9.30.0",
+    "eslint": "^9.30.0",
+    "eslint-config-prettier": "^10.1.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "globals": "^16.0.0",
+    "prettier": "^3.5.0",
+    "typescript": "^5.8.0",
+    "typescript-eslint": "^8.35.0"
   }
 }

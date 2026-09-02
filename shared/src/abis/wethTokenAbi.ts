@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const wethTokenAbi: AbiItem[] = [
+export const wethTokenAbi = [
   {
     inputs: [],
     payable: false,
@@ -379,4 +379,4 @@ export const wethTokenAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

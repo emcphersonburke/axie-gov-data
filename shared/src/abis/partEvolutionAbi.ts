@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const partEvolutionAbi: AbiItem[] = [
+export const partEvolutionAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   { inputs: [], name: 'ErrBodyPartAlreadyEvolved', type: 'error' },
   { inputs: [], name: 'ErrBodyPartStillEvolving', type: 'error' },
@@ -603,4 +603,4 @@ export const partEvolutionAbi: AbiItem[] = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-]
+] as const satisfies Abi

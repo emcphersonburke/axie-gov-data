@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const materialAbi: AbiItem[] = [
+export const materialAbi = [
   { inputs: [], stateMutability: 'payable', type: 'constructor' },
   {
     inputs: [{ internalType: 'bytes4', name: 'msgSig', type: 'bytes4' }],
@@ -417,4 +417,4 @@ export const materialAbi: AbiItem[] = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const satisfies Abi

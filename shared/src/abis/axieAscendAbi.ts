@@ -1,6 +1,6 @@
-import { AbiItem } from 'web3'
+import type { Abi } from 'viem'
 
-export const axieAscendAbi: AbiItem[] = [
+export const axieAscendAbi = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -491,4 +491,4 @@ export const axieAscendAbi: AbiItem[] = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
-]
+] as const satisfies Abi
