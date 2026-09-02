@@ -1,0 +1,46 @@
+.page {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  padding: 24px;
+
+  h1 {
+    line-height: 1.2;
+    margin-bottom: $px24;
+  }
+}
+
+.panel {
+  background-color: $containerBackgroundColor;
+  border-radius: 8px;
+  max-width: $containerMaxWidthSmall;
+  padding: 24px;
+}
+
+.title {
+  color: $warningYellow;
+  font-size: $px20;
+  margin-bottom: $px8;
+}
+
+.message {
+  color: $coolGray;
+  line-height: 1.5;
+  margin-bottom: $px16;
+}
+
+.retry {
+  background-color: $innerContainerBackgroundColor;
+  border: 1px solid $coolGray;
+  border-radius: 8px;
+  color: $fulvous;
+  cursor: pointer;
+  font-size: $px14;
+  font-weight: 600;
+  padding: 10px 20px;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $fulvous;
+  }
+}

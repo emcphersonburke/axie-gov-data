@@ -1,3 +1,19 @@
+// Palette as CSS custom properties so JS (src/lib/palette.ts) and CSS share one source.
+:root {
+  --aqua: #{$aqua};
+  --brilliant-rose: #{$brilliantRose};
+  --cerulean: #{$cerulean};
+  --cool-gray: #{$coolGray};
+  --dodger-blue: #{$dodgerBlue};
+  --fulvous: #{$fulvous};
+  --kelly-green: #{$kellyGreen};
+  --medium-slate-blue: #{$mediumStateBlue};
+  --raisin-black: #{$raisinBlack};
+  --rich-black: #{$richBlack};
+  --slate-gray: #{$slateGray};
+  --warning-yellow: #{$warningYellow};
+}
+
 /*
   1. Use a more-intuitive box-sizing model.
 */
@@ -18,6 +34,7 @@
   4. Improve text rendering
 */
 body {
+  font-family: $fontWorkSans;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
@@ -57,12 +74,10 @@ h6 {
 /*
   8. Create a root stacking context
 */
-#root,
-#__next {
+#root {
   isolation: isolate;
 }
 
-// These are specific to this example project and should likely be changed or removed
 html {
   background-color: $siteBackgroundColor;
 }

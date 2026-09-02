@@ -1,42 +1,29 @@
-'use client'
-
-import dynamic from 'next/dynamic'
-import React from 'react'
+import type { DashboardSnapshot } from '@axie-gov/shared'
 
 import ChartGroup from '~/components/ChartGroup/ChartGroup'
+import DataStatus from '~/components/DataStatus/DataStatus'
 import LineChart from '~/components/LineChart/LineChart'
 import PieChart from '~/components/PieChart/PieChart'
+import TerrariumGate from '~/components/TerrariumGate/TerrariumGate'
 import TreasuryTotals from '~/components/TreasuryTotals/TreasuryTotals'
-import { ChartTransaction } from '~/types'
+import { formatPrice } from '~/lib/format'
+import { useSnapshot } from '~/store/useSnapshot'
 
 import styles from './PageContent.module.scss'
 
-const AxieTerrarium = dynamic(() => import('../AxieTerrarium/AxieTerrarium'), {
-  ssr: false,
-})
-
-type ExchangeRates = {
-  axs: number
-  eth: number
+interface PageContentProps {
+  snapshot: DashboardSnapshot
 }
 
-type PageContentProps = {
-  lineTransactions: ChartTransaction[]
-  pieTransactions: ChartTransaction[]
-  initialTotals: { axs: number; weth: number }
-  exchangeRates: ExchangeRates
-}
+export default function PageContent({ snapshot }: PageContentProps) {
+  const state = useSnapshot()
+  const refetchError = state.status === 'ready' ? state.refetchError : null
+  const { rates, ranges } = snapshot
 
-export default function PageContent({
-  lineTransactions,
-  pieTransactions,
-  initialTotals,
-  exchangeRates,
-}: PageContentProps) {
   return (
     <div className={styles.page}>
-      <AxieTerrarium />
-      <div className={styles.headingWrapper}>
+      <TerrariumGate />
+      <header className={styles.headingWrapper}>
         <h1>Axie Community Treasury</h1>
         <div className={styles.tokenPriceBoxWrapper}>
           <div className={styles.tokenPriceBox}>
@@ -44,7 +31,7 @@ export default function PageContent({
               WETH/USD
             </p>
             <div className={styles.tokenPriceBoxPrice}>
-              ${new Intl.NumberFormat().format(exchangeRates.eth)}
+              ${formatPrice(rates.ethUsd)}
             </div>
           </div>
           <div className={styles.tokenPriceBox}>
@@ -52,61 +39,42 @@ export default function PageContent({
               AXS/USD
             </p>
             <div className={styles.tokenPriceBoxPrice}>
-              ${new Intl.NumberFormat().format(exchangeRates.axs)}
+              ${formatPrice(rates.axsUsd)}
             </div>
           </div>
         </div>
-      </div>
-      <TreasuryTotals
-        axsExchangeRate={exchangeRates.axs}
-        wethExchangeRate={exchangeRates.eth}
+      </header>
+      <DataStatus
+        snapshot={snapshot}
+        isStale={state.isStale}
+        refetchError={refetchError}
       />
-      <ChartGroup
-        title="Growth"
-        initialData={lineTransactions}
-        initialTotals={initialTotals}
-        dataType="line"
-      >
-        {(data, startDate, cumulativeTotals) => (
+      <TreasuryTotals
+        totals={snapshot.totals}
+        bridge={snapshot.bridge}
+        rates={rates}
+      />
+      <ChartGroup title="Growth" ranges={ranges}>
+        {(range) => (
           <>
-            <LineChart
-              data={data}
-              filter="weth"
-              yAxisLabel="WETH"
-              type="growthWeth"
-              startDate={startDate}
-              cumulativeTotals={cumulativeTotals}
-            />
-            <LineChart
-              data={data}
-              filter="axs"
-              yAxisLabel="AXS"
-              type="growthAxs"
-              startDate={startDate}
-              cumulativeTotals={cumulativeTotals}
-            />
+            <LineChart range={range} token="weth" />
+            <LineChart range={range} token="axs" />
           </>
         )}
       </ChartGroup>
       <ChartGroup
         title="Fees from Marketplace Sales"
         subtitle="By NFT Type (WETH)"
-        initialData={pieTransactions}
-        initialTotals={initialTotals}
-        dataType="pie"
+        ranges={ranges}
       >
-        {(data) => <PieChart data={data} type="nftType" currency="weth" />}
+        {(range) => <PieChart range={range} mode="nftType" token="weth" />}
       </ChartGroup>
       <ChartGroup
         title="Fee Breakdown in Ecosystem"
         subtitle="By Transaction Type (AXS)"
-        initialData={pieTransactions}
-        initialTotals={initialTotals}
-        dataType="pie"
+        ranges={ranges}
       >
-        {(data) => (
-          <PieChart data={data} type="transactionType" currency="axs" />
-        )}
+        {(range) => <PieChart range={range} mode="txType" token="axs" />}
       </ChartGroup>
     </div>
   )

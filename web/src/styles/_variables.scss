@@ -25,9 +25,12 @@ $px1920: 120rem;
 $containerMaxWidth: $px1280;
 $containerMaxWidthSmall: $px768;
 
-// Colors
+// Colors — the single source of truth. global.scss emits these as `:root`
+// custom properties (--aqua, --brilliant-rose, ...) which src/lib/palette.ts
+// reads so the Nivo charts share the exact same palette.
 $aqua: #00f5f8;
 $brilliantRose: #fa59a0;
+$cerulean: #007fa8;
 $coolGray: #8e97a8;
 $dodgerBlue: #0094ff;
 $fulvous: #dd8a0e;
@@ -35,6 +38,8 @@ $kellyGreen: #6db80f;
 $mediumStateBlue: #9967fb;
 $raisinBlack: #1c1f25;
 $richBlack: #13161b;
+$slateGray: #5c6370;
+$warningYellow: #ffcc00;
 
 // Add aliases for common use cases
 $containerBackgroundColor: rgba(24, 28, 34, 0.8);
@@ -42,5 +47,5 @@ $innerContainerBackgroundColor: $raisinBlack;
 $siteBackgroundColor: black;
 $textDefaultColor: white;
 
-// Fonts
-$fontWorkSans: --var(--font-work-sans);
+// Fonts — 'Work Sans Variable' is registered by @fontsource-variable/work-sans (imported in main.tsx)
+$fontWorkSans: 'Work Sans Variable', system-ui, sans-serif;

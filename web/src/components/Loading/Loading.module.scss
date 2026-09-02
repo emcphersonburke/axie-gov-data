@@ -1,0 +1,15 @@
+.page {
+  background-color: black;
+  color: white;
+  min-height: 100vh;
+  padding: 24px;
+
+  h1 {
+    line-height: 1.2;
+  }
+}
+
+.message {
+  color: $coolGray;
+  margin-top: $px16;
+}

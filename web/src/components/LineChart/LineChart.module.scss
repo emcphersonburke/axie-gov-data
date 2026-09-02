@@ -13,3 +13,21 @@
 .wrapper {
   position: relative;
 }
+
+.chart {
+  height: 300px;
+}
+
+.empty {
+  color: $coolGray;
+  padding: 96px 12px 0;
+}
+
+.tooltip {
+  border-radius: 3px;
+  padding: 5px;
+}
+
+.tooltipTime {
+  font-size: 0.8rem;
+}

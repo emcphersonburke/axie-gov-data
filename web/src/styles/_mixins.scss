@@ -1,3 +1,5 @@
+@use './variables' as *;
+
 @mixin tablet {
   @media (min-width: $px768) {
     @content;

@@ -1,113 +1,56 @@
-import { ReactNode, useEffect, useState } from 'react'
+import type { DashboardSnapshot, RangeKey, RangeStats } from '@axie-gov/shared'
+import type { ReactNode } from 'react'
+import { useState } from 'react'
 
-import { ChartTransaction } from '~/types'
+import { DEFAULT_RANGE, RANGE_LABELS, RANGE_ORDER } from '~/lib/ranges'
 
 import styles from './ChartGroup.module.scss'
 
-type ChartGroupProps = {
+/** The stats for the selected range plus which range it is. */
+export type SelectedRange = RangeStats & { key: RangeKey }
+
+interface ChartGroupProps {
   title: string
   subtitle?: string
-  initialData: ChartTransaction[]
-  initialTotals: { axs: number; weth: number }
-  children: (
-    data: ChartTransaction[],
-    startDate: string,
-    cumulativeTotals: { axs: number; weth: number },
-    displayTime: boolean,
-  ) => ReactNode
-  dataType: 'line' | 'pie' // Add dataType prop to distinguish chart type
+  ranges: DashboardSnapshot['ranges']
+  initialRange?: RangeKey
+  children: (range: SelectedRange) => ReactNode
 }
 
 export default function ChartGroup({
   title,
   subtitle,
-  initialData = [],
-  initialTotals = { axs: 0, weth: 0 },
+  ranges,
+  initialRange = DEFAULT_RANGE,
   children,
-  dataType,
 }: ChartGroupProps) {
-  const [timeRange, setTimeRange] = useState('24H')
-  const [data, setData] = useState<ChartTransaction[]>(initialData)
-  const [startDate, setStartDate] = useState('')
-  const [cumulativeTotals, setCumulativeTotals] = useState(initialTotals)
-
-  const fetchData = async (range: string) => {
-    let groupBy
-    let calculatedStartDate = new Date()
-
-    switch (range) {
-      case '24H':
-        groupBy = '1h'
-        calculatedStartDate.setDate(calculatedStartDate.getDate() - 1)
-        break
-      case '7D':
-        groupBy = '8h'
-        calculatedStartDate.setDate(calculatedStartDate.getDate() - 7)
-        break
-      case '30D':
-        groupBy = 'daily'
-        calculatedStartDate.setDate(calculatedStartDate.getDate() - 30)
-        break
-      case '6M':
-        groupBy = 'weekly'
-        calculatedStartDate.setMonth(calculatedStartDate.getMonth() - 6)
-        break
-      case '1Y':
-        groupBy = 'monthly'
-        calculatedStartDate.setFullYear(calculatedStartDate.getFullYear() - 1)
-        break
-      case 'ALL':
-        groupBy = 'all'
-        calculatedStartDate = new Date('1970-01-01')
-        break
-      default:
-        groupBy = 'daily'
-        calculatedStartDate.setDate(calculatedStartDate.getDate() - 30)
-        break
-    }
-
-    setStartDate(calculatedStartDate.toISOString().split('T')[0])
-
-    try {
-      const response = await fetch(
-        `/api/fetch-transactions?groupBy=${groupBy}&startDate=${calculatedStartDate.toISOString()}&dataType=${dataType}`,
-      )
-      const { transactions, cumulativeTotals } = await response.json()
-      setData(transactions)
-      setCumulativeTotals(cumulativeTotals)
-    } catch (error) {
-      console.error('Error fetching transactions:', error)
-    }
-  }
-
-  const handleRangeChange = (range: string) => {
-    setTimeRange(range)
-    fetchData(range)
-  }
+  const [selected, setSelected] = useState<RangeKey>(initialRange)
+  const stats = ranges[selected]
 
   return (
-    <div className={styles.chartGroup}>
+    <section className={styles.chartGroup} aria-label={title}>
       <h2 className={styles.heading}>{title}</h2>
       {subtitle && <h3 className={styles.subheading}>{subtitle}</h3>}
-      <div className={styles.controls}>
-        {['24H', '7D', '30D', '6M', '1Y', 'ALL'].map((range) => (
+      <div className={styles.controls} role="group" aria-label="Time range">
+        {RANGE_ORDER.map((key) => (
           <button
-            key={range}
-            className={timeRange === range ? styles.active : ''}
-            onClick={() => handleRangeChange(range)}
+            key={key}
+            type="button"
+            className={selected === key ? styles.active : undefined}
+            aria-pressed={selected === key}
+            onClick={() => setSelected(key)}
           >
-            {range}
+            {RANGE_LABELS[key]}
           </button>
         ))}
       </div>
       <div className={styles.chartWrapper}>
-        {children(
-          data,
-          startDate,
-          cumulativeTotals,
-          timeRange === '24H' || timeRange === '7D',
+        {stats ? (
+          children({ ...stats, key: selected })
+        ) : (
+          <p className={styles.empty}>No data available for this range.</p>
         )}
       </div>
-    </div>
+    </section>
   )
 }

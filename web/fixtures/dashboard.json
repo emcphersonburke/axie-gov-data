@@ -1,0 +1,2569 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-02T12:34:56Z",
+  "treasury": "0x245db945c485b68fdc429e4f7085a1761aa4d45d",
+  "chain": {
+    "id": 2020,
+    "head": 60444658,
+    "headAt": "2026-09-02T12:34:52.000Z"
+  },
+  "indexer": {
+    "status": "live",
+    "lastIndexedBlock": 60444628,
+    "lastIndexedAt": "2026-09-02T12:33:22.000Z",
+    "lagBlocks": 30,
+    "lagSeconds": 90,
+    "confirmations": 30,
+    "bridgeLastIndexedBlock": 60444628,
+    "firstTxBlock": 17349945,
+    "firstTxAt": "2022-10-11T08:17:23Z",
+    "txCount": 3293604
+  },
+  "totals": {
+    "inflow": {
+      "axs": 24312884.531271,
+      "weth": 61204.331834
+    },
+    "outflow": {
+      "axs": 1250000,
+      "weth": 2400.5
+    },
+    "net": {
+      "axs": 23062884.531271,
+      "weth": 58803.831834
+    },
+    "txCount": 3293641,
+    "exact": {
+      "axsInWei": "24312884531271000000000000",
+      "wethInWei": "61204331834000000000000",
+      "axsOutWei": "1250000000000000000000000",
+      "wethOutWei": "2400500000000000000000"
+    }
+  },
+  "bridge": {
+    "token": "0xc99a6a985ed2cac1ef41640596c5a5f9f4e19ef5",
+    "all": {
+      "deposited": 1184220.4471,
+      "withdrawn": 1180308.0093,
+      "net": 3912.4378
+    },
+    "treasury": {
+      "deposited": 0,
+      "withdrawn": 312.5,
+      "net": -312.5
+    },
+    "eventCount": 21487,
+    "lastIndexedBlock": 60444628
+  },
+  "rates": {
+    "axsUsd": 4.87,
+    "ethUsd": 3120.55,
+    "fetchedAt": "2026-09-02T12:29:56.000Z",
+    "stale": false,
+    "source": "skymavis-graphql"
+  },
+  "ranges": {
+    "24h": {
+      "bucket": "1h",
+      "windowStart": 1788264000,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 24306638.823216,
+        "weth": 61186.753262
+      },
+      "series": [
+        {
+          "t": 1788264000,
+          "axs": 441.708559,
+          "weth": 1.342765,
+          "txCount": 60
+        },
+        {
+          "t": 1788267600,
+          "axs": 365.470525,
+          "weth": 0.910214,
+          "txCount": 50
+        },
+        {
+          "t": 1788271200,
+          "axs": 233.261583,
+          "weth": 0.560923,
+          "txCount": 32
+        },
+        {
+          "t": 1788274800,
+          "axs": 361.387035,
+          "weth": 1.270188,
+          "txCount": 49
+        },
+        {
+          "t": 1788278400,
+          "axs": 309.34,
+          "weth": 1.047594,
+          "txCount": 42
+        },
+        {
+          "t": 1788282000,
+          "axs": 332.98907,
+          "weth": 0.965003,
+          "txCount": 45
+        },
+        {
+          "t": 1788285600,
+          "axs": 207.183326,
+          "weth": 0.517387,
+          "txCount": 28
+        },
+        {
+          "t": 1788289200,
+          "axs": 225.112379,
+          "weth": 0.755816,
+          "txCount": 30
+        },
+        {
+          "t": 1788292800,
+          "axs": 129.409025,
+          "weth": 0.369483,
+          "txCount": 18
+        },
+        {
+          "t": 1788296400,
+          "axs": 248.176673,
+          "weth": 0.866781,
+          "txCount": 34
+        },
+        {
+          "t": 1788300000,
+          "axs": 151.587954,
+          "weth": 0.316082,
+          "txCount": 21
+        },
+        {
+          "t": 1788303600,
+          "axs": 175.037963,
+          "weth": 0.433888,
+          "txCount": 24
+        },
+        {
+          "t": 1788307200,
+          "axs": 230.083959,
+          "weth": 0.644693,
+          "txCount": 31
+        },
+        {
+          "t": 1788310800,
+          "axs": 117.902812,
+          "weth": 0.22885,
+          "txCount": 16
+        },
+        {
+          "t": 1788314400,
+          "axs": 179.467134,
+          "weth": 0.345916,
+          "txCount": 24
+        },
+        {
+          "t": 1788318000,
+          "axs": 207.262549,
+          "weth": 0.461907,
+          "txCount": 28
+        },
+        {
+          "t": 1788321600,
+          "axs": 213.552026,
+          "weth": 0.596615,
+          "txCount": 29
+        },
+        {
+          "t": 1788325200,
+          "axs": 213.129469,
+          "weth": 0.69586,
+          "txCount": 29
+        },
+        {
+          "t": 1788328800,
+          "axs": 314.171325,
+          "weth": 1.005886,
+          "txCount": 43
+        },
+        {
+          "t": 1788332400,
+          "axs": 205.622879,
+          "weth": 0.432613,
+          "txCount": 28
+        },
+        {
+          "t": 1788336000,
+          "axs": 350.483382,
+          "weth": 1.009611,
+          "txCount": 47
+        },
+        {
+          "t": 1788339600,
+          "axs": 240.460723,
+          "weth": 0.693749,
+          "txCount": 33
+        },
+        {
+          "t": 1788343200,
+          "axs": 0,
+          "weth": 0,
+          "txCount": 0
+        },
+        {
+          "t": 1788346800,
+          "axs": 435.436327,
+          "weth": 0.962759,
+          "txCount": 59
+        },
+        {
+          "t": 1788350400,
+          "axs": 357.471378,
+          "weth": 1.143989,
+          "txCount": 48
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 1124.22745,
+          "weth": 16.875431,
+          "txCount": 440
+        },
+        {
+          "type": "rc-mint",
+          "axs": 2748.111544,
+          "weth": 0,
+          "txCount": 221
+        },
+        {
+          "type": "ascension",
+          "axs": 624.570806,
+          "weth": 0,
+          "txCount": 34
+        },
+        {
+          "type": "breeding",
+          "axs": 1249.141611,
+          "weth": 0,
+          "txCount": 102
+        },
+        {
+          "type": "evolution",
+          "axs": 312.285403,
+          "weth": 0,
+          "txCount": 25
+        },
+        {
+          "type": "atiablessing",
+          "axs": 124.914161,
+          "weth": 0,
+          "txCount": 17
+        },
+        {
+          "type": "unknown",
+          "axs": 62.45708,
+          "weth": 0.703143,
+          "txCount": 9
+        },
+        {
+          "type": "outflow",
+          "axs": 321.111017,
+          "weth": 0.616662,
+          "txCount": 1
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 637.062222,
+          "weth": 9.844001,
+          "txCount": 256
+        },
+        {
+          "nftType": "Land",
+          "axs": 62.457081,
+          "weth": 2.109429,
+          "txCount": 9
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 31.22854,
+          "weth": 0.703143,
+          "txCount": 9
+        },
+        {
+          "nftType": "Rune",
+          "axs": 1374.055772,
+          "weth": 0.878929,
+          "txCount": 144
+        },
+        {
+          "nftType": "Charm",
+          "axs": 1623.884094,
+          "weth": 0.878929,
+          "txCount": 161
+        },
+        {
+          "nftType": "Material",
+          "axs": 62.457081,
+          "weth": 0.703143,
+          "txCount": 34
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 31.22854,
+          "weth": 0.527357,
+          "txCount": 17
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 31.22854,
+          "weth": 0.527357,
+          "txCount": 25
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 31.22854,
+          "weth": 0.878929,
+          "txCount": 8
+        },
+        {
+          "nftType": "None",
+          "axs": 2681.988662,
+          "weth": 1.144019,
+          "txCount": 186
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 624.570806,
+          "weth": 9.668215,
+          "txCount": 254
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 62.457081,
+          "weth": 2.109429,
+          "txCount": 9
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 31.22854,
+          "weth": 0.703143,
+          "txCount": 9
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 124.914161,
+          "weth": 0.878929,
+          "txCount": 42
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 124.914161,
+          "weth": 0.878929,
+          "txCount": 42
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 62.457081,
+          "weth": 0.703143,
+          "txCount": 34
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 31.22854,
+          "weth": 0.527357,
+          "txCount": 17
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 31.22854,
+          "weth": 0.527357,
+          "txCount": 25
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 31.22854,
+          "weth": 0.878929,
+          "txCount": 8
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 1249.141611,
+          "weth": 0,
+          "txCount": 102
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 1498.969933,
+          "weth": 0,
+          "txCount": 119
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 624.570806,
+          "weth": 0,
+          "txCount": 34
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 1249.141611,
+          "weth": 0,
+          "txCount": 102
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 312.285403,
+          "weth": 0,
+          "txCount": 25
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 124.914161,
+          "weth": 0,
+          "txCount": 17
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 49.965664,
+          "weth": 0.527357,
+          "txCount": 7
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 12.491416,
+          "weth": 0.175786,
+          "txCount": 2
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 321.111017,
+          "weth": 0.616662,
+          "txCount": 1
+        }
+      ]
+    },
+    "7d": {
+      "bucket": "8h",
+      "windowStart": 1787731200,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 24271095.283253,
+        "weth": 61092.15562
+      },
+      "series": [
+        {
+          "t": 1787731200,
+          "axs": 2699.863954,
+          "weth": 7.526953,
+          "txCount": 366
+        },
+        {
+          "t": 1787760000,
+          "axs": 2256.56523,
+          "weth": 5.105533,
+          "txCount": 306
+        },
+        {
+          "t": 1787788800,
+          "axs": 2085.686317,
+          "weth": 5.487985,
+          "txCount": 281
+        },
+        {
+          "t": 1787817600,
+          "axs": 2372.176174,
+          "weth": 6.508396,
+          "txCount": 322
+        },
+        {
+          "t": 1787846400,
+          "axs": 1833.193562,
+          "weth": 4.657841,
+          "txCount": 248
+        },
+        {
+          "t": 1787875200,
+          "axs": 1926.627632,
+          "weth": 4.793797,
+          "txCount": 260
+        },
+        {
+          "t": 1787904000,
+          "axs": 2105.56529,
+          "weth": 5.777539,
+          "txCount": 285
+        },
+        {
+          "t": 1787932800,
+          "axs": 1503.704265,
+          "weth": 4.084131,
+          "txCount": 204
+        },
+        {
+          "t": 1787961600,
+          "axs": 1309.114722,
+          "weth": 3.57041,
+          "txCount": 177
+        },
+        {
+          "t": 1787990400,
+          "axs": 1731.263444,
+          "weth": 4.754002,
+          "txCount": 234
+        },
+        {
+          "t": 1788019200,
+          "axs": 1709.987661,
+          "weth": 4.535503,
+          "txCount": 232
+        },
+        {
+          "t": 1788048000,
+          "axs": 1643.113355,
+          "weth": 4.528683,
+          "txCount": 222
+        },
+        {
+          "t": 1788076800,
+          "axs": 1951.094986,
+          "weth": 5.2711,
+          "txCount": 264
+        },
+        {
+          "t": 1788105600,
+          "axs": 1553.260577,
+          "weth": 4.018984,
+          "txCount": 210
+        },
+        {
+          "t": 1788134400,
+          "axs": 1363.347909,
+          "weth": 3.992908,
+          "txCount": 185
+        },
+        {
+          "t": 1788163200,
+          "axs": 2830.662899,
+          "weth": 7.780646,
+          "txCount": 384
+        },
+        {
+          "t": 1788192000,
+          "axs": 1538.884337,
+          "weth": 4.368738,
+          "txCount": 208
+        },
+        {
+          "t": 1788220800,
+          "axs": 1773.144712,
+          "weth": 4.551472,
+          "txCount": 240
+        },
+        {
+          "t": 1788249600,
+          "axs": 2758.110639,
+          "weth": 7.367111,
+          "txCount": 375
+        },
+        {
+          "t": 1788278400,
+          "axs": 1778.83639,
+          "weth": 5.272034,
+          "txCount": 242
+        },
+        {
+          "t": 1788307200,
+          "axs": 1681.192153,
+          "weth": 4.41234,
+          "txCount": 228
+        },
+        {
+          "t": 1788336000,
+          "axs": 1383.85181,
+          "weth": 3.810108,
+          "txCount": 187
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 7522.064642,
+          "weth": 107.689167,
+          "txCount": 2944
+        },
+        {
+          "type": "rc-mint",
+          "axs": 18387.269128,
+          "weth": 0,
+          "txCount": 1472
+        },
+        {
+          "type": "ascension",
+          "axs": 4178.924802,
+          "weth": 0,
+          "txCount": 226
+        },
+        {
+          "type": "breeding",
+          "axs": 8357.849604,
+          "weth": 0,
+          "txCount": 679
+        },
+        {
+          "type": "evolution",
+          "axs": 2089.462401,
+          "weth": 0,
+          "txCount": 170
+        },
+        {
+          "type": "atiablessing",
+          "axs": 835.78496,
+          "weth": 0,
+          "txCount": 113
+        },
+        {
+          "type": "unknown",
+          "axs": 417.89248,
+          "weth": 4.487048,
+          "txCount": 56
+        },
+        {
+          "type": "outflow",
+          "axs": 2148.513475,
+          "weth": 4.126005,
+          "txCount": 1
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 4262.503298,
+          "weth": 62.81868,
+          "txCount": 1709
+        },
+        {
+          "nftType": "Land",
+          "axs": 417.89248,
+          "weth": 13.461146,
+          "txCount": 57
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 208.94624,
+          "weth": 4.487049,
+          "txCount": 57
+        },
+        {
+          "nftType": "Rune",
+          "axs": 9193.634564,
+          "weth": 5.608811,
+          "txCount": 962
+        },
+        {
+          "nftType": "Charm",
+          "axs": 10865.204484,
+          "weth": 5.608811,
+          "txCount": 1076
+        },
+        {
+          "nftType": "Material",
+          "axs": 417.89248,
+          "weth": 4.487049,
+          "txCount": 226
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 208.94624,
+          "weth": 3.365286,
+          "txCount": 113
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 208.94624,
+          "weth": 3.365286,
+          "txCount": 170
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 208.94624,
+          "weth": 5.608811,
+          "txCount": 57
+        },
+        {
+          "nftType": "None",
+          "axs": 17944.849226,
+          "weth": 7.491291,
+          "txCount": 1234
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 4178.924802,
+          "weth": 61.696918,
+          "txCount": 1698
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 417.89248,
+          "weth": 13.461146,
+          "txCount": 57
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 208.94624,
+          "weth": 4.487049,
+          "txCount": 57
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 835.78496,
+          "weth": 5.608811,
+          "txCount": 283
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 835.78496,
+          "weth": 5.608811,
+          "txCount": 283
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 417.89248,
+          "weth": 4.487049,
+          "txCount": 226
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 208.94624,
+          "weth": 3.365286,
+          "txCount": 113
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 208.94624,
+          "weth": 3.365286,
+          "txCount": 170
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 208.94624,
+          "weth": 5.608811,
+          "txCount": 57
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 8357.849604,
+          "weth": 0,
+          "txCount": 679
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 10029.419524,
+          "weth": 0,
+          "txCount": 793
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 4178.924802,
+          "weth": 0,
+          "txCount": 226
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 8357.849604,
+          "weth": 0,
+          "txCount": 679
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 2089.462401,
+          "weth": 0,
+          "txCount": 170
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 835.78496,
+          "weth": 0,
+          "txCount": 113
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 334.313984,
+          "weth": 3.365286,
+          "txCount": 45
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 83.578496,
+          "weth": 1.121762,
+          "txCount": 11
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 2148.513475,
+          "weth": 4.126005,
+          "txCount": 1
+        }
+      ]
+    },
+    "30d": {
+      "bucket": "1d",
+      "windowStart": 1785715200,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 24122460.601927,
+        "weth": 60713.039157
+      },
+      "series": [
+        {
+          "t": 1785715200,
+          "axs": 5956.052578,
+          "weth": 16.081422,
+          "txCount": 810
+        },
+        {
+          "t": 1785801600,
+          "axs": 5298.129369,
+          "weth": 14.407855,
+          "txCount": 718
+        },
+        {
+          "t": 1785888000,
+          "axs": 6389.191883,
+          "weth": 16.219121,
+          "txCount": 863
+        },
+        {
+          "t": 1785974400,
+          "axs": 6758.985301,
+          "weth": 17.682848,
+          "txCount": 917
+        },
+        {
+          "t": 1786060800,
+          "axs": 6470.397011,
+          "weth": 17.304694,
+          "txCount": 878
+        },
+        {
+          "t": 1786147200,
+          "axs": 5204.232226,
+          "weth": 13.658558,
+          "txCount": 705
+        },
+        {
+          "t": 1786233600,
+          "axs": 5043.188077,
+          "weth": 13.28753,
+          "txCount": 683
+        },
+        {
+          "t": 1786320000,
+          "axs": 6569.414696,
+          "weth": 17.131822,
+          "txCount": 891
+        },
+        {
+          "t": 1786406400,
+          "axs": 6367.341304,
+          "weth": 17.636545,
+          "txCount": 863
+        },
+        {
+          "t": 1786492800,
+          "axs": 7496.773435,
+          "weth": 18.92176,
+          "txCount": 1015
+        },
+        {
+          "t": 1786579200,
+          "axs": 6550.973238,
+          "weth": 18.337718,
+          "txCount": 889
+        },
+        {
+          "t": 1786665600,
+          "axs": 6334.702398,
+          "weth": 16.888423,
+          "txCount": 859
+        },
+        {
+          "t": 1786752000,
+          "axs": 4801.380487,
+          "weth": 12.763503,
+          "txCount": 651
+        },
+        {
+          "t": 1786838400,
+          "axs": 5196.270731,
+          "weth": 13.506973,
+          "txCount": 705
+        },
+        {
+          "t": 1786924800,
+          "axs": 5849.029951,
+          "weth": 16.72274,
+          "txCount": 789
+        },
+        {
+          "t": 1787011200,
+          "axs": 8604.758872,
+          "weth": 18.018225,
+          "txCount": 1163
+        },
+        {
+          "t": 1787097600,
+          "axs": 8381.501348,
+          "weth": 18.800863,
+          "txCount": 1138
+        },
+        {
+          "t": 1787184000,
+          "axs": 6258.885407,
+          "weth": 16.564776,
+          "txCount": 852
+        },
+        {
+          "t": 1787270400,
+          "axs": 8411.179924,
+          "weth": 18.273514,
+          "txCount": 1140
+        },
+        {
+          "t": 1787356800,
+          "axs": 6298.061941,
+          "weth": 12.742175,
+          "txCount": 856
+        },
+        {
+          "t": 1787443200,
+          "axs": 5489.980592,
+          "weth": 15.231435,
+          "txCount": 746
+        },
+        {
+          "t": 1787529600,
+          "axs": 6270.430529,
+          "weth": 16.886086,
+          "txCount": 850
+        },
+        {
+          "t": 1787616000,
+          "axs": 6047.086322,
+          "weth": 17.471576,
+          "txCount": 818
+        },
+        {
+          "t": 1787702400,
+          "axs": 7543.16289,
+          "weth": 17.208787,
+          "txCount": 1023
+        },
+        {
+          "t": 1787788800,
+          "axs": 6291.056053,
+          "weth": 16.654222,
+          "txCount": 851
+        },
+        {
+          "t": 1787875200,
+          "axs": 5535.897187,
+          "weth": 14.655467,
+          "txCount": 749
+        },
+        {
+          "t": 1787961600,
+          "axs": 4750.365827,
+          "weth": 12.859915,
+          "txCount": 643
+        },
+        {
+          "t": 1788048000,
+          "axs": 5147.468918,
+          "weth": 13.818767,
+          "txCount": 696
+        },
+        {
+          "t": 1788134400,
+          "axs": 5732.895145,
+          "weth": 16.142292,
+          "txCount": 777
+        },
+        {
+          "t": 1788220800,
+          "axs": 6310.091741,
+          "weth": 17.190617,
+          "txCount": 857
+        },
+        {
+          "t": 1788307200,
+          "axs": 3065.043963,
+          "weth": 8.222448,
+          "txCount": 415
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 34276.307282,
+          "weth": 471.640969,
+          "txCount": 13421
+        },
+        {
+          "type": "rc-mint",
+          "axs": 83786.528912,
+          "weth": 0,
+          "txCount": 6711
+        },
+        {
+          "type": "ascension",
+          "axs": 19042.392934,
+          "weth": 0,
+          "txCount": 1032
+        },
+        {
+          "type": "breeding",
+          "axs": 38084.785869,
+          "weth": 0,
+          "txCount": 3097
+        },
+        {
+          "type": "evolution",
+          "axs": 9521.196467,
+          "weth": 0,
+          "txCount": 774
+        },
+        {
+          "type": "atiablessing",
+          "axs": 3808.478587,
+          "weth": 0,
+          "txCount": 516
+        },
+        {
+          "type": "unknown",
+          "axs": 1904.239294,
+          "weth": 19.651707,
+          "txCount": 259
+        },
+        {
+          "type": "outflow",
+          "axs": 9790.27854,
+          "weth": 18.801251,
+          "txCount": 3
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 19423.240793,
+          "weth": 275.123899,
+          "txCount": 7795
+        },
+        {
+          "nftType": "Land",
+          "axs": 1904.239293,
+          "weth": 58.955121,
+          "txCount": 258
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 952.119647,
+          "weth": 19.651707,
+          "txCount": 258
+        },
+        {
+          "nftType": "Rune",
+          "axs": 41893.264456,
+          "weth": 24.564634,
+          "txCount": 4388
+        },
+        {
+          "nftType": "Charm",
+          "axs": 49510.22163,
+          "weth": 24.564634,
+          "txCount": 4905
+        },
+        {
+          "nftType": "Material",
+          "axs": 1904.239293,
+          "weth": 19.651707,
+          "txCount": 1032
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 952.119647,
+          "weth": 14.73878,
+          "txCount": 516
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 952.119647,
+          "weth": 14.73878,
+          "txCount": 774
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 952.119647,
+          "weth": 24.564634,
+          "txCount": 258
+        },
+        {
+          "nftType": "None",
+          "axs": 81770.523832,
+          "weth": 33.540031,
+          "txCount": 5629
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 19042.392934,
+          "weth": 270.210972,
+          "txCount": 7743
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 1904.239293,
+          "weth": 58.955121,
+          "txCount": 258
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 952.119647,
+          "weth": 19.651707,
+          "txCount": 258
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 3808.478587,
+          "weth": 24.564634,
+          "txCount": 1291
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 3808.478587,
+          "weth": 24.564634,
+          "txCount": 1291
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 1904.239293,
+          "weth": 19.651707,
+          "txCount": 1032
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 952.119647,
+          "weth": 14.73878,
+          "txCount": 516
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 952.119647,
+          "weth": 14.73878,
+          "txCount": 774
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 952.119647,
+          "weth": 24.564634,
+          "txCount": 258
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 38084.785869,
+          "weth": 0,
+          "txCount": 3097
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 45701.743043,
+          "weth": 0,
+          "txCount": 3614
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 19042.392934,
+          "weth": 0,
+          "txCount": 1032
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 38084.785869,
+          "weth": 0,
+          "txCount": 3097
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 9521.196467,
+          "weth": 0,
+          "txCount": 774
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 3808.478587,
+          "weth": 0,
+          "txCount": 516
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 1523.391435,
+          "weth": 14.73878,
+          "txCount": 207
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 380.847859,
+          "weth": 4.912927,
+          "txCount": 52
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 9790.27854,
+          "weth": 18.801251,
+          "txCount": 3
+        }
+      ]
+    },
+    "6m": {
+      "bucket": "1w",
+      "windowStart": 1772409600,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 23045568.424556,
+        "weth": 57969.879715
+      },
+      "series": [
+        {
+          "t": 1772409600,
+          "axs": 53541.676099,
+          "weth": 135.617964,
+          "txCount": 7257
+        },
+        {
+          "t": 1773014400,
+          "axs": 51940.784334,
+          "weth": 133.091374,
+          "txCount": 7034
+        },
+        {
+          "t": 1773619200,
+          "axs": 52846.862277,
+          "weth": 139.452912,
+          "txCount": 7167
+        },
+        {
+          "t": 1774224000,
+          "axs": 56876.779744,
+          "weth": 142.416316,
+          "txCount": 7702
+        },
+        {
+          "t": 1774828800,
+          "axs": 56167.26348,
+          "weth": 125.405274,
+          "txCount": 7610
+        },
+        {
+          "t": 1775433600,
+          "axs": 47311.999767,
+          "weth": 126.478284,
+          "txCount": 6412
+        },
+        {
+          "t": 1776038400,
+          "axs": 48104.980309,
+          "weth": 125.93425,
+          "txCount": 6516
+        },
+        {
+          "t": 1776643200,
+          "axs": 50799.79518,
+          "weth": 129.615892,
+          "txCount": 6877
+        },
+        {
+          "t": 1777248000,
+          "axs": 47690.643757,
+          "weth": 129.882997,
+          "txCount": 6463
+        },
+        {
+          "t": 1777852800,
+          "axs": 50030.55971,
+          "weth": 123.954114,
+          "txCount": 6777
+        },
+        {
+          "t": 1778457600,
+          "axs": 49255.247925,
+          "weth": 126.364608,
+          "txCount": 6673
+        },
+        {
+          "t": 1779062400,
+          "axs": 47753.102821,
+          "weth": 123.851556,
+          "txCount": 6466
+        },
+        {
+          "t": 1779667200,
+          "axs": 43857.141537,
+          "weth": 116.719685,
+          "txCount": 5938
+        },
+        {
+          "t": 1780272000,
+          "axs": 50526.324979,
+          "weth": 126.464015,
+          "txCount": 6846
+        },
+        {
+          "t": 1780876800,
+          "axs": 45224.390046,
+          "weth": 121.616346,
+          "txCount": 6116
+        },
+        {
+          "t": 1781481600,
+          "axs": 50726.947714,
+          "weth": 118.840703,
+          "txCount": 6871
+        },
+        {
+          "t": 1782086400,
+          "axs": 50000.808802,
+          "weth": 120.686807,
+          "txCount": 6775
+        },
+        {
+          "t": 1782691200,
+          "axs": 43248.823967,
+          "weth": 119.553502,
+          "txCount": 5860
+        },
+        {
+          "t": 1783296000,
+          "axs": 47109.536983,
+          "weth": 117.543641,
+          "txCount": 6380
+        },
+        {
+          "t": 1783900800,
+          "axs": 43374.616678,
+          "weth": 115.327265,
+          "txCount": 5878
+        },
+        {
+          "t": 1784505600,
+          "axs": 42830.3211,
+          "weth": 111.65592,
+          "txCount": 5798
+        },
+        {
+          "t": 1785110400,
+          "axs": 47673.570162,
+          "weth": 112.686017,
+          "txCount": 6449
+        },
+        {
+          "t": 1785715200,
+          "axs": 41120.176445,
+          "weth": 108.642028,
+          "txCount": 5574
+        },
+        {
+          "t": 1786320000,
+          "axs": 43316.856289,
+          "weth": 115.186744,
+          "txCount": 5873
+        },
+        {
+          "t": 1786924800,
+          "axs": 49293.398035,
+          "weth": 116.353728,
+          "txCount": 6684
+        },
+        {
+          "t": 1787529600,
+          "axs": 41585.467726,
+          "weth": 109.55482,
+          "txCount": 5630
+        },
+        {
+          "t": 1788134400,
+          "axs": 15108.030849,
+          "weth": 41.555357,
+          "txCount": 2049
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 228116.89921,
+          "weth": 3105.074035,
+          "txCount": 89272
+        },
+        {
+          "type": "rc-mint",
+          "axs": 557619.086955,
+          "weth": 0,
+          "txCount": 44636
+        },
+        {
+          "type": "ascension",
+          "axs": 126731.610672,
+          "weth": 0,
+          "txCount": 6867
+        },
+        {
+          "type": "breeding",
+          "axs": 253463.221343,
+          "weth": 0,
+          "txCount": 20601
+        },
+        {
+          "type": "evolution",
+          "axs": 63365.805336,
+          "weth": 0,
+          "txCount": 5150
+        },
+        {
+          "type": "atiablessing",
+          "axs": 25346.322134,
+          "weth": 0,
+          "txCount": 3433
+        },
+        {
+          "type": "unknown",
+          "axs": 12673.161067,
+          "weth": 129.378085,
+          "txCount": 1716
+        },
+        {
+          "type": "outflow",
+          "axs": 65156.609918,
+          "weth": 125.126754,
+          "txCount": 23
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 129266.242885,
+          "weth": 1811.293186,
+          "txCount": 51846
+        },
+        {
+          "nftType": "Land",
+          "axs": 12673.161067,
+          "weth": 388.134254,
+          "txCount": 1717
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 6336.580534,
+          "weth": 129.378085,
+          "txCount": 1717
+        },
+        {
+          "nftType": "Rune",
+          "axs": 278809.543477,
+          "weth": 161.722606,
+          "txCount": 29185
+        },
+        {
+          "nftType": "Charm",
+          "axs": 329502.187746,
+          "weth": 161.722606,
+          "txCount": 32619
+        },
+        {
+          "nftType": "Material",
+          "axs": 12673.161067,
+          "weth": 129.378085,
+          "txCount": 6867
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 6336.580534,
+          "weth": 97.033564,
+          "txCount": 3433
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 6336.580534,
+          "weth": 97.033564,
+          "txCount": 5150
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 6336.580534,
+          "weth": 161.722606,
+          "txCount": 1717
+        },
+        {
+          "nftType": "None",
+          "axs": 544202.098257,
+          "weth": 222.160318,
+          "txCount": 37447
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 126731.610672,
+          "weth": 1778.948665,
+          "txCount": 51503
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 12673.161067,
+          "weth": 388.134254,
+          "txCount": 1717
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 6336.580534,
+          "weth": 129.378085,
+          "txCount": 1717
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 25346.322134,
+          "weth": 161.722606,
+          "txCount": 8584
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 25346.322134,
+          "weth": 161.722606,
+          "txCount": 8584
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 12673.161067,
+          "weth": 129.378085,
+          "txCount": 6867
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 6336.580534,
+          "weth": 97.033564,
+          "txCount": 3433
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 6336.580534,
+          "weth": 97.033564,
+          "txCount": 5150
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 6336.580534,
+          "weth": 161.722606,
+          "txCount": 1717
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 253463.221343,
+          "weth": 0,
+          "txCount": 20601
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 304155.865612,
+          "weth": 0,
+          "txCount": 24035
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 126731.610672,
+          "weth": 0,
+          "txCount": 6867
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 253463.221343,
+          "weth": 0,
+          "txCount": 20601
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 63365.805336,
+          "weth": 0,
+          "txCount": 5150
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 25346.322134,
+          "weth": 0,
+          "txCount": 3433
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 10138.528854,
+          "weth": 97.033564,
+          "txCount": 1373
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 2534.632213,
+          "weth": 32.344521,
+          "txCount": 343
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 65156.609918,
+          "weth": 125.126754,
+          "txCount": 23
+        }
+      ]
+    },
+    "1y": {
+      "bucket": "1M",
+      "windowStart": 1756684800,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 21459964.546451,
+        "weth": 53957.106256
+      },
+      "series": [
+        {
+          "t": 1756684800,
+          "axs": 285510.830891,
+          "weth": 726.022992,
+          "txCount": 38683
+        },
+        {
+          "t": 1759276800,
+          "axs": 283089.040289,
+          "weth": 722.509067,
+          "txCount": 38349
+        },
+        {
+          "t": 1761955200,
+          "axs": 263258.678625,
+          "weth": 661.480405,
+          "txCount": 35658
+        },
+        {
+          "t": 1764547200,
+          "axs": 269019.36999,
+          "weth": 665.554396,
+          "txCount": 36445
+        },
+        {
+          "t": 1767225600,
+          "axs": 261181.623048,
+          "weth": 659.016183,
+          "txCount": 35380
+        },
+        {
+          "t": 1769904000,
+          "axs": 215093.149166,
+          "weth": 560.49175,
+          "txCount": 29134
+        },
+        {
+          "t": 1772323200,
+          "axs": 242405.576922,
+          "weth": 605.350839,
+          "txCount": 32841
+        },
+        {
+          "t": 1775001600,
+          "axs": 212029.190166,
+          "weth": 547.194371,
+          "txCount": 28721
+        },
+        {
+          "t": 1777593600,
+          "axs": 210193.255948,
+          "weth": 543.938682,
+          "txCount": 28472
+        },
+        {
+          "t": 1780272000,
+          "axs": 209644.025453,
+          "weth": 523.107054,
+          "txCount": 28391
+        },
+        {
+          "t": 1782864000,
+          "axs": 199380.825598,
+          "weth": 513.779286,
+          "txCount": 27002
+        },
+        {
+          "t": 1785542400,
+          "axs": 192739.28302,
+          "weth": 493.367488,
+          "txCount": 26118
+        },
+        {
+          "t": 1788220800,
+          "axs": 9375.135704,
+          "weth": 25.413065,
+          "txCount": 1272
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 513525.597266,
+          "weth": 6957.336554,
+          "txCount": 200963
+        },
+        {
+          "type": "rc-mint",
+          "axs": 1255284.793321,
+          "weth": 0,
+          "txCount": 100481
+        },
+        {
+          "type": "ascension",
+          "axs": 285291.998482,
+          "weth": 0,
+          "txCount": 15458
+        },
+        {
+          "type": "breeding",
+          "axs": 570583.996964,
+          "weth": 0,
+          "txCount": 46376
+        },
+        {
+          "type": "evolution",
+          "axs": 142645.999241,
+          "weth": 0,
+          "txCount": 11594
+        },
+        {
+          "type": "atiablessing",
+          "axs": 57058.399696,
+          "weth": 0,
+          "txCount": 7729
+        },
+        {
+          "type": "unknown",
+          "axs": 28529.199849,
+          "weth": 289.889023,
+          "txCount": 3865
+        },
+        {
+          "type": "outflow",
+          "axs": 146677.370858,
+          "weth": 281.679223,
+          "txCount": 52
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 290997.838452,
+          "weth": 4058.446324,
+          "txCount": 116713
+        },
+        {
+          "nftType": "Land",
+          "axs": 28529.199848,
+          "weth": 869.667069,
+          "txCount": 3865
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 14264.599924,
+          "weth": 289.889023,
+          "txCount": 3865
+        },
+        {
+          "nftType": "Rune",
+          "axs": 627642.39666,
+          "weth": 362.361279,
+          "txCount": 65699
+        },
+        {
+          "nftType": "Charm",
+          "axs": 741759.196053,
+          "weth": 362.361279,
+          "txCount": 73428
+        },
+        {
+          "nftType": "Material",
+          "axs": 28529.199848,
+          "weth": 289.889023,
+          "txCount": 15459
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 14264.599924,
+          "weth": 217.416767,
+          "txCount": 7729
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 14264.599924,
+          "weth": 217.416767,
+          "txCount": 11594
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 14264.599924,
+          "weth": 362.361279,
+          "txCount": 3865
+        },
+        {
+          "nftType": "None",
+          "axs": 1225081.12512,
+          "weth": 499.09599,
+          "txCount": 84301
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 285291.998482,
+          "weth": 3985.974068,
+          "txCount": 115940
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 28529.199848,
+          "weth": 869.667069,
+          "txCount": 3865
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 14264.599924,
+          "weth": 289.889023,
+          "txCount": 3865
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 57058.399696,
+          "weth": 362.361279,
+          "txCount": 19323
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 57058.399696,
+          "weth": 362.361279,
+          "txCount": 19323
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 28529.199848,
+          "weth": 289.889023,
+          "txCount": 15459
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 14264.599924,
+          "weth": 217.416767,
+          "txCount": 7729
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 14264.599924,
+          "weth": 217.416767,
+          "txCount": 11594
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 14264.599924,
+          "weth": 362.361279,
+          "txCount": 3865
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 570583.996964,
+          "weth": 0,
+          "txCount": 46376
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 684700.796357,
+          "weth": 0,
+          "txCount": 54105
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 285291.998482,
+          "weth": 0,
+          "txCount": 15458
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 570583.996964,
+          "weth": 0,
+          "txCount": 46376
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 142645.999241,
+          "weth": 0,
+          "txCount": 11594
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 57058.399696,
+          "weth": 0,
+          "txCount": 7729
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 22823.359879,
+          "weth": 217.416767,
+          "txCount": 3092
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 5705.83997,
+          "weth": 72.472256,
+          "txCount": 773
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 146677.370858,
+          "weth": 281.679223,
+          "txCount": 52
+        }
+      ]
+    },
+    "all": {
+      "bucket": "1M",
+      "windowStart": 1664582400,
+      "windowEnd": 1788352496,
+      "baseline": {
+        "axs": 0,
+        "weth": 0
+      },
+      "series": [
+        {
+          "t": 1664582400,
+          "axs": 764431.025317,
+          "weth": 1951.631196,
+          "txCount": 103551
+        },
+        {
+          "t": 1667260800,
+          "axs": 1025158.797856,
+          "weth": 2613.584235,
+          "txCount": 138897
+        },
+        {
+          "t": 1669852800,
+          "axs": 1041497.706465,
+          "weth": 2618.296188,
+          "txCount": 141088
+        },
+        {
+          "t": 1672531200,
+          "axs": 964055.837646,
+          "weth": 2499.072331,
+          "txCount": 130593
+        },
+        {
+          "t": 1675209600,
+          "axs": 853811.391996,
+          "weth": 2169.822231,
+          "txCount": 115651
+        },
+        {
+          "t": 1677628800,
+          "axs": 967557.44127,
+          "weth": 2367.535633,
+          "txCount": 131083
+        },
+        {
+          "t": 1680307200,
+          "axs": 877676.206845,
+          "weth": 2195.203543,
+          "txCount": 118895
+        },
+        {
+          "t": 1682899200,
+          "axs": 851983.575284,
+          "weth": 2139.338029,
+          "txCount": 115416
+        },
+        {
+          "t": 1685577600,
+          "axs": 850904.166874,
+          "weth": 2071.179365,
+          "txCount": 115273
+        },
+        {
+          "t": 1688169600,
+          "axs": 786162.801254,
+          "weth": 2048.582729,
+          "txCount": 106498
+        },
+        {
+          "t": 1690848000,
+          "axs": 774083.305685,
+          "weth": 1992.77241,
+          "txCount": 104881
+        },
+        {
+          "t": 1693526400,
+          "axs": 739146.917934,
+          "weth": 1808.555328,
+          "txCount": 100120
+        },
+        {
+          "t": 1696118400,
+          "axs": 719193.835671,
+          "weth": 1797.959403,
+          "txCount": 97429
+        },
+        {
+          "t": 1698796800,
+          "axs": 652628.391257,
+          "weth": 1692.185817,
+          "txCount": 88421
+        },
+        {
+          "t": 1701388800,
+          "axs": 661343.14777,
+          "weth": 1651.201042,
+          "txCount": 89592
+        },
+        {
+          "t": 1704067200,
+          "axs": 628447.474312,
+          "weth": 1596.750725,
+          "txCount": 85150
+        },
+        {
+          "t": 1706745600,
+          "axs": 571965.303027,
+          "weth": 1435.721568,
+          "txCount": 77479
+        },
+        {
+          "t": 1709251200,
+          "axs": 586245.568728,
+          "weth": 1457.507396,
+          "txCount": 79420
+        },
+        {
+          "t": 1711929600,
+          "axs": 585796.721076,
+          "weth": 1403.918483,
+          "txCount": 79350
+        },
+        {
+          "t": 1714521600,
+          "axs": 545696.999643,
+          "weth": 1380.590685,
+          "txCount": 73914
+        },
+        {
+          "t": 1717200000,
+          "axs": 507931.431647,
+          "weth": 1281.402459,
+          "txCount": 68807
+        },
+        {
+          "t": 1719792000,
+          "axs": 535499.054897,
+          "weth": 1292.810802,
+          "txCount": 72543
+        },
+        {
+          "t": 1722470400,
+          "axs": 480794.535871,
+          "weth": 1212.540208,
+          "txCount": 65134
+        },
+        {
+          "t": 1725148800,
+          "axs": 449063.361122,
+          "weth": 1142.607985,
+          "txCount": 60835
+        },
+        {
+          "t": 1727740800,
+          "axs": 464118.103664,
+          "weth": 1153.531021,
+          "txCount": 62856
+        },
+        {
+          "t": 1730419200,
+          "axs": 418667.159056,
+          "weth": 1051.365244,
+          "txCount": 56713
+        },
+        {
+          "t": 1733011200,
+          "axs": 399717.276454,
+          "weth": 1014.786018,
+          "txCount": 54156
+        },
+        {
+          "t": 1735689600,
+          "axs": 393493.409015,
+          "weth": 997.641291,
+          "txCount": 53307
+        },
+        {
+          "t": 1738368000,
+          "axs": 342301.738079,
+          "weth": 852.127242,
+          "txCount": 46373
+        },
+        {
+          "t": 1740787200,
+          "axs": 372865.087517,
+          "weth": 934.458146,
+          "txCount": 50500
+        },
+        {
+          "t": 1743465600,
+          "axs": 372617.841166,
+          "weth": 877.360009,
+          "txCount": 50483
+        },
+        {
+          "t": 1746057600,
+          "axs": 333899.453198,
+          "weth": 860.347158,
+          "txCount": 45228
+        },
+        {
+          "t": 1748736000,
+          "axs": 316416.153672,
+          "weth": 798.369505,
+          "txCount": 42874
+        },
+        {
+          "t": 1751328000,
+          "axs": 326625.991938,
+          "weth": 813.025877,
+          "txCount": 44240
+        },
+        {
+          "t": 1754006400,
+          "axs": 298167.333245,
+          "weth": 783.324954,
+          "txCount": 40388
+        },
+        {
+          "t": 1756684800,
+          "axs": 285510.830891,
+          "weth": 726.022992,
+          "txCount": 38683
+        },
+        {
+          "t": 1759276800,
+          "axs": 283089.040289,
+          "weth": 722.509067,
+          "txCount": 38349
+        },
+        {
+          "t": 1761955200,
+          "axs": 263258.678625,
+          "weth": 661.480405,
+          "txCount": 35658
+        },
+        {
+          "t": 1764547200,
+          "axs": 269019.36999,
+          "weth": 665.554396,
+          "txCount": 36445
+        },
+        {
+          "t": 1767225600,
+          "axs": 261181.623048,
+          "weth": 659.016183,
+          "txCount": 35380
+        },
+        {
+          "t": 1769904000,
+          "axs": 215093.149166,
+          "weth": 560.49175,
+          "txCount": 29134
+        },
+        {
+          "t": 1772323200,
+          "axs": 242405.576922,
+          "weth": 605.350839,
+          "txCount": 32841
+        },
+        {
+          "t": 1775001600,
+          "axs": 212029.190166,
+          "weth": 547.194371,
+          "txCount": 28721
+        },
+        {
+          "t": 1777593600,
+          "axs": 210193.255948,
+          "weth": 543.938682,
+          "txCount": 28472
+        },
+        {
+          "t": 1780272000,
+          "axs": 209644.025453,
+          "weth": 523.107054,
+          "txCount": 28391
+        },
+        {
+          "t": 1782864000,
+          "axs": 199380.825598,
+          "weth": 513.779286,
+          "txCount": 27002
+        },
+        {
+          "t": 1785542400,
+          "axs": 192739.28302,
+          "weth": 493.367488,
+          "txCount": 26118
+        },
+        {
+          "t": 1788220800,
+          "axs": 9375.135704,
+          "weth": 25.413065,
+          "txCount": 1272
+        }
+      ],
+      "byType": [
+        {
+          "type": "sale",
+          "axs": 4376319.215627,
+          "weth": 58756.158561,
+          "txCount": 1712673
+        },
+        {
+          "type": "rc-mint",
+          "axs": 10697669.193759,
+          "weth": 0,
+          "txCount": 856338
+        },
+        {
+          "type": "ascension",
+          "axs": 2431288.453127,
+          "weth": 0,
+          "txCount": 131744
+        },
+        {
+          "type": "breeding",
+          "axs": 4862576.906254,
+          "weth": 0,
+          "txCount": 395233
+        },
+        {
+          "type": "evolution",
+          "axs": 1215644.226564,
+          "weth": 0,
+          "txCount": 98808
+        },
+        {
+          "type": "atiablessing",
+          "axs": 486257.690625,
+          "weth": 0,
+          "txCount": 65872
+        },
+        {
+          "type": "unknown",
+          "axs": 243128.845313,
+          "weth": 2448.173273,
+          "txCount": 32936
+        },
+        {
+          "type": "outflow",
+          "axs": 1250000,
+          "weth": 2400.5,
+          "txCount": 444
+        }
+      ],
+      "byNftType": [
+        {
+          "nftType": "Axie",
+          "axs": 2479914.22219,
+          "weth": 34274.425827,
+          "txCount": 994668
+        },
+        {
+          "nftType": "Land",
+          "axs": 243128.845313,
+          "weth": 7344.51982,
+          "txCount": 32936
+        },
+        {
+          "nftType": "Land Item",
+          "axs": 121564.422656,
+          "weth": 2448.173273,
+          "txCount": 32936
+        },
+        {
+          "nftType": "Rune",
+          "axs": 5348834.596879,
+          "weth": 3060.216592,
+          "txCount": 559913
+        },
+        {
+          "nftType": "Charm",
+          "axs": 6321349.97813,
+          "weth": 3060.216592,
+          "txCount": 625785
+        },
+        {
+          "nftType": "Material",
+          "axs": 243128.845313,
+          "weth": 2448.173273,
+          "txCount": 131744
+        },
+        {
+          "nftType": "Accessory",
+          "axs": 121564.422656,
+          "weth": 1836.129955,
+          "txCount": 65872
+        },
+        {
+          "nftType": "Consumable Item",
+          "axs": 121564.422656,
+          "weth": 1836.129955,
+          "txCount": 98808
+        },
+        {
+          "nftType": "Mixed",
+          "axs": 121564.422656,
+          "weth": 3060.216592,
+          "txCount": 32936
+        },
+        {
+          "nftType": "None",
+          "axs": 10440270.35282,
+          "weth": 4236.629955,
+          "txCount": 718450
+        }
+      ],
+      "breakdown": [
+        {
+          "type": "sale",
+          "nftType": "Axie",
+          "axs": 2431288.453127,
+          "weth": 33662.382509,
+          "txCount": 988081
+        },
+        {
+          "type": "sale",
+          "nftType": "Land",
+          "axs": 243128.845313,
+          "weth": 7344.51982,
+          "txCount": 32936
+        },
+        {
+          "type": "sale",
+          "nftType": "Land Item",
+          "axs": 121564.422656,
+          "weth": 2448.173273,
+          "txCount": 32936
+        },
+        {
+          "type": "sale",
+          "nftType": "Rune",
+          "axs": 486257.690625,
+          "weth": 3060.216592,
+          "txCount": 164680
+        },
+        {
+          "type": "sale",
+          "nftType": "Charm",
+          "axs": 486257.690625,
+          "weth": 3060.216592,
+          "txCount": 164680
+        },
+        {
+          "type": "sale",
+          "nftType": "Material",
+          "axs": 243128.845313,
+          "weth": 2448.173273,
+          "txCount": 131744
+        },
+        {
+          "type": "sale",
+          "nftType": "Accessory",
+          "axs": 121564.422656,
+          "weth": 1836.129955,
+          "txCount": 65872
+        },
+        {
+          "type": "sale",
+          "nftType": "Consumable Item",
+          "axs": 121564.422656,
+          "weth": 1836.129955,
+          "txCount": 98808
+        },
+        {
+          "type": "sale",
+          "nftType": "Mixed",
+          "axs": 121564.422656,
+          "weth": 3060.216592,
+          "txCount": 32936
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Rune",
+          "axs": 4862576.906254,
+          "weth": 0,
+          "txCount": 395233
+        },
+        {
+          "type": "rc-mint",
+          "nftType": "Charm",
+          "axs": 5835092.287505,
+          "weth": 0,
+          "txCount": 461105
+        },
+        {
+          "type": "ascension",
+          "nftType": "None",
+          "axs": 2431288.453127,
+          "weth": 0,
+          "txCount": 131744
+        },
+        {
+          "type": "breeding",
+          "nftType": "None",
+          "axs": 4862576.906254,
+          "weth": 0,
+          "txCount": 395233
+        },
+        {
+          "type": "evolution",
+          "nftType": "None",
+          "axs": 1215644.226564,
+          "weth": 0,
+          "txCount": 98808
+        },
+        {
+          "type": "atiablessing",
+          "nftType": "None",
+          "axs": 486257.690625,
+          "weth": 0,
+          "txCount": 65872
+        },
+        {
+          "type": "unknown",
+          "nftType": "None",
+          "axs": 194503.07625,
+          "weth": 1836.129955,
+          "txCount": 26349
+        },
+        {
+          "type": "unknown",
+          "nftType": "Axie",
+          "axs": 48625.769063,
+          "weth": 612.043318,
+          "txCount": 6587
+        },
+        {
+          "type": "outflow",
+          "nftType": "None",
+          "axs": 1250000,
+          "weth": 2400.5,
+          "txCount": 444
+        }
+      ]
+    }
+  }
+}

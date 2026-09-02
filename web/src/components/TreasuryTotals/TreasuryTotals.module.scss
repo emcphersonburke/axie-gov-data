@@ -42,10 +42,11 @@
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
+    width: 220px;
     font-size: $px12;
+    font-weight: 400;
 
-    ::after {
+    &::after {
       content: '';
       position: absolute;
       top: 100%;
@@ -57,13 +58,15 @@
     }
   }
 
+  .infoIcon:hover .tooltip,
+  .infoIcon:focus-visible .tooltip,
   .totalLabel:hover .tooltip {
     visibility: visible;
   }
 
   .infoIcon {
     margin-left: 4px;
-    cursor: pointer;
+    cursor: help;
     position: relative;
   }
 }

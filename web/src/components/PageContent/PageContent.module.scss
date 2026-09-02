@@ -2,17 +2,6 @@
   color: $mediumStateBlue;
 }
 
-.disclaimer {
-  font-size: 14px;
-  color: #ffcc00;
-  margin: 8px 0 16px;
-  line-height: 1.4;
-
-  @include tablet {
-    margin: 8px 24px 16px;
-  }
-}
-
 .ethColor {
   color: $dodgerBlue;
 }

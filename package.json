@@ -1,6 +1,7 @@
 {
   "name": "axie-gov-data",
   "private": true,
+  "type": "module",
   "license": "MIT",
   "workspaces": [
     "shared",

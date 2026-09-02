@@ -1,0 +1,42 @@
+.status {
+  margin-bottom: $px16;
+  position: relative;
+  z-index: 1;
+}
+
+.meta {
+  color: $coolGray;
+  font-size: $px14;
+  line-height: 1.4;
+
+  time {
+    color: inherit;
+  }
+}
+
+.separator {
+  color: $coolGray;
+}
+
+// Moved from PageContent.module.scss: the yellow disclaimer style, now the stale banner.
+.disclaimer {
+  font-size: 14px;
+  color: $warningYellow;
+  margin: 8px 0 16px;
+  line-height: 1.4;
+
+  @include tablet {
+    margin: 8px 24px 16px;
+  }
+}
+
+.paused {
+  color: $coolGray;
+  font-size: $px12;
+  line-height: 1.4;
+  margin-top: 4px;
+
+  time {
+    color: inherit;
+  }
+}
