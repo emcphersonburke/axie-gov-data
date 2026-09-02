@@ -1,0 +1,6 @@
+[Unit]
+Description=Axie indexer health check (pings healthchecks.io only when healthy)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/axie-healthcheck.sh

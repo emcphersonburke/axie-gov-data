@@ -1,0 +1,50 @@
+# Caddy config for the Axie Community Treasury dashboard.
+# provision.sh substitutes treasury.example.com with $AXIE_DOMAIN and installs this at /etc/caddy/Caddyfile.
+{
+	email ops@example.com
+	admin off
+}
+
+treasury.example.com {
+	# Behind Cloudflare (recommended): 15-year Origin CA cert, SSL mode "Full (strict)".
+	# Not using Cloudflare? Delete the tls line and Caddy issues a Let's Encrypt cert itself.
+	tls /etc/caddy/certs/origin.pem /etc/caddy/certs/origin.key
+
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		# Report-only until pixi/spine + nivo are verified clean; then rename to Content-Security-Policy.
+		Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://axiecdn.axieinfinity.com; connect-src 'self' https://axiecdn.axieinfinity.com; font-src 'self'; worker-src 'self' blob:; frame-ancestors 'none'"
+		-Server
+	}
+
+	# Precomputed snapshots written atomically by the indexer.
+	handle_path /data/* {
+		root * /srv/axie/data
+		header Cache-Control "public, max-age=60, stale-while-revalidate=120"
+		header Access-Control-Allow-Origin "*"
+		file_server
+	}
+
+	# The static Vite SPA.
+	handle {
+		root * /srv/axie/web
+		@assets path /assets/*
+		header Cache-Control "no-cache"
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+		try_files {path} /index.html
+		file_server
+	}
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 20mb
+			roll_keep 5
+		}
+	}
+}

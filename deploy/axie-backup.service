@@ -1,0 +1,8 @@
+[Unit]
+Description=Nightly SQLite backup of the Axie indexer database
+
+[Service]
+Type=oneshot
+User=axie
+Group=axie
+ExecStart=/usr/local/bin/axie-backup.sh

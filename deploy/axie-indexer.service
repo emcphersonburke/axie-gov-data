@@ -1,0 +1,49 @@
+[Unit]
+Description=Axie Community Treasury indexer (catch-up + tail)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=axie
+Group=axie
+WorkingDirectory=/opt/axie/current
+EnvironmentFile=/etc/axie-indexer.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node indexer/dist/cli.js tail
+Restart=always
+RestartSec=10
+TimeoutStopSec=30
+KillSignal=SIGTERM
+SyslogIdentifier=axie-indexer
+StandardOutput=journal
+StandardError=journal
+UMask=0022
+MemoryMax=1536M
+Nice=5
+
+# Hardening
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/axie-indexer /srv/axie/data
+PrivateTmp=yes
+PrivateDevices=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectKernelLogs=yes
+ProtectControlGroups=yes
+ProtectClock=yes
+ProtectHostname=yes
+RestrictSUIDSGID=yes
+RestrictRealtime=yes
+RestrictNamespaces=yes
+LockPersonality=yes
+SystemCallArchitectures=native
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+CapabilityBoundingSet=
+# MemoryDenyWriteExecute stays off: V8's JIT needs W+X pages.
+
+[Install]
+WantedBy=multi-user.target

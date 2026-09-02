@@ -1,0 +1,2 @@
+# Lets the deploy user restart the indexer and reload Caddy without a password. Installed at /etc/sudoers.d/axie (0440).
+axie ALL=(root) NOPASSWD: /usr/bin/systemctl restart axie-indexer.service, /usr/bin/systemctl start axie-indexer.service, /usr/bin/systemctl stop axie-indexer.service, /usr/bin/systemctl status axie-indexer.service, /usr/bin/systemctl reload caddy.service

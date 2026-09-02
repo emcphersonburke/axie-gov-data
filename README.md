@@ -1,155 +1,66 @@
-# Axie Community Treasury Dashboard 
+# Axie Community Treasury Dashboard
 
-This project is a dashboard for visualizing the Axie Community Treasury data. It displays various charts to show the growth and sales of the treasury over different time periods.
+Live view of the [Axie Infinity](https://axieinfinity.com) Community Treasury on Ronin: cumulative
+AXS and WETH inflow, breakdowns by transaction type and NFT type, bridge-backed WETH, and USD
+prices — indexed from chain, served as a static site.
 
-## Table of Contents
-
-- [Installation](#installation)
-- [Environment Variables](#environment-variables)
-- [API Endpoints](#api-endpoints)
-- [Data Synchronization](#data-synchronization)
-- [Tech Documentation](#tech-documentation)
-  - [Technologies Used](#technologies-used)
-  - [Project Structure](#project-structure)
-  - [Components](#components)
-  - [Utilities](#utilities)
-
-## Installation
-
-1. Clone the repository: 
-
-```sh
-git clone https://github.com/emcphersonburke/axie-gov-data.git
-cd axie-gov-data
+```
+Sky Mavis RPC ──▶ indexer (Node 22 + viem, systemd, SQLite) ──▶ dashboard.json + health.json
+Sky Mavis GraphQL (prices) ─┘                                       │
+                                            Caddy ◀── serves ───────┘ + web/dist (static Vite SPA)
+                                              ▲
+                                  Cloudflare (proxy) ◀── browsers
 ```
 
-2. Install dependencies:
+The chain is the source of truth. The indexer keeps a re-indexable SQLite database and precomputes
+one small JSON snapshot; the web app fetches that file and nothing else. One ~€5/month VPS runs it
+all. Details: [`docs/architecture.md`](docs/architecture.md), [`docs/data-model.md`](docs/data-model.md).
+
+## Repository layout
+
+| Path | What |
+|---|---|
+| `shared/` | `@axie-gov/shared`: contract addresses and descriptors, viem ABIs, event selectors, UTC bucketing helpers, the `dashboard.json` zod schema. |
+| `indexer/` | `@axie-gov/indexer`: the Ronin indexer CLI (`tail`, `backfill`, `snapshot`, `verify`, `rebuild-rollups`, `rewind`, `fixture`). |
+| `web/` | `@axie-gov/web`: the Vite + React dashboard (Nivo charts, SCSS modules, lazy PixiJS Axie terrarium). |
+| `deploy/` | Caddyfile, systemd unit and timers, provision/deploy/backup/healthcheck scripts. |
+| `docs/` | Architecture, data model, runbook, cutover checklist, and the captured legacy Supabase figures. |
+
+## Local development
+
+Requires Node 22 (`.nvmrc`).
 
 ```sh
 npm install
+npm run build -w shared          # web and indexer import the built package
+
+# web: serves web/fixtures/dashboard.json at /data/dashboard.json
+npm run dev -w web
+# …or against the production snapshot (proxies /data, no CORS fuss)
+DEV_DATA_PROXY=https://<domain> npm run dev -w web
+
+# indexer: copy indexer/.env.example to indexer/.env, set RONIN_API_KEY, then
+npm run dev -w indexer                                             # tail from the configured start block
+npx tsx indexer/src/cli.ts verify --tx 0x<hash>                    # decode + classify one transaction
+DB_PATH=/tmp/x.db SNAPSHOT_DIR=/tmp/snap npx tsx indexer/src/cli.ts backfill --leg treasury --from 42206600 --to 42206700
 ```
 
-3. Set up your environment variables (see below).
+Checks: `npm run lint`, `npm run typecheck`, `npm test`, `npm run build` (CI runs the same).
+Live-RPC integration tests: `npm run test:integration -w indexer`.
 
-4. Run the development server:
+## Configuration
 
-```sh
-npm run dev
-```
+Contract addresses, start blocks, and the chain id are constants in `shared/src/contracts.ts` —
+they are public facts, and env-var addresses were a source of case-sensitivity bugs in the old sync.
+The only secret is the Sky Mavis API key. Indexer env vars are documented in
+[`indexer/.env.example`](indexer/.env.example); the web app has none at runtime.
 
-## Environment Variables
+## Deploy and operate
 
-Create a `.env.local` file in the root of your project based on the `.env.local.example` file.
-
-## API Endpoints
-
-### Fetch Transactions
-
-Fetch transactions grouped by different intervals.
-
-**Endpoint:** `/api/fetch-transactions`
-
-**Method:** `GET`
-
-**Parameters:**
-
-- `groupBy` - Interval to group transactions by (`1h`, `8h`, `daily`, `weekly`, `monthly`).
-
-**Example:**
-
-```sh
-GET /api/fetch-transactions?groupBy=daily
-```
-
-### Data Synchronization
-
-To sync data to Supabase, you need to use the Supabase SQL API or Supabase functions. Here is an example of how you might define views and functions in Supabase.
-
-**Creating Views:**
-
-```sql
--- Daily Aggregated Transactions
-CREATE VIEW daily_aggregated_transactions AS
-SELECT
-  DATE_TRUNC('day', timestamp) AS date,
-  type,
-  SUM(axs_fee) AS axs_fee,
-  SUM(weth_fee) AS weth_fee,
-  COALESCE(nft_type, 'No NFT Transfer') AS nft_type
-FROM transactions
-LEFT JOIN nft_transfers ON nft_transfers.transaction_id = transactions.transaction_id
-WHERE type != 'unknown'
-GROUP BY 1, 2, 5
-ORDER BY 1;
-```
-
-**Fetching Cumulative Totals Before a Given Date:**
-
-```sql
--- Function to fetch cumulative totals before a given date
-CREATE FUNCTION get_cumulative_totals_before(date TIMESTAMPTZ)
-RETURNS TABLE (total_axs NUMERIC, total_weth NUMERIC) AS $$
-BEGIN
-  RETURN QUERY
-  SELECT SUM(axs_fee), SUM(weth_fee)
-  FROM transactions
-  WHERE timestamp < $1;
-END;
-$$ LANGUAGE plpgsql;
-```
-
-**Calling the Function:**
-
-```sh
-SELECT * FROM get_cumulative_totals_before('2024-05-28');
-```
-
-## Tech Documentation
-
-### Technologies Used
-
-- **Next.js**: React framework for building server-side rendered and statically generated web applications.
-- **Supabase**: Backend-as-a-Service providing a real-time database and authentication.
-- **Nivo**: A library for data visualization, used to create the charts in this project.
-
-### Project Structure
-
-```sh
-.
-├── components
-│   ├── BarChart
-│   │   └── BarChart.tsx
-│   ├── ChartGroup
-│   │   └── ChartGroup.tsx
-│   ├── LineChart
-│   │   └── LineChart.tsx
-│   └── PageContent
-│       └── PageContent.tsx
-├── lib
-│   └── nivo.ts
-├── pages
-│   ├── api
-│   │   └── fetch-transactions.ts
-│   └── index.tsx
-├── public
-├── styles
-│   ├── globals.css
-│   └── Home.module.css
-└── types
-    └── index.ts
-```
-
-### Components
-
-- **BarChart**: Displays sales data broken down by NFT type or transaction type.
-- **ChartGroup**: A container for grouping multiple charts and managing time range selection.
-- **LineChart**: Displays cumulative totals of AXS and WETH over time.
-- **PageContent**: The main content of the page, including headers and ChartGroups.
-
-### Utilities
-
-- **nivo.ts**: Configuration for Nivo charts, including themes and color schemes.
+First-time setup and day-to-day operations are in [`deploy/README.md`](deploy/README.md) and
+[`docs/runbook.md`](docs/runbook.md). The migration from the previous Vercel + Supabase setup is
+tracked in [`docs/cutover.md`](docs/cutover.md).
 
 ## License
 
-This project is licensed under the MIT License. 
+[MIT](LICENSE).
