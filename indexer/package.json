@@ -7,7 +7,7 @@
     "axie-indexer": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsc -b",
+    "build": "tsc -b && mkdir -p dist/db/migrations && cp src/db/migrations/*.sql dist/db/migrations/",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "dev": "tsx --env-file=.env src/cli.ts tail",
     "start": "node dist/cli.js tail",
