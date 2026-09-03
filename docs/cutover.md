@@ -19,8 +19,9 @@ owner's go-ahead.
 ## B. Close the unauthenticated write surface
 
 - ✅ Local commit removes `vercel.json` (per-minute cron) and both `process-*-batch` routes.
-- ◻ Push to `main` **only when you are ready for Vercel to redeploy** (it auto-deploys). Then verify
-  Cron Jobs is empty in Vercel and the two routes 404.
+- ◻ Vercel is being torn down (2026-09-03: the old domain lapsed, so nothing points at it and the
+  site had been stale since 2025-02). Once the project is deleted, pushing `main` triggers no
+  deploy. Downgrade the Vercel team from Pro afterwards; deleting the project alone keeps billing.
 - ◻ cPanel: stop the Node app; check `crontab -l` for `@reboot`; leave `../private_html/.env` until E.
 
 ## C. Provision, deploy, backfill, reconcile
@@ -36,8 +37,9 @@ owner's go-ahead.
 > can split receipts across providers.
 
 
-1. ◻ Confirm the production domain (Vercel → Domains). Add it to Cloudflare (free plan) and switch
-   Namecheap nameservers to Cloudflare's. Wait for propagation before issuing the Origin CA cert.
+1. ◻ Domain: the previous one lapsed. Recover it from Namecheap's redemption window, re-register
+   it, or pick a new name; then add it to Cloudflare (free) with Cloudflare's nameservers. Wait for
+   propagation before issuing the Origin CA cert.
 2. ◻ Hetzner CX23, Falkenstein or Helsinki, Ubuntu 24.04, your SSH key, Backups on.
    `deploy/provision.sh` (see `deploy/README.md`); set `RONIN_API_KEY`; install the origin cert;
    healthchecks.io URLs. Add `beta.<domain>` as a proxied A record → server IP.
@@ -65,16 +67,18 @@ owner's go-ahead.
    `bridge.all.net` is accurate up to the migration and frozen after it. A CCIP leg is a follow-up;
    until then the Backed WETH tile shows the pre-migration figure (tooltip should say so).
 
-## D. DNS switch
+## D. Go live
+
+No overlap with Vercel to manage.
 
 - ◻ Add apex/www to the Caddyfile site block (and the origin cert if not wildcard), `systemctl reload caddy`.
-- ◻ Cloudflare: proxied A records apex/www → server IP. Instant and reversible.
-- ◻ Keep Vercel until `dig +short <domain>` from two networks resolves to the new origin and
+- ◻ Cloudflare: proxied A records apex/www → server IP.
+- ◻ Confirm `dig +short <domain>` resolves to Cloudflare and
   `curl -sI https://<domain>/data/dashboard.json` shows `cache-control: public, max-age=60`.
 
 ## E. Decommission (after 7 days green)
 
-- ◻ Vercel: delete the project; downgrade the team from Pro before the next billing date.
+- ◻ Vercel: delete the project (safe now, see B) and downgrade the team from Pro.
 - ◻ Supabase: pause → delete project → **downgrade the organization to Free** (the $25 is org-level).
   Only after the Step A dump has been re-read once.
 - ◻ cPanel: remove the Node app, shred `../private_html/.env`, cancel hosting at renewal.
