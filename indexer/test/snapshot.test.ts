@@ -310,4 +310,19 @@ describe('snapshot', () => {
     expect(health.ratesStale).toBe(true)
     db.close()
   })
+
+  it('never reports live/ok when the chain head is unknown (RPC unreachable)', () => {
+    const { db } = seed()
+    const { dashboard, health } = buildSnapshot(db, config, {
+      now: NOW,
+      head: null,
+      headAt: null,
+      rates,
+    })
+    expect(() => dashboardSnapshotSchema.parse(dashboard)).not.toThrow()
+    expect(dashboard.chain.headAt).toBeNull()
+    expect(dashboard.indexer.status).toBe('backfilling')
+    expect(health.ok).toBe(false)
+    db.close()
+  })
 })

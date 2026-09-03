@@ -164,6 +164,9 @@ export function buildSnapshot(
   const cursorBridge =
     getMetaInt(stmts, 'cursor_bridge') ?? config.BRIDGE_START_BLOCK
   const lastIndexedBlock = cursorTreasury - 1
+  // An unknown head (RPC unreachable) must never read as "caught up": without it we cannot
+  // compute lag, so the snapshot reports backfilling / not ok until the chain is reachable again.
+  const headKnown = inputs.head !== null
   const head = inputs.head ?? lastIndexedBlock
   const lagBlocks = Math.max(0, head - lastIndexedBlock)
 
@@ -229,7 +232,7 @@ export function buildSnapshot(
   ) as Record<RangeKey, RangeStats>
 
   const status: 'backfilling' | 'live' =
-    lagBlocks > STALE_LAG_BLOCKS ? 'backfilling' : 'live'
+    headKnown && lagBlocks <= STALE_LAG_BLOCKS ? 'live' : 'backfilling'
   const dashboard: DashboardSnapshot = {
     schemaVersion: SNAPSHOT_SCHEMA_VERSION,
     generatedAt: toIso(now),
@@ -280,7 +283,7 @@ export function buildSnapshot(
     ranges,
   }
   const health: HealthSnapshot = {
-    ok: lagBlocks < STALE_LAG_BLOCKS,
+    ok: headKnown && lagBlocks < STALE_LAG_BLOCKS,
     status,
     generatedAt: dashboard.generatedAt,
     lastIndexedBlock,
