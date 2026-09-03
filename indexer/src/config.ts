@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 
 import { BRIDGE_START_BLOCK, TREASURY_START_BLOCK } from '@axie-gov/shared'
 import { z } from 'zod'
+import { scrubSecrets } from './logger.js'
 
 /**
  * The single place `process.env` is read. Everything downstream receives the
@@ -156,7 +157,7 @@ export function redactConfig(config: Config): Record<string, unknown> {
   const out: Record<string, unknown> = { ...config }
   for (const k of SECRET_KEYS) out[k] = config[k] ? '<redacted>' : '<unset>'
   out.endpoints = config.endpoints.map((e) => ({
-    url: e.url,
+    url: scrubSecrets(e.url),
     rps: e.rps,
     maxRps: e.maxRps,
     batchSize: e.batchSize,

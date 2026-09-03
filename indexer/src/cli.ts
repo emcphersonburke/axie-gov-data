@@ -59,7 +59,7 @@ async function main(argv: string[]): Promise<number> {
   }
 
   const config = loadConfig(process.env)
-  const log = createLogger(config.LOG_LEVEL)
+  const log = createLogger(config.LOG_LEVEL, undefined, [config.RONIN_API_KEY])
   log.debug(redactConfig(config), 'configuration')
   const stop = new Stopper()
   const onSignal = (signal: NodeJS.Signals) => {
