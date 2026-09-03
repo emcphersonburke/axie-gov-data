@@ -29,7 +29,7 @@ health() {
   local base="$DOMAIN"; [[ $base == *://* ]] || base="https://$base"
   ssh "$HOST" 'systemctl is-active axie-indexer.service; journalctl -u axie-indexer -n 5 --no-pager -o cat'
   curl -fsS "${base}/data/health.json" | jq . || echo "health.json not served yet (first batch still in flight?)"
-  curl -fsS -o /dev/null -w 'web  HTTP %{http_code}\n' "${base}/"
+  if curl -fsS "${base}/" | grep -q '<title>Axie Community Treasury</title>'; then echo "web  OK (SPA served)"; else echo "web  WRONG: / is not the SPA (check /etc/caddy/Caddyfile and /srv/axie/web)"; return 1; fi
 }
 
 case "${1:-deploy}" in

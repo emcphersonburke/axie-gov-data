@@ -80,7 +80,9 @@ if [[ "$AXIE_DOMAIN" == http://* ]]; then
   echo ">>> bootstrap mode: Caddy serves plain HTTP at ${AXIE_DOMAIN}"
 fi
 if caddy validate --config /etc/caddy/Caddyfile >/dev/null 2>&1; then
-  systemctl enable --now caddy && systemctl reload caddy || true
+  systemctl enable caddy >/dev/null
+  systemctl restart caddy          # restart, not reload: applies even on the first run after install
+  curl -fsS -o /dev/null -w "caddy answering: HTTP %{http_code}\n" http://127.0.0.1/ || echo ">>> caddy is not answering on :80"
 else
   echo ">>> Caddyfile did not validate yet (origin cert missing?). Install /etc/caddy/certs/origin.{pem,key} then: systemctl enable --now caddy"
 fi
