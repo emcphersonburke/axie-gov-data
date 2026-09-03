@@ -3,6 +3,7 @@ import { dirname, resolve } from 'node:path'
 
 import { BRIDGE_START_BLOCK, TREASURY_START_BLOCK } from '@axie-gov/shared'
 import { z } from 'zod'
+
 import { scrubSecrets } from './logger.js'
 
 /**
