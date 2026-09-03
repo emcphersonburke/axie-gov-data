@@ -19,6 +19,8 @@ const schema = z.object({
     .url()
     .default('https://api-gateway.skymavis.com/rpc'),
   RONIN_API_KEY: z.string().min(1, 'RONIN_API_KEY is required'),
+  /** "user:password" for providers that protect the endpoint with HTTP basic auth (e.g. Chainstack). Sent only to RONIN_RPC_URL. */
+  RONIN_RPC_BASIC_AUTH: z.string().optional(),
   /** Extra endpoints, "url|rps|batchSize" entries separated by commas. No API key is sent to these. */
   RPC_URLS: z.string().default(''),
   DB_PATH: z.string().default('./data/indexer.db'),
@@ -57,6 +59,8 @@ export interface RpcEndpointConfig {
   batchSize: number
   /** Only the primary (Sky Mavis) endpoint receives the API key. */
   apiKey?: string
+  /** HTTP basic-auth credentials ("user:password") for the primary endpoint. */
+  basicAuth?: string
 }
 
 export type Config = Readonly<
@@ -128,6 +132,7 @@ export function loadConfig(
     batchSize: c.RPC_BATCH_SIZE,
     // The key is a Sky Mavis credential: never send it to any other host (e.g. the public RPC used for smoke tests).
     apiKey: isSkyMavisHost(c.RONIN_RPC_URL) ? c.RONIN_API_KEY : undefined,
+    basicAuth: c.RONIN_RPC_BASIC_AUTH,
   }
   const extras = parseRpcUrls(c.RPC_URLS, {
     rps: c.RPC_START_RPS,
@@ -151,7 +156,7 @@ export function loadConfig(
 }
 
 /** Keys whose values must never appear in logs or error output. */
-export const SECRET_KEYS = ['RONIN_API_KEY'] as const
+export const SECRET_KEYS = ['RONIN_API_KEY', 'RONIN_RPC_BASIC_AUTH'] as const
 
 /** A copy of the config safe to log (secrets redacted, endpoints without keys). */
 export function redactConfig(config: Config): Record<string, unknown> {
@@ -163,6 +168,7 @@ export function redactConfig(config: Config): Record<string, unknown> {
     maxRps: e.maxRps,
     batchSize: e.batchSize,
     hasKey: Boolean(e.apiKey),
+    hasBasicAuth: Boolean(e.basicAuth),
   }))
   return out
 }

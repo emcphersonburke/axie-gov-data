@@ -48,6 +48,9 @@ function makeEndpoint(
 ): Endpoint {
   const headers: Record<string, string> = {}
   if (cfg.apiKey) headers['X-API-KEY'] = cfg.apiKey
+  if (cfg.basicAuth)
+    headers['Authorization'] =
+      `Basic ${Buffer.from(cfg.basicAuth).toString('base64')}`
   const client = createPublicClient({
     chain: ronin,
     transport: http(cfg.url, {
