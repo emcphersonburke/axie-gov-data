@@ -40,8 +40,18 @@ owner's go-ahead.
 > (Cloudflare error 1005, ASN 24940 banned), so the public RPC is not an option there at all.
 > dRPC's keyless public endpoint answers `eth_getLogs` only up to 200 blocks and returns
 > "Temporary internal error" for `eth_getBlockByNumber`, so it cannot even drive a near-head tail.
-> A keyed provider is required before the indexer runs: Sky Mavis (fix the entitlement), a free
-> dRPC account key, or Alchemy.
+> A keyed provider is required before the indexer runs.
+>
+> **Measured 2026-09-03 with keyed accounts:** Sky Mavis has sunset its RPC products (the console
+> marks "Ronin Archive Node" deprecated), which is also the likely reason the legacy sync died in
+> Feb 2025. **dRPC free**: `eth_getLogs`, `eth_getBlockReceipts` and full-block calls all fail with
+> "Temporary internal error" — unusable. **Chainstack Developer (free)**: works, but only for the
+> last ~128 blocks; everything older (blocks, logs, receipts by number) is gated as "Archive". The
+> live tail runs on it today (`RONIN_RPC_BASIC_AUTH`, CONFIRMATIONS=30 leaves ~5 min of slack) but
+> cannot recover from a longer outage, and the 2022–2025 backfill needs an archive plan:
+> Chainstack Growth ($49/mo, 20M requests, cancel after the month) or Alchemy pay-as-you-go
+> ($0.45 per 1M CU). Alchemy's free tier (tens of millions of CU/month, archive included) is the
+> candidate for a robust free steady state; not yet tested from the box.
 
 
 1. ◻ Domain: the previous one lapsed. Recover it from Namecheap's redemption window, re-register
