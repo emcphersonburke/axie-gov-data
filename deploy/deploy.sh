@@ -2,6 +2,7 @@
 # Build locally, ship artifacts, flip the release symlink atomically, restart the indexer.
 #
 #   DEPLOY_HOST=axie@<ip-or-host> DOMAIN=treasury.example.com deploy/deploy.sh [deploy|rollback|health]
+#   (DOMAIN may be http://<ip> while bootstrapping without a domain)
 #
 # Releases live in /opt/axie/releases/<utc>-<sha>; /opt/axie/current points at the active one and
 # /srv/axie/web -> /opt/axie/current/web/dist, so the web app and indexer flip together.
@@ -25,9 +26,10 @@ REMOTE
 }
 
 health() {
+  local base="$DOMAIN"; [[ $base == *://* ]] || base="https://$base"
   ssh "$HOST" 'systemctl is-active axie-indexer.service; journalctl -u axie-indexer -n 5 --no-pager -o cat'
-  curl -fsS "https://${DOMAIN}/data/health.json" | jq . || echo "health.json not served yet (first backfill still writing?)"
-  curl -fsS -o /dev/null -w 'web  HTTP %{http_code}\n' "https://${DOMAIN}/"
+  curl -fsS "${base}/data/health.json" | jq . || echo "health.json not served yet (first batch still in flight?)"
+  curl -fsS -o /dev/null -w 'web  HTTP %{http_code}\n' "${base}/"
 }
 
 case "${1:-deploy}" in

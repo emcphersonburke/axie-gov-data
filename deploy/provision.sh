@@ -4,6 +4,8 @@
 # Usage, from your laptop:
 #   rsync -a deploy/ root@<ip>:/root/axie-deploy/
 #   ssh root@<ip> 'AXIE_DOMAIN=treasury.example.com AXIE_ADMIN_PUBKEY="ssh-ed25519 AAAA... you@laptop" bash /root/axie-deploy/provision.sh'
+# No domain yet? Pass AXIE_DOMAIN=http://<ip> to serve plain HTTP on the IP; re-run with the real
+# domain later (the script is idempotent) to switch to TLS.
 #
 # Afterwards (manual, once):
 #   1. Put the Sky Mavis key in /etc/axie-indexer.env
@@ -70,7 +72,13 @@ systemctl start axie-healthcheck.timer axie-backup.timer   # the indexer itself 
 
 log "Caddy config"
 install -d -m 0750 -o root -g caddy /etc/caddy/certs
-sed "s/treasury.example.com/${AXIE_DOMAIN}/g" "$HERE/Caddyfile" > /etc/caddy/Caddyfile
+sed "s#treasury.example.com#${AXIE_DOMAIN}#g" "$HERE/Caddyfile" > /etc/caddy/Caddyfile
+if [[ "$AXIE_DOMAIN" == http://* ]]; then
+  # Bootstrap mode (no domain yet): serve plain HTTP on the IP, no certificate. Re-run with the real
+  # domain later and Caddy switches to TLS.
+  sed -i '/^[[:space:]]*tls \/etc\/caddy\/certs/d; /Strict-Transport-Security/d' /etc/caddy/Caddyfile
+  echo ">>> bootstrap mode: Caddy serves plain HTTP at ${AXIE_DOMAIN}"
+fi
 if caddy validate --config /etc/caddy/Caddyfile >/dev/null 2>&1; then
   systemctl enable --now caddy && systemctl reload caddy || true
 else
