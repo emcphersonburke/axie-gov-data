@@ -35,8 +35,9 @@ treasury.example.com {
 	handle {
 		root * /srv/axie/web
 		@assets path /assets/*
-		header Cache-Control "no-cache"
+		# Caddy runs path-matched header directives first, so the generic one uses `?` (set only if absent).
 		header @assets Cache-Control "public, max-age=31536000, immutable"
+		header ?Cache-Control "no-cache"
 		try_files {path} /index.html
 		file_server
 	}
