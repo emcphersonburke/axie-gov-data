@@ -1,9 +1,15 @@
 # Caddy config for the Axie Community Treasury dashboard.
 # provision.sh substitutes treasury.example.com with $AXIE_DOMAIN and installs this at /etc/caddy/Caddyfile.
 {
-	email ops@example.com
+	# No ACME email on purpose: the dashboard uses a Cloudflare Origin CA cert, and other sites on
+	# this box may use Caddy's automatic HTTPS (Let's Encrypt registers fine without a contact;
+	# it rejects example.com addresses). Set `email you@domain` here if you want expiry notices.
 	# The admin API stays on (localhost:2019 only): `systemctl reload caddy` needs it.
 }
+
+# Other apps hosted on this box drop their own site blocks here; provision.sh creates the
+# directory and never touches its contents, so they survive regeneration of this file.
+import /etc/caddy/sites/*.caddy
 
 treasury.example.com {
 	# Behind Cloudflare (recommended): 15-year Origin CA cert, SSL mode "Full (strict)".

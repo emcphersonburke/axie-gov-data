@@ -72,6 +72,7 @@ systemctl start axie-healthcheck.timer axie-backup.timer   # the indexer itself 
 
 log "Caddy config"
 install -d -m 0750 -o root -g caddy /etc/caddy/certs
+install -d -m 0755 -o root -g root /etc/caddy/sites      # site blocks of other apps on this box (imported by the Caddyfile)
 sed "s#treasury.example.com#${AXIE_DOMAIN}#g" "$HERE/Caddyfile" > /etc/caddy/Caddyfile
 if [[ "$AXIE_DOMAIN" == http://* ]]; then
   # Bootstrap mode (no domain yet): serve plain HTTP on the IP, no certificate. Re-run with the real
