@@ -35,6 +35,13 @@ owner's go-ahead.
 > 2022–2025**. If the gateway stays down, an archive-capable provider with Ronin support (Alchemy,
 > Chainstack, dRPC paid tier) goes in `RONIN_RPC_URL`; the indexer's endpoint pool (`RPC_URLS`)
 > can split receipts across providers.
+>
+> **From the Hetzner box (2026-09-03):** `api.roninchain.com` blocks Hetzner's whole network
+> (Cloudflare error 1005, ASN 24940 banned), so the public RPC is not an option there at all.
+> dRPC's keyless public endpoint answers `eth_getLogs` only up to 200 blocks and returns
+> "Temporary internal error" for `eth_getBlockByNumber`, so it cannot even drive a near-head tail.
+> A keyed provider is required before the indexer runs: Sky Mavis (fix the entitlement), a free
+> dRPC account key, or Alchemy.
 
 
 1. ◻ Domain: the previous one lapsed. Recover it from Namecheap's redemption window, re-register

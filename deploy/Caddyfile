@@ -41,10 +41,7 @@ treasury.example.com {
 		file_server
 	}
 
-	log {
-		output file /var/log/caddy/access.log {
-			roll_size 20mb
-			roll_keep 5
-		}
-	}
+	# Access log goes to the journal (journald is capped at 500 MB by provision.sh); Caddy's systemd
+	# sandbox made a file under /var/log unwritable.
+	log
 }
