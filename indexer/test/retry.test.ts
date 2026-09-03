@@ -91,6 +91,47 @@ describe('classifyError', () => {
     expect(info.rangeLimit).toBe(10_000)
   })
 
+  it('treats -32002 "not on your plan" as a permanent endpoint failure, other -32002 as transient', () => {
+    const plan = classifyError(
+      new RpcRequestError({
+        url,
+        body,
+        error: {
+          code: -32002,
+          message:
+            'eth_getLogs is not available on your current plan. Upgrade at https://example.test/plans',
+        },
+      }),
+    )
+    expect(plan).toMatchObject({
+      code: -32002,
+      transient: false,
+      rateLimited: false,
+      shrinkRange: false,
+    })
+    const busy = classifyError(
+      new RpcRequestError({
+        url,
+        body,
+        error: { code: -32002, message: 'resource unavailable' },
+      }),
+    )
+    expect(busy.transient).toBe(true)
+  })
+
+  it('treats dRPC "Temporary internal error" as transient whatever the code', () => {
+    const err = new RpcRequestError({
+      url,
+      body,
+      error: { code: -32001, message: 'Temporary internal error' },
+    })
+    expect(classifyError(err).transient).toBe(true)
+    expect(classifyError(err).shrinkRange).toBe(false)
+    expect(classifyError(new Error('Temporary internal error')).transient).toBe(
+      true,
+    )
+  })
+
   it('does not retry HTTP 400/401/403', () => {
     for (const status of [400, 401, 403, 404]) {
       const info = classifyError(new HttpRequestError({ url, body, status }))

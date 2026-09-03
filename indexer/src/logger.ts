@@ -7,16 +7,17 @@ export type { Logger }
  * Patterns that mark an API key embedded in a URL: query parameters
  * (`?dkey=…`, `?apikey=…`), Alchemy-style `/v2/<key>` paths, and any long
  * opaque path segment that is not a hex hash. Transaction hashes (`0x…`)
- * are deliberately left alone so logs stay debuggable.
+ * are deliberately left alone so logs stay debuggable. `|`, `,` and `;`
+ * terminate a key so RPC_URLS entries scrub cleanly.
  */
 const URL_SECRET_PATTERNS: Array<[RegExp, string]> = [
   [
-    /([?&](?:dkey|apikey|api_key|apiKey|key|token|access_token|auth)=)[^&\s"'#]+/gi,
+    /([?&](?:dkey|apikey|api_key|apiKey|key|token|access_token|auth)=)[^&\s"'#|,;]+/gi,
     '$1***',
   ],
   [/(\/v2\/)[A-Za-z0-9_-]{16,}/g, '$1***'],
   [
-    /(https?:\/\/[^\s"'/]+(?:\/[^\s"'/]*)*?\/)(?!0x)[A-Za-z0-9_-]{24,}(?=[/?#\s"']|$)/g,
+    /(https?:\/\/[^\s"'/]+(?:\/[^\s"'/]*)*?\/)(?!0x)[A-Za-z0-9_-]{24,}(?=[/?#\s"'|,;]|$)/g,
     '$1***',
   ],
 ]

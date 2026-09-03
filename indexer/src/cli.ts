@@ -13,7 +13,7 @@ import { closeContext, createContext, parseIntArg } from './commands/shared.js'
 import { snapshot } from './commands/snapshot.js'
 import { tail } from './commands/tail.js'
 import { verify } from './commands/verify.js'
-import { loadConfig, redactConfig } from './config.js'
+import { collectSecrets, loadConfig, redactConfig } from './config.js'
 import { createLogger } from './logger.js'
 import { Stopper } from './pipeline/stop.js'
 
@@ -59,15 +59,7 @@ async function main(argv: string[]): Promise<number> {
   }
 
   const config = loadConfig(process.env)
-  const log = createLogger(config.LOG_LEVEL, undefined, [
-    config.RONIN_API_KEY,
-    ...(config.RONIN_RPC_BASIC_AUTH
-      ? [
-          config.RONIN_RPC_BASIC_AUTH,
-          config.RONIN_RPC_BASIC_AUTH.split(':').pop() ?? '',
-        ]
-      : []),
-  ])
+  const log = createLogger(config.LOG_LEVEL, undefined, collectSecrets(config))
   log.debug(redactConfig(config), 'configuration')
   const stop = new Stopper()
   const onSignal = (signal: NodeJS.Signals) => {

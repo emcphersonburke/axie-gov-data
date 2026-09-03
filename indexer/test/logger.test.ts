@@ -30,6 +30,17 @@ describe('log scrubbing', () => {
       scrubSecrets(`receipt for ${tx} at https://api.roninchain.com/rpc`),
     ).toBe(`receipt for ${tx} at https://api.roninchain.com/rpc`)
   })
+  it('masks keys in RPC_URLS entries (keys end at | , ;)', () => {
+    expect(
+      scrubSecrets(
+        'https://ronin-mainnet.core.chainstack.com/0123456789abcdef0123456789abcdef|20|20, ' +
+          'https://lb.drpc.org/ogrpc?network=ronin&dkey=AbCdEf0123456789|5|5|priority=10',
+      ),
+    ).toBe(
+      'https://ronin-mainnet.core.chainstack.com/***|20|20, ' +
+        'https://lb.drpc.org/ogrpc?network=ronin&dkey=***|5|5|priority=10',
+    )
+  })
   it('scrubs nested objects and Error messages', () => {
     const err = new Error(
       'HTTP request failed.\nURL: https://x.example/v2/AbCdEfGhIjKlMnOpQrStUv',

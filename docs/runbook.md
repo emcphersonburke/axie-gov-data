@@ -92,8 +92,28 @@ journalctl -u axie-reindex -f
 
 ## RPC providers
 
-`RONIN_RPC_URL` is the primary endpoint; the API key is only sent to `*.skymavis.com` hosts.
-`RPC_URLS=url|rps|batch,…` adds pool members for receipt/header load. Known behaviour:
+`RONIN_RPC_URL` is the primary endpoint (`RONIN_RPC_BASIC_AUTH=user:pw` for Chainstack's
+password-protected endpoint; the Sky Mavis API key is only ever sent to `*.skymavis.com` hosts).
+`RPC_URLS` adds more endpoints, comma-separated, each `url|rps|batch|options` where options are
+`;`-separated: `methods=eth_getLogs,…` (this endpoint is used only, and first, for those methods),
+`priority=N` (lower first; primary is 0, extras default to 10 = backup only), `basic=user:pw`,
+`key=…`. Calls route to the first healthy eligible endpoint; a failing endpoint is sidelined for a
+cooldown (30 s doubling to 10 min) and the call moves to the next one immediately, so a backup
+takes over without restarts. Rate limits (429) never trigger failover, they just slow that endpoint.
+
+Layouts in use:
+
+```
+# backfill: Chainstack for receipts/headers (paid, all history), Alchemy pinned to discovery
+RONIN_RPC_URL=https://ronin-mainnet.core.chainstack.com
+RONIN_RPC_BASIC_AUTH=<user>:<pw>
+RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|20|20|methods=eth_getLogs;priority=0
+# steady state: Chainstack free primary, Alchemy pure backup
+RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|10|20|priority=10
+```
+
+Why discovery is pinned: Chainstack's Ronin `eth_getLogs` only returns logs for roughly the last
+5M blocks (~170 days) and silently returns an empty list before that. Known behaviour:
 
 | Endpoint | Notes |
 |---|---|

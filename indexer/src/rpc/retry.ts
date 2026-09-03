@@ -27,6 +27,12 @@ export interface ErrorInfo {
 const RANGE_RE =
   /limit|too many|exceed|timeout|timed out|413|-32005|-32602|response size|too large|query returned more|ranges? over \d+|block range/i
 const RATE_RE = /rate limit|rate-limit|too many requests|throttl|quota/i
+/** Provider wording for a backend hiccup that carries no standard code (dRPC "Temporary internal error"). */
+const TRANSIENT_RE =
+  /temporary internal error|temporarily unavailable|service unavailable|bad gateway|gateway time-?out|try again later/i
+/** -32002 wording that means "this method is not on your plan" rather than a passing node hiccup. */
+const PLAN_RE =
+  /plan|upgrade|not (?:available|supported|enabled|allowed)|unauthori[sz]ed|forbidden/i
 
 /** Thrown when a receipt lacks a log that phase-1 discovery saw: a lagging replica. Never commit; retry the batch. */
 export class ReplicaLagError extends Error {
@@ -141,12 +147,18 @@ export function classifyError(err: unknown): ErrorInfo {
       info.rateLimited = true
       return info
     }
+    if (code === -32002) {
+      // EIP-1474 "resource unavailable": a node hiccup, unless the provider means the method is off-plan
+      // ("… not available on your current plan") — then only another endpoint can help.
+      info.transient = !PLAN_RE.test(text)
+      return info
+    }
     if (code === -32005 || code === -32602 || RANGE_RE.test(text)) {
       info.shrinkRange = true
       info.rangeLimit = parseRangeLimit(text)
       return info
     }
-    if (code === -32603 || code === -32000 || code === -32603) {
+    if (code === -32603 || code === -32000 || TRANSIENT_RE.test(text)) {
       // "internal error" — providers use it for transient backend hiccups
       info.transient = true
       return info
@@ -157,7 +169,8 @@ export function classifyError(err: unknown): ErrorInfo {
     if (
       /fetch failed|ECONNRESET|ECONNREFUSED|ETIMEDOUT|EAI_AGAIN|socket hang up|network/i.test(
         text,
-      )
+      ) ||
+      TRANSIENT_RE.test(text)
     ) {
       info.transient = true
     }

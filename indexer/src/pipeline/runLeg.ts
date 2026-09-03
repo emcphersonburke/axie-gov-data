@@ -3,6 +3,7 @@ import { STALE_LAG_BLOCKS } from '@axie-gov/shared'
 import type { WriteResult } from '../db/writeBatch.js'
 import { readCursor, writeBatch } from '../db/writeBatch.js'
 import type { Leg } from '../legs/leg.js'
+import { endpointUsageDelta } from '../rpc/client.js'
 import { getBlockNumber } from '../rpc/methods.js'
 import { RangeSizer } from '../rpc/rangeSizer.js'
 import { classifyError, ReplicaLagError } from '../rpc/retry.js'
@@ -183,6 +184,10 @@ export class LegRunner {
         etaMin: eta === null ? null : Math.round(eta / 60),
         http: callsAfter.httpRequests - callsBefore.httpRequests,
         subCalls: callsAfter.subCalls - callsBefore.subCalls,
+        endpoints: endpointUsageDelta(
+          callsBefore.endpoints,
+          callsAfter.endpoints,
+        ),
         rps: Number(this.ctx.rpc.primary.throttle.rps.toFixed(1)),
         lag: remaining,
       },
