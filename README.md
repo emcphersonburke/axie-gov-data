@@ -13,7 +13,7 @@ Sky Mavis GraphQL (prices) ─┘                                       │
 ```
 
 The chain is the source of truth. The indexer keeps a re-indexable SQLite database and precomputes
-one small JSON snapshot; the web app fetches that file and nothing else. One ~€5/month VPS runs it
+one small JSON snapshot; the web app fetches that file and nothing else. One ~€6/month VPS runs it
 all. Details: [`docs/architecture.md`](docs/architecture.md), [`docs/data-model.md`](docs/data-model.md).
 
 ## Repository layout

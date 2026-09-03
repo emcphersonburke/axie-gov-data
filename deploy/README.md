@@ -1,7 +1,7 @@
 # deploy/
 
 Everything needed to run the dashboard on one Ubuntu 24.04 box (Hetzner CX23 in an EU location,
-~€4.50/mo). No control plane: these files are the whole ops surface.
+about €6/mo after the June-2026 price rise, IPv4 included). No control plane: these files are the whole ops surface.
 
 | File | Purpose |
 |---|---|
