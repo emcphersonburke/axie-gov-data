@@ -170,10 +170,12 @@ export function checkpointCheck(ctx: AppContext): Check[] {
   const covered = db
     .prepare('SELECT MIN(block) AS lo, MAX(ts) AS ts FROM transactions')
     .get() as { lo: number | null; ts: number | null }
-  // first fee tx is at block 17,349,945; the legacy cursor died at 42,238,965
+  // The run must have started at (or before) the treasury's creation and have passed the block
+  // where the legacy cursor died (42,238,965). The first fee transaction is at 17,934,147, so the
+  // earliest indexed block is deliberately not part of the test.
   const coversCheckpoint =
     (covered.ts ?? 0) >= LEGACY_CHECKPOINT.beforeTs &&
-    (covered.lo ?? Number.POSITIVE_INFINITY) <= 17_349_945 &&
+    ctx.config.START_BLOCK <= 16_377_111 &&
     cursor > 42_238_965
   const axsRel = rel(row.axs, LEGACY_CHECKPOINT.axs)
   const wethRel = rel(row.weth, LEGACY_CHECKPOINT.weth)
@@ -183,7 +185,7 @@ export function checkpointCheck(ctx: AppContext): Check[] {
       ok: coversCheckpoint,
       detail: coversCheckpoint
         ? 'yes'
-        : `no (blocks from ${covered.lo ?? 'none'}, cursor=${cursor}); the comparison below is partial`,
+        : `no (START_BLOCK=${ctx.config.START_BLOCK}, first tx block ${covered.lo ?? 'none'}, cursor=${cursor}); the comparison below is partial`,
     },
     {
       name: `cumulative AXS inflow before 2025-02-04 vs legacy ${LEGACY_CHECKPOINT.axs.toFixed(3)}`,
@@ -346,9 +348,13 @@ export async function verify(
       })
   }
   if (!opts.tx || opts.full || opts.checkpoint || opts.spot) {
-    if (!opts.tx || opts.full)
-      checks.push(...invariantChecks(ctx, Boolean(opts.full)))
-    if (opts.checkpoint) checks.push(...checkpointCheck(ctx))
+    // One read transaction so every sum sees the same snapshot even while the indexer is writing
+    // (WAL readers are isolated per transaction, not per statement).
+    ctx.db.transaction(() => {
+      if (!opts.tx || opts.full)
+        checks.push(...invariantChecks(ctx, Boolean(opts.full)))
+      if (opts.checkpoint) checks.push(...checkpointCheck(ctx))
+    })()
     if (opts.spot) checks.push(...(await spotCheck(ctx, opts.spot)))
   }
   let allOk = true
