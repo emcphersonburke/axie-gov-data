@@ -1,6 +1,7 @@
 import {
   BaseError,
   HttpRequestError,
+  ResponseBodyTooLargeError,
   RpcRequestError,
   TimeoutError,
 } from 'viem'
@@ -17,6 +18,8 @@ export interface ErrorInfo {
   transient: boolean
   /** The provider rejected the block range / result size — shrink and retry. */
   shrinkRange: boolean
+  /** The response exceeded the transport's body-size cap: fetch in smaller pieces; not a range or endpoint fault. */
+  oversized?: boolean
   /** Explicit cap parsed from the message ("limit of 200", "over 10000 blocks"). */
   rangeLimit?: number
   status?: number
@@ -111,6 +114,13 @@ export function classifyError(err: unknown): ErrorInfo {
   }
   if (err instanceof FatalRpcError) return { ...err.info, message: err.message }
   if (err instanceof ReplicaLagError) return info
+  if (
+    err instanceof ResponseBodyTooLargeError ||
+    /exceeded the size limit/i.test(text)
+  ) {
+    info.oversized = true
+    return info
+  }
 
   if (err instanceof TimeoutError) {
     info.transient = true

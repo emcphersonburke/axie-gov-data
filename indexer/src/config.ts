@@ -39,6 +39,8 @@ const schema = z.object({
   RPC_MAX_RPS: z.coerce.number().positive().default(50),
   RPC_CONCURRENCY: int(64, 1),
   RPC_BATCH_SIZE: int(20, 1),
+  /** Largest HTTP response body accepted from any endpoint (a batch of big receipts can exceed viem's 10 MB default). */
+  RPC_MAX_RESPONSE_MB: int(256, 1),
   RANGE_START: int(2000, 1),
   RANGE_MAX: int(100_000, 1),
   RANGE_MIN: int(50, 1),

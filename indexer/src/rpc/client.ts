@@ -8,6 +8,9 @@ import type { ErrorInfo } from './retry.js'
 import { classifyError, withRetry } from './retry.js'
 import { Throttle } from './throttle.js'
 
+/** viem's default is 10 MB, which a batch of receipt-heavy transactions can exceed. */
+export const DEFAULT_MAX_RESPONSE_BYTES = 256 * 1024 * 1024
+
 export interface RpcCounters {
   httpRequests: number
   subCalls: number
@@ -88,6 +91,8 @@ export interface RpcOptions {
   fetch?: typeof fetch
   cooldownStartMs?: number
   cooldownMaxMs?: number
+  /** Largest HTTP response body accepted (bytes); defaults to 256 MB. */
+  maxResponseBytes?: number
   /** Base delay of the backoff applied once every eligible endpoint has failed (default 500 ms). */
   baseDelayMs?: number
 }
@@ -122,6 +127,7 @@ function makeEndpoint(
     chain: ronin,
     transport: http(cfg.url, {
       batch: { batchSize: cfg.batchSize, wait: 10 },
+      maxResponseBodySize: opts.maxResponseBytes ?? DEFAULT_MAX_RESPONSE_BYTES,
       fetchOptions: { headers },
       fetchFn: opts.fetch,
       retryCount: 0,
@@ -317,7 +323,9 @@ export class Rpc {
       } catch (err) {
         const info = classifyError(err)
         // Range caps belong to the range sizer, and an exhausted rate-limit wait is not the endpoint's fault.
-        if (opts.propagate?.(info) || info.rateLimited) throw err
+        // Oversized responses are the caller's to split up (smaller batches), not an endpoint fault.
+        if (opts.propagate?.(info) || info.rateLimited || info.oversized)
+          throw err
         this.markFailure(ep, info)
         failed.add(ep)
         anyTransient ||= info.transient

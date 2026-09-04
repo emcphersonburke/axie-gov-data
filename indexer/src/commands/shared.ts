@@ -16,7 +16,9 @@ export function createContext(config: Config, log: Logger): AppContext {
   return {
     config,
     log,
-    rpc: new Rpc(config, log),
+    rpc: new Rpc(config, log, {
+      maxResponseBytes: config.RPC_MAX_RESPONSE_MB * 1024 * 1024,
+    }),
     db,
     stmts: prepareStatements(db),
     strategy: createStrategy(config.LOG_FETCH_STRATEGY),
