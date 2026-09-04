@@ -4,7 +4,7 @@ set -euo pipefail
 ENV_FILE=/etc/axie-indexer.env
 DB=$(sed -n 's/^DB_PATH=//p' "$ENV_FILE" | tail -1); DB=${DB:-/var/lib/axie-indexer/indexer.db}
 OUT=/var/lib/axie-indexer/backups
-KEEP=3
+KEEP=2
 mkdir -p "$OUT"
 f="$OUT/indexer-$(date -u +%F).db"
 sqlite3 "$DB" ".backup '$f'"          # online backup API: safe while the indexer is writing
