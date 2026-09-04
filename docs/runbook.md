@@ -50,7 +50,8 @@ sudo systemctl stop axie-indexer
 
 ## Indexer commands
 
-Run with the production env: `set -a; . /etc/axie-indexer.env; set +a; cd /opt/axie/current`.
+Run with the production env loaded literally (values contain `|` and `;`, so never `source` the file):
+`cd /opt/axie/current && axie-env /etc/axie-indexer.env node indexer/dist/cli.js <command>`.
 
 | Command | Use |
 |---|---|
@@ -95,7 +96,7 @@ sudo systemctl enable --now axie-backfill.service      # unit file ships in depl
 journalctl -u axie-backfill -f -o cat | jq -c '{leg,from,to,txs,blocksPerSec,etaMin,endpoints}'
 # 2. when it logs "backfill leg finished" for both legs and exits 0:
 sudo systemctl disable axie-backfill.service
-set -a; . /etc/axie-backfill.env; set +a; node /opt/axie/current/indexer/dist/cli.js verify --checkpoint --full
+cd /opt/axie/current && sudo -u axie axie-env /etc/axie-backfill.env node indexer/dist/cli.js verify --checkpoint --full
 sudo systemctl stop axie-indexer
 sudo -u axie mv /var/lib/axie-indexer/indexer.db /var/lib/axie-indexer/indexer.db.old   # keep until happy
 sudo -u axie mv /var/lib/axie-indexer/reindex.db /var/lib/axie-indexer/indexer.db

@@ -65,7 +65,7 @@ install -m 0440 "$HERE/sudoers.d-axie" /etc/sudoers.d/axie && visudo -cf /etc/su
 
 log "systemd units + timers"
 install -m 0644 "$HERE"/axie-*.service "$HERE"/axie-*.timer /etc/systemd/system/
-install -m 0755 "$HERE/axie-healthcheck.sh" "$HERE/axie-backup.sh" /usr/local/bin/
+install -m 0755 "$HERE/axie-healthcheck.sh" "$HERE/axie-backup.sh" "$HERE/axie-env" /usr/local/bin/
 systemctl daemon-reload
 systemctl enable axie-indexer.service axie-healthcheck.timer axie-backup.timer
 systemctl start axie-healthcheck.timer axie-backup.timer   # the indexer itself starts on first deploy

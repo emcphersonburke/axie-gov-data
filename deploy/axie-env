@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Run a command with an env file loaded literally. Values in these files may contain `|` and `;`
+# (RPC_URLS options), which a shell `source` would misread as pipes and separators; systemd's
+# EnvironmentFile= reads them literally, and so does this.
+# Usage: axie-env /etc/axie-indexer.env node indexer/dist/cli.js verify --checkpoint
+set -euo pipefail
+file=$1; shift
+while IFS= read -r line || [[ -n $line ]]; do
+  [[ $line =~ ^[A-Za-z_][A-Za-z0-9_]*= ]] || continue
+  export "$line"
+done < "$file"
+exec "$@"
