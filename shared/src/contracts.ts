@@ -38,6 +38,20 @@ export const BRIDGE_START_BLOCK = 14_765_762
 /** Blocks behind head treated as final: ~90 s on Ronin, and enough to stay behind every load-balanced replica's head. */
 export const DEFAULT_CONFIRMATIONS = 30
 
+/**
+ * WETH sitting in the Community Treasury that no ETH on Ethereum backs, a consequence of the
+ * March 2022 Ronin bridge hack: 173,600 ETH was stolen, Sky Mavis refunded 117,600 ETH of user
+ * funds, and the remaining 56,000 ETH of shortfall was left against the community treasury. The
+ * treasury's WETH balance is therefore only spendable down to this figure — the rest is a claim on
+ * Sky Mavis, not on the bridge.
+ *
+ * Source: Sky Mavis staff in the Axie developer Discord, 2024-07-04 ("there is 58.5k weth in the
+ * treasury, but 56k from it is unbacked"). The dashboard's original hardcoded "Backed WETH" values
+ * (2,087.9213 in Jul 2024 and 2,618.2305 in Dec 2024) both reconcile to the treasury balance at the
+ * time minus ~56,000. Revisit if Sky Mavis ever restores the backing.
+ */
+export const UNBACKED_WETH_FROM_HACK = 56_000
+
 export const TX_TYPES = [
   'sale',
   'rc-mint',

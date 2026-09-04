@@ -88,10 +88,16 @@ owner's go-ahead.
 8. ◻ **Bridge / Backed WETH:** the Ronin Gateway (`0x0cf8ff40…`) has emitted nothing recently —
    bridging moved to Chainlink CCIP (WETH now minted from
    `0x320a10449556388503fd71d74a16ab52e0bd1deb`). Historical gateway events decode correctly, so
-   `bridge.all.net` is accurate up to the migration and frozen after it. **Measured:** 272,014 WETH
-   deposited vs 322,058 withdrawn via Gateway v2 (Jun 2022 – Jun 2025) → net **−50,044 WETH**; the
-   pre-hack v1 baseline is not in these events. Decision pending on how the tile presents this
-   (flows separately / net with tooltip / hide until a CCIP leg exists).
+   `bridge.all.net` is accurate up to the migration and frozen after it.
+9. ✅ **"Backed WETH" resolved 2026-09-04.** It never meant bridge deposits minus withdrawals (that
+   is −50,044 WETH chain-wide, a different quantity). Sky Mavis staff explained it in the Axie
+   developer Discord on 2024-07-04: the March 2022 bridge hack took 173,600 ETH, Sky Mavis refunded
+   117,600 ETH of user funds, and the remaining **56,000 ETH of shortfall was left against the
+   community treasury**, so that much of the treasury's WETH is a claim on Sky Mavis rather than
+   spendable. Backed WETH = treasury net WETH − 56,000 (`UNBACKED_WETH_FROM_HACK` in `shared/`).
+   Both legacy hardcoded values reconcile to this: 2,087.9213 (Jul 2024) and 2,618.2305 (Dec 2024)
+   are the treasury balance at the time minus ~56,000, the December figure to within 34 WETH.
+   Today the tile reads ≈ 3,031 WETH.
 
 ## D. Go live
 

@@ -19,11 +19,7 @@ const token = new Intl.NumberFormat(undefined, {
 describe('<TreasuryTotals>', () => {
   it('renders four tiles from props with the correct USD value and no loading state', () => {
     const { container } = render(
-      <TreasuryTotals
-        totals={snapshot.totals}
-        bridge={snapshot.bridge}
-        rates={snapshot.rates}
-      />,
+      <TreasuryTotals totals={snapshot.totals} rates={snapshot.rates} />,
     )
 
     expect(screen.getByText('Total AXS')).toBeTruthy()
@@ -38,7 +34,7 @@ describe('<TreasuryTotals>', () => {
       screen.getByText(`${token.format(snapshot.totals.net.weth)} WETH`),
     ).toBeTruthy()
     expect(
-      screen.getByText(`${token.format(snapshot.bridge.all.net)} WETH`),
+      screen.getByText(`${token.format(snapshot.totals.backedWeth)} WETH`),
     ).toBeTruthy()
 
     const expectedUsd =
@@ -49,24 +45,26 @@ describe('<TreasuryTotals>', () => {
     expect(container.textContent).not.toMatch(/loading/i)
   })
 
-  it('explains Backed WETH as the chain-wide bridge net', () => {
-    render(
-      <TreasuryTotals
-        totals={snapshot.totals}
-        bridge={snapshot.bridge}
-        rates={snapshot.rates}
-      />,
+  it('shows the hack-adjusted backed WETH and explains the shortfall', () => {
+    render(<TreasuryTotals totals={snapshot.totals} rates={snapshot.rates} />)
+    const tooltip = screen.getByRole('tooltip').textContent ?? ''
+    expect(tooltip).toMatch(/March 2022 Ronin bridge hack/)
+    expect(tooltip).toMatch(/173,600/)
+    expect(screen.getByText(/56,000 ETH of shortfall/)).toBeTruthy()
+    // the tile shows net WETH minus the shortfall, not the raw balance
+    expect(snapshot.totals.backedWeth).toBeCloseTo(
+      snapshot.totals.net.weth - snapshot.totals.unbackedWeth,
+      6,
     )
-    expect(screen.getByRole('tooltip').textContent).toMatch(
-      /bridged onto Ronin minus WETH withdrawn, chain-wide, through the Ronin Gateway/,
-    )
+    expect(
+      screen.getByText(`${token.format(snapshot.totals.backedWeth)} WETH`),
+    ).toBeTruthy()
   })
 
   it('shows a dash instead of a USD value when rates are missing', () => {
     render(
       <TreasuryTotals
         totals={snapshot.totals}
-        bridge={snapshot.bridge}
         rates={{ ...snapshot.rates, axsUsd: null }}
       />,
     )

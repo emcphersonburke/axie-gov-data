@@ -18,6 +18,7 @@ import {
   STALE_LAG_BLOCKS,
   toIso,
   TX_TYPES,
+  UNBACKED_WETH_FROM_HACK,
 } from '@axie-gov/shared'
 
 import { weiToUnits } from '../classify/classify.js'
@@ -258,6 +259,8 @@ export function buildSnapshot(
       inflow,
       outflow,
       net: { axs: inflow.axs - outflow.axs, weth: inflow.weth - outflow.weth },
+      unbackedWeth: UNBACKED_WETH_FROM_HACK,
+      backedWeth: inflow.weth - outflow.weth - UNBACKED_WETH_FROM_HACK,
       txCount,
       exact: {
         axsInWei: exact.axsInWei.toString(),

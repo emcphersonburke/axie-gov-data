@@ -20,6 +20,7 @@ import type {
   RangeStats,
   TxType,
 } from '@axie-gov/shared'
+import { UNBACKED_WETH_FROM_HACK } from '@axie-gov/shared/contracts'
 import { ADDRESSES, DEFAULT_CONFIRMATIONS } from '@axie-gov/shared/contracts'
 import {
   dashboardSnapshotSchema,
@@ -280,6 +281,10 @@ const snapshot: DashboardSnapshot = {
       axs: round(inflow.axs - OUTFLOW_TOTAL.axs),
       weth: round(inflow.weth - OUTFLOW_TOTAL.weth),
     },
+    unbackedWeth: UNBACKED_WETH_FROM_HACK,
+    backedWeth: round(
+      inflow.weth - OUTFLOW_TOTAL.weth - UNBACKED_WETH_FROM_HACK,
+    ),
     txCount: txTotal + 37,
     exact: {
       axsInWei: toWei(inflow.axs),

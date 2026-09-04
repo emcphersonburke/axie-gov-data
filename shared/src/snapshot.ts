@@ -90,6 +90,10 @@ export const dashboardSnapshotSchema = z.object({
     inflow: amountPair,
     outflow: amountPair,
     net: amountPair,
+    /** WETH held that has no ETH behind it on Ethereum (the 2022 hack shortfall). */
+    unbackedWeth: z.number(),
+    /** net.weth - unbackedWeth: the spendable part of the treasury's WETH. */
+    backedWeth: z.number(),
     txCount: z.number().int(),
     exact: z.object({
       axsInWei: z.string(),

@@ -49,11 +49,7 @@ export default function PageContent({ snapshot }: PageContentProps) {
         isStale={state.isStale}
         refetchError={refetchError}
       />
-      <TreasuryTotals
-        totals={snapshot.totals}
-        bridge={snapshot.bridge}
-        rates={rates}
-      />
+      <TreasuryTotals totals={snapshot.totals} rates={rates} />
       <ChartGroup title="Growth" ranges={ranges}>
         {(range) => (
           <>
