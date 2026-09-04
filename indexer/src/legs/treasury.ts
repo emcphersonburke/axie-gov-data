@@ -99,6 +99,7 @@ export const treasuryLeg: Leg = {
     const txLogs = await ctx.strategy.fetch(
       { rpc: ctx.rpc, log: ctx.log, range: { from, to } },
       hashes,
+      discovered,
     )
 
     // Integrity cross-check: every discovered (hash, logIndex) must be in the receipt we got.
