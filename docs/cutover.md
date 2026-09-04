@@ -57,14 +57,14 @@ owner's go-ahead.
 1. ◻ Domain: the previous one lapsed. Recover it from Namecheap's redemption window, re-register
    it, or pick a new name; then add it to Cloudflare (free) with Cloudflare's nameservers. Wait for
    propagation before issuing the Origin CA cert.
-2. ◻ Hetzner CX23, Falkenstein or Helsinki, Ubuntu 24.04, your SSH key, Backups on.
+2. ✅ Hetzner CX23 in Helsinki (62.238.105.235, Ubuntu 26.04), provisioned 2026-09-03.
    `deploy/provision.sh` (see `deploy/README.md`); set `RONIN_API_KEY`; install the origin cert;
    healthchecks.io URLs. Add `beta.<domain>` as a proxied A record → server IP.
-3. ◻ `DEPLOY_HOST=axie@<ip> DOMAIN=beta.<domain> deploy/deploy.sh`. `tail` starts catching up from
-   block 16,377,111.
-4. ◻ First 30 min: `backfill --probe` into a scratch DB for the gateway's rate accounting; watch
-   blocks/s and ETA in the journal. **No-go past here if ETA > 5 days** without tuning
-   `RPC_MAX_RPS` / `RPC_BATCH_SIZE` / `RPC_CONCURRENCY` or adding `RPC_URLS`.
+3. ✅ Deployed; the tail ran live from 2026-09-03 17:05 UTC on Chainstack.
+4. ✅ Historical backfill 2026-09-03 → 2026-09-04 (~29 h wall clock incl. a reboot): 17,711,512
+   transactions, 291,266 bridge events, 12.7 GB. Receipts on Chainstack Growth up to block 52.67M,
+   then `LOG_FETCH_STRATEGY=range` (Alchemy sweeps) for the dense 2026 stretch; Chainstack stayed
+   under 20M requests.
 5. ✅ Reconciled 2026-09-04 (interim, while the backfill was still running past the checkpoint):
    cumulative inflow before 2025-02-04 = **22,818,618.07 AXS (+0.077 %) / 58,700.44 WETH (+0.054 %)**
    vs legacy 22,801,117.13 / 58,668.91. Monthly AXS matches the legacy views to the cent for
@@ -75,7 +75,9 @@ owner's go-ahead.
    event signature, or the confirmations boundary). Per-month series vs
    `reference-figures/aggregated_fees_all.csv` within ±2 % for complete months. Spot-check 25
    legacy hashes with `verify --tx` and 10 new-only ones on the Ronin explorer.
-6. ◻ `https://beta.<domain>` renders live; banner clears at `status: live`; healthchecks green 24 h.
+6. ✅ Database swapped under the tail 2026-09-04 19:27 UTC; dashboard serves the full history at
+   http://62.238.105.235 (`status: live`, 24.10M AXS / 59,031 WETH cumulative). healthchecks.io
+   URLs still to be added.
 7. ◻ Contract drift since the legacy sync stopped (Feb 2025), seen while smoke-testing near head:
    marketplace fee transfers now come from `0x3b3adf1422f84254b7fbb0e7ca62bd0865133fe3` (not the
    old `MARKETPLACE` address) and AXS fees route via `0xb4c12d442fb0f90eba1fe5c63498aa91c02bc183`;
@@ -86,8 +88,10 @@ owner's go-ahead.
 8. ◻ **Bridge / Backed WETH:** the Ronin Gateway (`0x0cf8ff40…`) has emitted nothing recently —
    bridging moved to Chainlink CCIP (WETH now minted from
    `0x320a10449556388503fd71d74a16ab52e0bd1deb`). Historical gateway events decode correctly, so
-   `bridge.all.net` is accurate up to the migration and frozen after it. A CCIP leg is a follow-up;
-   until then the Backed WETH tile shows the pre-migration figure (tooltip should say so).
+   `bridge.all.net` is accurate up to the migration and frozen after it. **Measured:** 272,014 WETH
+   deposited vs 322,058 withdrawn via Gateway v2 (Jun 2022 – Jun 2025) → net **−50,044 WETH**; the
+   pre-hack v1 baseline is not in these events. Decision pending on how the tile presents this
+   (flows separately / net with tooltip / hide until a CCIP leg exists).
 
 ## D. Go live
 
