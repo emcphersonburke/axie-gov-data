@@ -104,6 +104,48 @@ sudo rm -f /var/lib/axie-indexer/indexer.db-wal /var/lib/axie-indexer/indexer.db
 sudo systemctl start axie-indexer        # tails from the backfill's cursor and rewrites the snapshot
 ```
 
+## RPC providers
+
+`RONIN_RPC_URL` is the primary endpoint (`RONIN_RPC_BASIC_AUTH=user:pw` for Chainstack's
+password-protected endpoint; the Sky Mavis API key is only ever sent to `*.skymavis.com` hosts).
+`RPC_URLS` adds more endpoints, comma-separated, each `url|rps|batch|options` where options are
+`;`-separated: `methods=eth_getLogs,…` (this endpoint is used only, and first, for those methods),
+`priority=N` (lower first; primary is 0, extras default to 10 = backup only), `basic=user:pw`,
+`key=…`. Calls route to the first healthy eligible endpoint; a failing endpoint is sidelined for a
+cooldown (30 s doubling to 10 min) and the call moves to the next one immediately, so a backup
+takes over without restarts. Rate limits (429) never trigger failover, they just slow that endpoint.
+
+Layouts in use:
+
+```
+# backfill: Chainstack for receipts/headers (paid, all history), Alchemy pinned to discovery
+RONIN_RPC_URL=https://ronin-mainnet.core.chainstack.com
+RONIN_RPC_BASIC_AUTH=<user>:<pw>
+RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|20|20|methods=eth_getLogs;priority=0
+# steady state: Chainstack free primary, Alchemy pure backup
+RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|10|20|priority=10
+```
+
+Why discovery is pinned: Chainstack's Ronin `eth_getLogs` only returns logs for roughly the last
+5M blocks (~170 days) and silently returns an empty list before that. **Enrichment strategy.** `LOG_FETCH_STRATEGY=receipts` (default) fetches one receipt per
+transaction and records the sender / entry-point contract; it is bound by the provider's
+per-request cap (250/s on Chainstack Growth), which in dense 2026 ranges (3+ treasury
+transactions per block) meant minutes per 10k blocks. `LOG_FETCH_STRATEGY=range` instead reuses the
+discovered treasury transfers and sweeps `eth_getLogs` over the NFT, marker and gateway contracts
+(about 3 Alchemy calls per batch, ~1,000 blocks/s, verified identical output on a 27k-transaction
+batch) at the cost of `from_address`/`to_address`/`tx_index` staying NULL. The 2026 part of the
+first backfill used `range`; steady-state tailing uses `receipts`.
+
+Known behaviour:
+
+| Endpoint | Notes |
+|---|---|
+| `api-gateway.skymavis.com/rpc` (+`/rpc/archive`) | Needs the key. Was 503 "ring-balancer" all of 2026-09-02 — check the app's RPC entitlement in the developer portal. |
+| `api.roninchain.com/rpc` (public) | 200-block `eth_getLogs` cap (auto-learned), batches ≤ 3, ~5 req/s, receipts only for ~the last 2.5M blocks. Fine for `tail`, not for backfill. |
+
+`backfill --probe` reports HTTP vs sub-call accounting and the first 429 so `RPC_MAX_RPS` /
+`RPC_BATCH_SIZE` can be set per provider.
+
 ## Rotate the Sky Mavis key
 
 Edit `/etc/axie-indexer.env`, then `sudo systemctl restart axie-indexer`. Check the journal for
