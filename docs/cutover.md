@@ -65,7 +65,12 @@ owner's go-ahead.
 4. ◻ First 30 min: `backfill --probe` into a scratch DB for the gateway's rate accounting; watch
    blocks/s and ETA in the journal. **No-go past here if ETA > 5 days** without tuning
    `RPC_MAX_RPS` / `RPC_BATCH_SIZE` / `RPC_CONCURRENCY` or adding `RPC_URLS`.
-5. ◻ Reconcile: `verify --checkpoint` within **[−0.5 %, +3 %]** of legacy (higher is expected from
+5. ✅ Reconciled 2026-09-04 (interim, while the backfill was still running past the checkpoint):
+   cumulative inflow before 2025-02-04 = **22,818,618.07 AXS (+0.077 %) / 58,700.44 WETH (+0.054 %)**
+   vs legacy 22,801,117.13 / 58,668.91. Monthly AXS matches the legacy views to the cent for
+   Oct 2022 – Oct 2024; WETH runs 0–6 % higher in 2024 (fee summing); legacy Dec 2024 / Jan 2025
+   were badly under-counted (stale materialized views before the sync died). Original criterion:
+   `verify --checkpoint` within **[−0.5 %, +3 %]** of legacy (higher is expected from
    the fee-summing fix and legacy gaps; lower means a missing contract, `TransferBatch`, a changed
    event signature, or the confirmations boundary). Per-month series vs
    `reference-figures/aggregated_fees_all.csv` within ±2 % for complete months. Spot-check 25
