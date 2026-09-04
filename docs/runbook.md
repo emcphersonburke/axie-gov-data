@@ -81,47 +81,27 @@ and certs. The chain is the ultimate backup: a full re-index is always possible.
 
 ## Full re-index (fresh database, no downtime)
 
+The backfill runs as its own enabled unit against a separate database while the tail keeps
+serving. It survives reboots (unattended-upgrades reboots the box at 04:30 UTC when a kernel
+update lands) and retries transient provider errors with back-off; it exits 0 when caught up.
+
 ```sh
-set -a; . /etc/axie-indexer.env; set +a
-sudo -u axie DB_PATH=/var/lib/axie-indexer/reindex.db SNAPSHOT_DIR=/tmp/axie-snap \
-  systemd-run --unit=axie-reindex --uid=axie --gid=axie -p WorkingDirectory=/opt/axie/current \
-  /usr/bin/node indexer/dist/cli.js backfill
-journalctl -u axie-reindex -f
-# when it exits 0: stop the service, swap the DB files, start the service
+# 1. env: copy /etc/axie-indexer.env to /etc/axie-backfill.env, point DB_PATH at
+#    /var/lib/axie-indexer/reindex.db and SNAPSHOT_DIR at /var/lib/axie-indexer/reindex-snapshots,
+#    remove any START_BLOCK/BRIDGE_START_BLOCK overrides, set RPC_URLS/RONIN_RPC_METHODS as in
+#    "RPC providers" (discovery pinned to an endpoint with a real log index).
+sudo install -d -m 0750 -o axie -g axie /var/lib/axie-indexer/reindex-snapshots
+sudo systemctl enable --now axie-backfill.service      # unit file ships in deploy/
+journalctl -u axie-backfill -f -o cat | jq -c '{leg,from,to,txs,blocksPerSec,etaMin,endpoints}'
+# 2. when it logs "backfill leg finished" for both legs and exits 0:
+sudo systemctl disable axie-backfill.service
+set -a; . /etc/axie-backfill.env; set +a; node /opt/axie/current/indexer/dist/cli.js verify --checkpoint --full
+sudo systemctl stop axie-indexer
+sudo -u axie mv /var/lib/axie-indexer/indexer.db /var/lib/axie-indexer/indexer.db.old   # keep until happy
+sudo -u axie mv /var/lib/axie-indexer/reindex.db /var/lib/axie-indexer/indexer.db
+sudo rm -f /var/lib/axie-indexer/indexer.db-wal /var/lib/axie-indexer/indexer.db-shm
+sudo systemctl start axie-indexer        # tails from the backfill's cursor and rewrites the snapshot
 ```
-
-## RPC providers
-
-`RONIN_RPC_URL` is the primary endpoint (`RONIN_RPC_BASIC_AUTH=user:pw` for Chainstack's
-password-protected endpoint; the Sky Mavis API key is only ever sent to `*.skymavis.com` hosts).
-`RPC_URLS` adds more endpoints, comma-separated, each `url|rps|batch|options` where options are
-`;`-separated: `methods=eth_getLogs,…` (this endpoint is used only, and first, for those methods),
-`priority=N` (lower first; primary is 0, extras default to 10 = backup only), `basic=user:pw`,
-`key=…`. Calls route to the first healthy eligible endpoint; a failing endpoint is sidelined for a
-cooldown (30 s doubling to 10 min) and the call moves to the next one immediately, so a backup
-takes over without restarts. Rate limits (429) never trigger failover, they just slow that endpoint.
-
-Layouts in use:
-
-```
-# backfill: Chainstack for receipts/headers (paid, all history), Alchemy pinned to discovery
-RONIN_RPC_URL=https://ronin-mainnet.core.chainstack.com
-RONIN_RPC_BASIC_AUTH=<user>:<pw>
-RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|20|20|methods=eth_getLogs;priority=0
-# steady state: Chainstack free primary, Alchemy pure backup
-RPC_URLS=https://ronin-mainnet.g.alchemy.com/v2/<key>|10|20|priority=10
-```
-
-Why discovery is pinned: Chainstack's Ronin `eth_getLogs` only returns logs for roughly the last
-5M blocks (~170 days) and silently returns an empty list before that. Known behaviour:
-
-| Endpoint | Notes |
-|---|---|
-| `api-gateway.skymavis.com/rpc` (+`/rpc/archive`) | Needs the key. Was 503 "ring-balancer" all of 2026-09-02 — check the app's RPC entitlement in the developer portal. |
-| `api.roninchain.com/rpc` (public) | 200-block `eth_getLogs` cap (auto-learned), batches ≤ 3, ~5 req/s, receipts only for ~the last 2.5M blocks. Fine for `tail`, not for backfill. |
-
-`backfill --probe` reports HTTP vs sub-call accounting and the first 429 so `RPC_MAX_RPS` /
-`RPC_BATCH_SIZE` can be set per provider.
 
 ## Rotate the Sky Mavis key
 

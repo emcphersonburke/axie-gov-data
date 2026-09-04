@@ -63,6 +63,10 @@ export class LegRunner {
     return this.lastCommit
   }
 
+  get log(): AppContext['log'] {
+    return this.ctx.log
+  }
+
   async getHead(force = false): Promise<number> {
     const now = Date.now()
     if (!force && this.head && now - this.head.at < HEAD_CACHE_MS)
@@ -197,15 +201,49 @@ export class LegRunner {
   }
 }
 
-/** Run a leg until it is caught up (or `to` is reached) — the `backfill` shape. */
+/** Upper bound for the back-off between failed steps (mirrors `tail`). */
+export const MAX_STEP_BACKOFF_MS = 10 * 60_000
+
+/**
+ * Run a leg until it is caught up (or `to` is reached) — the `backfill` shape.
+ * A step that throws (provider outage, network blip, reboot in progress) is
+ * logged and retried after an exponential back-off (`baseBackoffMs` doubling
+ * up to 10 minutes) instead of aborting the whole run; the cursor only moves
+ * on committed batches, so nothing is skipped.
+ */
 export async function runLegToEnd(
   runner: LegRunner,
   stop: Stopper,
-  onCommit?: (info: CommitInfo) => void,
+  onCommit?: (info: CommitInfo) => void | Promise<void>,
+  baseBackoffMs = 15_000,
 ): Promise<void> {
+  let consecutiveFailures = 0
   while (!stop.requested) {
-    const r = await runner.step()
-    if (r === 'committed' && onCommit && runner.last) onCommit(runner.last)
+    let r: StepResult
+    try {
+      r = await runner.step()
+    } catch (err) {
+      consecutiveFailures += 1
+      const waitMs = Math.min(
+        baseBackoffMs * 2 ** Math.min(consecutiveFailures - 1, 8),
+        MAX_STEP_BACKOFF_MS,
+      )
+      runner.log.error(
+        {
+          leg: runner.leg.name,
+          cursor: runner.cursor,
+          attempt: consecutiveFailures,
+          waitMs,
+          err: (err as Error).message,
+        },
+        'leg step failed; backing off',
+      )
+      await stop.sleep(waitMs)
+      continue
+    }
+    consecutiveFailures = 0
+    if (r === 'committed' && onCommit && runner.last)
+      await onCommit(runner.last)
     if (r === 'done' || r === 'idle') return
   }
 }

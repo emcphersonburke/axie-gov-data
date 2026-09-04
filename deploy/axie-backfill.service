@@ -1,0 +1,31 @@
+[Unit]
+Description=Axie treasury historical backfill (resumes from its cursor; exits 0 when caught up)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=axie
+Group=axie
+WorkingDirectory=/opt/axie/current
+EnvironmentFile=/etc/axie-backfill.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node indexer/dist/cli.js backfill
+# Transient errors are retried inside the process; a crash or a reboot resumes here.
+Restart=on-failure
+RestartSec=60
+TimeoutStopSec=60
+KillSignal=SIGTERM
+SyslogIdentifier=axie-backfill
+UMask=0022
+MemoryMax=2400M
+Nice=10
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/axie-indexer
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
