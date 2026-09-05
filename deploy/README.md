@@ -11,6 +11,7 @@ about €6/mo after the June-2026 price rise, IPv4 included). No control plane: 
 | `axie-indexer.service` | The indexer as a hardened systemd service (`tail` = catch-up then follow). |
 | `axie-healthcheck.{sh,service,timer}` | Every 5 min: pings healthchecks.io only if the unit is active, the snapshot is < 10 min old, lag ≤ 400 blocks (unless backfilling), disk < 85 %, and the public URL answers. |
 | `axie-backup.{sh,service,timer}` | 03:30 UTC: `sqlite3 .backup` + zstd, keep 3. |
+| `vercel-redirect/` | Two-file Vercel project that reclaims `axie-gov.vercel.app` and forwards it to the live site, so the Axie blog post's link to the hackathon entry keeps working. Deploy it once, separately from this repo. |
 | `axie-env` | Runs a command with an env file loaded literally (`axie-env /etc/axie-indexer.env node …`); never `source` these files, `RPC_URLS` contains `\|` and `;`. |
 | `sudoers.d-axie` | Lets `axie` restart the indexer / reload Caddy for deploys. |
 | `axie-indexer.env.example` | Template for `/etc/axie-indexer.env` (root:axie 0640). The Sky Mavis key is the only secret. |

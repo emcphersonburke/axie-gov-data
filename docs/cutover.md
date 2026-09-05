@@ -111,6 +111,9 @@ No overlap with Vercel to manage.
 ## E. Decommission (after 7 days green)
 
 - ◻ Vercel: delete the project (safe now, see B) and downgrade the team from Pro.
+- ◻ Reclaim `axie-gov.vercel.app` as a redirect once the new domain is live: the Axie blog post
+  announcing the hackathon win still links there and it currently 404s. See
+  `deploy/vercel-redirect/`. Also worth asking Sky Mavis to update the link itself.
 - ◻ Supabase: pause → delete project → **downgrade the organization to Free** (the $25 is org-level).
   Only after the Step A dump has been re-read once.
 - ◻ cPanel: remove the Node app, shred `../private_html/.env`, cancel hosting at renewal.
